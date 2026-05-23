@@ -1,0 +1,60 @@
+:root {
+  /* SPRO Brand Colors */
+  --color-primary: #004b23;
+  --color-primary-hover: #003d1c;
+  --color-primary-light: #eef7f2;
+  --color-primary-light-hover: #dcf0e5;
+
+  /* Layout Theme Colors */
+  --color-sidebar-bg: #004b23;
+  --color-sidebar-active: #005a2b;
+  --color-sidebar-hover: #003d1c;
+  --color-sidebar-text: #ffffff;
+  --color-sidebar-text-muted: #a3b899;
+
+  --color-bg-main: #f9fbf9;
+  --color-bg-mobile-header: #267043;
+  --color-card-bg: #ffffff;
+  --color-border: #e9ede9;
+  --color-text-main: #0c1a12;
+  --color-text-muted: #5e6b62;
+
+  /* Card Type Specific Colors (Dashboard & Badges) */
+  --color-orders-bg: #fff8eb;
+  --color-orders-icon: #f2994a;
+  
+  --color-tracking-bg: #ebf5ff;
+  --color-tracking-icon: #2f80ed;
+  
+  --color-stock-bg: #eefbee;
+  --color-stock-icon: #27ae60;
+  
+  --color-analytics-bg: #f9f0ff;
+  --color-analytics-icon: #9b51e0;
+  
+  --color-webreport-bg: #f2f7f4;
+  --color-webreport-icon: #219653;
+  
+  --color-alerts-bg: #fff0f0;
+  --color-alerts-icon: #eb5757;
+  
+  --color-attendance-bg: #ebf9ff;
+  --color-attendance-icon: #0088cc;
+  
+  --color-forms-bg: #fffcf0;
+  --color-forms-icon: #d9aa00;
+
+  --color-settings-bg: #f1f3f2;
+  --color-settings-icon: #4f5e55;
+
+  --color-badge-on-bg: #eefbee;
+  --color-badge-on-text: #27ae60;
+  
+  --color-badge-target-bg: #e5f0e9;
+  --color-badge-target-text: #219653;
+
+  --color-badge-high-bg: #fff0f0;
+  --color-badge-high-text: #eb5757;
+}
+
+
