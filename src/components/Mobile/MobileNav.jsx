@@ -3,21 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Menu, Search, X, Home, FileText, Users, User, Settings, HelpCircle, Download, Bell } from 'lucide-react';
+import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X } from 'lucide-react';
 
 const MobileHeaderContent = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState(searchParams.get('q') || '');
-
-  // Determine Title based on pathname
-  const getTitle = () => {
-    if (pathname === '/reports') return 'WEB REPORT';
-    return 'SPRO APP';
-  };
 
   const menuItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -48,72 +41,42 @@ const MobileHeaderContent = () => {
 
   return (
     <>
-      {isSearchOpen ? (
-        <header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
-          {/* Back/Close Button */}
-          <button
-            onClick={() => {
-              setIsSearchOpen(false);
-              const params = new URLSearchParams(searchParams);
-              params.delete('q');
-              router.replace(`${pathname}?${params.toString()}`);
-            }}
-            className="p-2 hover:bg-[#1f5734] rounded-lg transition-colors"
-          >
-            <X size={22} />
-          </button>
+      <header className="lg:hidden flex items-center justify-between gap-3 px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
+        {/* Left Side Hamburger */}
+        <button
+          onClick={() => setIsOpen(true)}
+          className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0"
+        >
+          <Menu size={22} />
+        </button>
 
-          {/* Input field */}
-          <div className="flex-1 mx-2 relative">
-            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
-              <Search size={16} />
-            </span>
-            <input
-              type="text"
-              value={searchVal}
-              onChange={handleSearch}
-              placeholder={pathname === '/reports' ? "Search reports..." : "Search data..."}
-              className="w-full pl-9 pr-4 py-1.5 text-sm bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all"
-              autoFocus
-            />
-          </div>
-        </header>
-      ) : (
-        <header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
-          {/* Left Side Hamburger */}
-          <button
-            onClick={() => setIsOpen(true)}
-            className="p-2 hover:bg-[#1f5734] rounded-lg transition-colors"
-          >
-            <Menu size={22} />
-          </button>
-
-          {/* Center Page Title */}
-          <span className="font-extrabold tracking-wider text-base sm:text-lg">
-            {getTitle()}
+        {/* Persistent Search Field in Mobile Header */}
+        <div className="flex-1 relative">
+          <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
+            <Search size={16} />
           </span>
+          <input
+            type="text"
+            value={searchVal}
+            onChange={handleSearch}
+            placeholder={
+              pathname === '/reports' ? "Search reports..." :
+              pathname.startsWith('/targetVs') ? "Search reps..." :
+              "Search data..."
+            }
+            className="w-full pl-9 pr-3 py-1.5 text-xs bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all text-white font-medium"
+          />
+        </div>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-1">
-            {pathname !== '/reports' && (
-              <button 
-                onClick={() => setIsSearchOpen(true)}
-                className="p-2 hover:bg-[#1f5734] rounded-full transition-colors"
-              >
-                <Search size={20} />
-              </button>
-            )}
-            
-            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold font-mono ml-1 shadow-sm">
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                alt="avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </header>
-      )}
+        {/* Right User Avatar */}
+        <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+          <img
+            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+            alt="avatar"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </header>
 
       {/* Drawer Overlay Backdrop */}
       {isOpen && (

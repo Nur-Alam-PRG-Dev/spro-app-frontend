@@ -1,0 +1,108 @@
+{
+  "periodOptions": [
+    { "label": "This Month (Oct 2024)", "value": "2024-10", "isActive": true },
+    { "label": "Sep 2024", "value": "2024-09", "isActive": false },
+    { "label": "Aug 2024", "value": "2024-08", "isActive": false },
+    { "label": "Jul 2024", "value": "2024-07", "isActive": false }
+  ],
+  "teamPerformance": {
+    "period": "Oct 2024",
+    "badge": "OVERALL",
+    "totalTarget": 1000000,
+    "expected": 720000,
+    "achieved": 650000,
+    "achievedPct": 65,
+    "expectedPct": 72,
+    "gap": -70000,
+    "gapPct": -7,
+    "gapMessage": "The team is currently 7% behind the expected linear target for today. Immediate intervention recommended for pending orders."
+  },
+  "salesReps": [
+    {
+      "id": "SPRO-SR-102",
+      "name": "Rahman Ali",
+      "initials": "RA",
+      "avatarColor": "primary",
+      "status": "On Field",
+      "statusVariant": "success",
+      "todayPulse": {
+        "order": 42000,
+        "target": 50000
+      },
+      "mtdProgress": {
+        "achieved": 320000,
+        "expected": 350000,
+        "pct": 60,
+        "gap": -30000,
+        "isAhead": false
+      }
+    },
+    {
+      "id": "SPRO-SR-105",
+      "name": "Siddiqur Rahman",
+      "initials": "SR",
+      "avatarColor": "info",
+      "status": "Lunch Break",
+      "statusVariant": "warning",
+      "todayPulse": {
+        "order": 55000,
+        "target": 50000
+      },
+      "mtdProgress": {
+        "achieved": 410000,
+        "expected": 380000,
+        "pct": 85,
+        "gap": 30000,
+        "isAhead": true
+      }
+    },
+    {
+      "id": "SPRO-SR-110",
+      "name": "Anisur Khan",
+      "initials": "AK",
+      "avatarColor": "neutral",
+      "status": "Offline",
+      "statusVariant": "danger",
+      "todayPulse": {
+        "order": 12000,
+        "target": 45000
+      },
+      "mtdProgress": {
+        "achieved": 180000,
+        "expected": 290000,
+        "pct": 40,
+        "gap": -110000,
+        "isAhead": false
+      }
+    }
+  ],
+  "detailedLogs": [
+    {
+      "id": "log-1",
+      "region": "Dhaka North",
+      "manager": "Zahid Hasan",
+      "achievement": 245000,
+      "gap": -15000,
+      "efficiencyPct": 92,
+      "efficiencyVariant": "success"
+    },
+    {
+      "id": "log-2",
+      "region": "Chittagong Central",
+      "manager": "Mehedi Iqbal",
+      "achievement": 310000,
+      "gap": 20000,
+      "efficiencyPct": 105,
+      "efficiencyVariant": "success"
+    },
+    {
+      "id": "log-3",
+      "region": "Sylhet Zone",
+      "manager": "Sylhet Zone",
+      "achievement": 95000,
+      "gap": -75000,
+      "efficiencyPct": 55,
+      "efficiencyVariant": "danger"
+    }
+  ]
+}

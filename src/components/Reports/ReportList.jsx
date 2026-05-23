@@ -13,8 +13,8 @@ import {
   MoreVertical,
   AlertTriangle
 } from 'lucide-react';
-
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import reportsData from '@/dummyData/webReport.json';
 
 const iconMap = {
@@ -89,7 +89,8 @@ const ReportListContent = () => {
       icon: iconMap[report.icon] || FileText,
       bgVar,
       iconColor,
-      meta
+      meta,
+      route: report.route
     };
   });
 
@@ -113,39 +114,40 @@ const ReportListContent = () => {
         {reports.map((report, idx) => {
           const Icon = report.icon;
           return (
-            <div 
-              key={idx} 
-              className="px-6 py-5 flex items-center justify-between gap-4 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 transition-colors cursor-pointer group"
-            >
-              {/* Left side details */}
-              <div className="flex items-center gap-4 min-w-0 flex-1">
-                {/* Icon square */}
-                <div 
-                  style={{ backgroundColor: report.bgVar, color: report.iconColor }} 
-                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 border border-black/5"
-                >
-                  <Icon size={20} />
+            <Link key={idx} href={report.route || '#'} className="block">
+              <div 
+                className="px-6 py-5 flex items-center justify-between gap-4 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 transition-colors cursor-pointer group"
+              >
+                {/* Left side details */}
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  {/* Icon square */}
+                  <div 
+                    style={{ backgroundColor: report.bgVar, color: report.iconColor }} 
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 border border-black/5"
+                  >
+                    <Icon size={20} />
+                  </div>
+                  
+                  {/* Text Content */}
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-extrabold text-xs sm:text-sm text-[var(--color-text-main)] truncate group-hover:text-[var(--color-primary)] transition-colors">
+                      {report.title}
+                    </h4>
+                    <p className="text-[11px] sm:text-xs text-[var(--color-text-muted)] mt-0.5 leading-snug truncate sm:normal-case">
+                      {report.description}
+                    </p>
+                  </div>
                 </div>
-                
-                {/* Text Content */}
-                <div className="min-w-0 flex-1">
-                  <h4 className="font-extrabold text-xs sm:text-sm text-[var(--color-text-main)] truncate group-hover:text-[var(--color-primary)] transition-colors">
-                    {report.title}
-                  </h4>
-                  <p className="text-[11px] sm:text-xs text-[var(--color-text-muted)] mt-0.5 leading-snug truncate sm:normal-case">
-                    {report.description}
-                  </p>
-                </div>
-              </div>
 
-              {/* Right side metadata info */}
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="hidden sm:block">
-                  {report.meta}
+                {/* Right side metadata info */}
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="hidden sm:block">
+                    {report.meta}
+                  </div>
+                  <ChevronRight size={18} className="text-[var(--color-text-muted)] group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <ChevronRight size={18} className="text-[var(--color-text-muted)] group-hover:translate-x-0.5 transition-transform" />
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
