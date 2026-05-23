@@ -1,19 +1,39 @@
 'use client';
 
-import React from 'react';
-import { usePathname } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Search, Bell, History, Grid } from 'lucide-react';
 
-const Header = () => {
+const HeaderContent = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchVal, setSearchVal] = useState(searchParams.get('q') || '');
 
-  // Tab navigation items
+  // Synchronize state with URL search param changes
+  useEffect(() => {
+    setSearchVal(searchParams.get('q') || '');
+  }, [searchParams]);
+
   const tabs = [
     { name: 'Dashboard', path: '/' },
     { name: 'Inventory', path: '#' },
     { name: 'Logistics', path: '#' },
     { name: 'Analytics', path: '/reports' },
   ];
+
+  const handleSearch = (e) => {
+    const val = e.target.value;
+    setSearchVal(val);
+
+    const params = new URLSearchParams(searchParams);
+    if (val) {
+      params.set('q', val);
+    } else {
+      params.delete('q');
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <header className="h-16 border-b border-[var(--color-border)] bg-[var(--color-card-bg)] px-8 flex items-center justify-between sticky top-0 z-20 hidden lg:flex">
@@ -24,6 +44,8 @@ const Header = () => {
         </span>
         <input
           type="text"
+          value={searchVal}
+          onChange={handleSearch}
           placeholder={pathname === '/reports' ? "Search reports..." : "Search logistics data..."}
           className="w-full pl-10 pr-4 py-2 text-sm bg-zinc-50 border border-[var(--color-border)] rounded-full outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)]"
         />
@@ -87,6 +109,14 @@ const Header = () => {
         </div>
       </div>
     </header>
+  );
+};
+
+const Header = () => {
+  return (
+    <React.Suspense fallback={<div className="h-16 bg-[var(--color-card-bg)] border-b border-[var(--color-border)] hidden lg:block" />}>
+      <HeaderContent />
+    </React.Suspense>
   );
 };
 

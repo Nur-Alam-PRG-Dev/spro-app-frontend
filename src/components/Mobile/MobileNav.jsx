@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Menu, Search, X, Home, FileText, Users, User, Settings, HelpCircle, Download, Bell } from 'lucide-react';
 
-export const MobileHeader = () => {
+const MobileHeaderContent = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState(searchParams.get('q') || '');
 
   // Determine Title based on pathname
   const getTitle = () => {
@@ -24,39 +28,92 @@ export const MobileHeader = () => {
     { name: 'Support', href: '#', icon: HelpCircle },
   ];
 
+  // Synchronize state with URL search param changes
+  useEffect(() => {
+    setSearchVal(searchParams.get('q') || '');
+  }, [searchParams]);
+
+  const handleSearch = (e) => {
+    const val = e.target.value;
+    setSearchVal(val);
+
+    const params = new URLSearchParams(searchParams);
+    if (val) {
+      params.set('q', val);
+    } else {
+      params.delete('q');
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <>
-      <header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
-        {/* Left Side Hamburger */}
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-[#1f5734] rounded-lg transition-colors"
-        >
-          <Menu size={22} />
-        </button>
+      {isSearchOpen ? (
+        <header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
+          {/* Back/Close Button */}
+          <button
+            onClick={() => {
+              setIsSearchOpen(false);
+              const params = new URLSearchParams(searchParams);
+              params.delete('q');
+              router.replace(`${pathname}?${params.toString()}`);
+            }}
+            className="p-2 hover:bg-[#1f5734] rounded-lg transition-colors"
+          >
+            <X size={22} />
+          </button>
 
-        {/* Center Page Title */}
-        <span className="font-extrabold tracking-wider text-base sm:text-lg">
-          {getTitle()}
-        </span>
-
-        {/* Right Actions */}
-        <div className="flex items-center gap-1">
-          {pathname !== '/reports' && (
-            <button className="p-2 hover:bg-[#1f5734] rounded-full transition-colors">
-              <Search size={20} />
-            </button>
-          )}
-          
-          <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold font-mono ml-1 shadow-sm">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              alt="avatar"
-              className="w-full h-full object-cover"
+          {/* Input field */}
+          <div className="flex-1 mx-2 relative">
+            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
+              <Search size={16} />
+            </span>
+            <input
+              type="text"
+              value={searchVal}
+              onChange={handleSearch}
+              placeholder={pathname === '/reports' ? "Search reports..." : "Search data..."}
+              className="w-full pl-9 pr-4 py-1.5 text-sm bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all"
+              autoFocus
             />
           </div>
-        </div>
-      </header>
+        </header>
+      ) : (
+        <header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
+          {/* Left Side Hamburger */}
+          <button
+            onClick={() => setIsOpen(true)}
+            className="p-2 hover:bg-[#1f5734] rounded-lg transition-colors"
+          >
+            <Menu size={22} />
+          </button>
+
+          {/* Center Page Title */}
+          <span className="font-extrabold tracking-wider text-base sm:text-lg">
+            {getTitle()}
+          </span>
+
+          {/* Right Actions */}
+          <div className="flex items-center gap-1">
+            {pathname !== '/reports' && (
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 hover:bg-[#1f5734] rounded-full transition-colors"
+              >
+                <Search size={20} />
+              </button>
+            )}
+            
+            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold font-mono ml-1 shadow-sm">
+              <img
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                alt="avatar"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </header>
+      )}
 
       {/* Drawer Overlay Backdrop */}
       {isOpen && (
@@ -122,6 +179,14 @@ export const MobileHeader = () => {
         </div>
       </div>
     </>
+  );
+};
+
+export const MobileHeader = () => {
+  return (
+    <React.Suspense fallback={<header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full animate-pulse" />}>
+      <MobileHeaderContent />
+    </React.Suspense>
   );
 };
 

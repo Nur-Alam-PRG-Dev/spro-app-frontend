@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import { 
   ClipboardList, 
@@ -16,7 +17,10 @@ import {
   Plus 
 } from 'lucide-react';
 
-const CardGrid = () => {
+const CardGridContent = () => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q')?.toLowerCase() || '';
+
   const cards = [
     {
       title: 'Orders',
@@ -92,9 +96,14 @@ const CardGrid = () => {
     },
   ];
 
+  const filteredCards = cards.filter(card => 
+    card.title.toLowerCase().includes(query) || 
+    card.value.toLowerCase().includes(query)
+  );
+
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8">
-      {cards.map((card, idx) => {
+      {filteredCards.map((card, idx) => {
         const IconComponent = card.icon;
         const CardContent = (
           <>
@@ -159,6 +168,14 @@ const CardGrid = () => {
         </h4>
       </Card>
     </div>
+  );
+};
+
+const CardGrid = () => {
+  return (
+    <React.Suspense fallback={<div className="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-6 sm:mt-8"><div className="h-28 sm:h-36 bg-zinc-50 border border-[var(--color-border)] rounded-2xl animate-pulse" /></div>}>
+      <CardGridContent />
+    </React.Suspense>
   );
 };
 

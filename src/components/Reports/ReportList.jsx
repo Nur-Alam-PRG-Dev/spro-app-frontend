@@ -14,6 +14,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
+import { useSearchParams } from 'next/navigation';
 import reportsData from '@/dummyData/webReport.json';
 
 const iconMap = {
@@ -23,8 +24,16 @@ const iconMap = {
   Store
 };
 
-const ReportList = () => {
-  const reports = reportsData.map(report => {
+const ReportListContent = () => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q')?.toLowerCase() || '';
+
+  const filteredData = reportsData.filter(report => 
+    report.reportTitle.toLowerCase().includes(query) ||
+    report.reportSubTitle.toLowerCase().includes(query)
+  );
+
+  const reports = filteredData.map(report => {
     let bgVar = '#e8f5e9';
     let iconColor = '#2e7d32';
     let meta = null;
@@ -141,6 +150,14 @@ const ReportList = () => {
         })}
       </div>
     </Card>
+  );
+};
+
+const ReportList = () => {
+  return (
+    <React.Suspense fallback={<div className="h-48 bg-zinc-50 border border-[var(--color-border)] rounded-2xl animate-pulse" />}>
+      <ReportListContent />
+    </React.Suspense>
   );
 };
 
