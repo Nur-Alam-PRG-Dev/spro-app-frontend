@@ -1,19 +1,14 @@
 [
   {
-    "id": "1",
-    "icon": "BriefcaseBusiness",
-    "reportTitle": "Half Summary",
-    "reportSubTitle": "Mid-period performance metrics and aggregate logistics flow.",
-    "route": "/halfSummary",
-    "lastUpdated": "2 hours ago"
-  },
-  {
     "id": "2",
     "icon": "Target",
     "reportTitle": "Target vs. Achievement",
     "reportSubTitle": "Comparative sales goals tracking and distribution efficiency.",
     "route": "/targetVsAchievement",
-    "status": ["On", "Target"]
+    "status": [
+      "On",
+      "Target"
+    ]
   },
   {
     "id": "3",
@@ -32,51 +27,11 @@
     "criticality": "High"
   },
   {
-    "id": "5",
-    "icon": "Gauge",
-    "reportTitle": "Velocity & Run Rate",
-    "reportSubTitle": "Real-time sales velocity monitoring and monthly projection forecasting.",
-    "route": "/salesVelocity",
-    "lastUpdated": "10 mins ago"
-  },
-  {
-    "id": "6",
-    "icon": "Route",
-    "reportTitle": "Logistics & Fleet Dispatch",
-    "reportSubTitle": "Secondary distribution channel tracking, transit delays, and fuel efficiency.",
-    "route": "/fleetDispatch",
-    "status": ["94%", "Optimized"]
-  },
-  {
-    "id": "7",
-    "icon": "MapPinCheckInside",
-    "reportTitle": "SR Attendance & Route Compliance",
-    "reportSubTitle": "Daily check-in logs, geofenced tracking, and missed route analysis for field reps.",
-    "route": "/srCompliance",
-    "records": "412 active reps"
-  },
-  {
-    "id": "8",
-    "icon": "PackageX",
-    "reportTitle": "Stockout & Aging Inventory",
-    "reportSubTitle": "Warehouse stock levels, critically low SKU alerts, and shelf-life aging reports.",
-    "route": "/stockoutAging",
-    "criticality": "Critical"
-  },
-  {
-    "id": "9",
-    "icon": "ReceiptPercent",
-    "reportTitle": "Collection & Outstanding Dues",
-    "reportSubTitle": "Credit management tracking, pending retailer invoices, and age-wise outstanding bills.",
-    "route": "/collectionsDues",
-    "lastUpdated": "Yesterday"
-  },
-  {
-    "id": "10",
-    "icon": "Undo2",
-    "reportTitle": "Damage & Return Analytics",
-    "reportSubTitle": "Product returns summary broken down by damage reasons, expiry dates, and territory.",
-    "route": "/returnsAnalytics",
-    "records": "87 pending reviews"
+    "id": "1",
+    "icon": "BriefcaseBusiness",
+    "reportTitle": "Half Summary",
+    "reportSubTitle": "Mid-period performance metrics and aggregate logistics flow.",
+    "route": "/halfSummary",
+    "lastUpdated": "2 hours ago"
   }
 ]

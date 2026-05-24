@@ -44,24 +44,24 @@ function AmolnamaContent() {
       value: '26',
       subText: 'Total Working Days',
       icon: Calendar,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/20',
-      iconColor: 'text-emerald-700 dark:text-emerald-400'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'First Activity',
       value: '08:45 AM',
       subText: 'LAST: 06:12 PM',
       icon: Clock,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/20',
-      iconColor: 'text-emerald-700 dark:text-emerald-400'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'Total Orders',
       value: '142',
       subText: 'Orders processed today',
       icon: ShoppingCart,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/20',
-      iconColor: 'text-emerald-700 dark:text-emerald-400'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     }
   ];
 
@@ -86,15 +86,15 @@ function AmolnamaContent() {
     {
       name: 'Hira store',
       icon: Home,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/20',
-      iconColor: 'text-emerald-700 dark:text-emerald-400',
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700',
       time: 'Last visited at 12:26 • 20m ago'
     },
     {
       name: 'Mayer Doa Pharmacy',
       icon: ShoppingBag,
-      iconBg: 'bg-sky-50 dark:bg-sky-950/20',
-      iconColor: 'text-sky-700 dark:text-sky-400',
+      iconBg: 'bg-sky-50',
+      iconColor: 'text-sky-700',
       time: 'Last visited at 11:45 • 1h ago'
     }
   ];
@@ -174,7 +174,7 @@ function AmolnamaContent() {
                     {supervisor.id} - {supervisor.name}
                   </span>
                 </div>
-                <ChevronDown size={18} className="text-emerald-800 dark:text-emerald-400" />
+                <ChevronDown size={18} className="text-emerald-800" />
               </div>
 
               {/* Reporting Date / Filter */}
@@ -185,7 +185,7 @@ function AmolnamaContent() {
                   </div>
                   <span className="text-sm font-bold text-emerald-800">{reportingDate}</span>
                 </div>
-                <button className="p-2 bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-100 dark:border-emerald-900/50 rounded-xl text-emerald-800 dark:text-emerald-400 cursor-pointer">
+                <button className="p-2 bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-800 cursor-pointer">
                   <SlidersHorizontal size={16} />
                 </button>
               </div>
@@ -196,8 +196,8 @@ function AmolnamaContent() {
         {/* Supervisor details selector on DESKTOP */}
         <div className="hidden lg:flex items-center gap-4 select-none">
           {/* Supervisor Card */}
-          <div className="flex items-center gap-3 bg-white dark:bg-zinc-900 border border-[var(--color-border)] rounded-2xl px-5 py-2.5 shadow-sm min-w-[320px]">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 text-[var(--color-primary)] dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+          <div className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-2xl px-5 py-2.5 shadow-sm min-w-[320px]">
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[var(--color-primary)] flex items-center justify-center border border-emerald-100">
               <Building2 size={18} />
             </div>
             <div className="flex-1">
@@ -208,12 +208,12 @@ function AmolnamaContent() {
                 {supervisor.id} - {supervisor.name}
               </span>
             </div>
-            <ChevronDown size={18} className="text-emerald-800 dark:text-emerald-400 cursor-pointer" />
+            <ChevronDown size={18} className="text-emerald-800 cursor-pointer" />
           </div>
 
           {/* Date Selector Card */}
-          <div className="flex items-center gap-3 bg-white dark:bg-zinc-900 border border-[var(--color-border)] rounded-2xl px-5 py-2.5 shadow-sm min-w-[260px]">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 text-[var(--color-primary)] dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+          <div className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-2xl px-5 py-2.5 shadow-sm min-w-[260px]">
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[var(--color-primary)] flex items-center justify-center border border-emerald-100">
               <Calendar size={18} />
             </div>
             <div className="flex-1">
@@ -222,7 +222,7 @@ function AmolnamaContent() {
               </span>
               <span className="text-sm font-extrabold text-[var(--color-text-main)]">{reportingDate}</span>
             </div>
-            <SlidersHorizontal size={18} className="text-emerald-800 dark:text-emerald-400 cursor-pointer hover:text-emerald-600 transition-colors ml-2" />
+            <SlidersHorizontal size={18} className="text-emerald-800 cursor-pointer hover:text-emerald-600 transition-colors ml-2" />
           </div>
         </div>
       </div>
@@ -265,7 +265,7 @@ function AmolnamaContent() {
           {/* Growth Status (visible as column 4 on desktop, hidden or placed on mobile) */}
           <div className="min-w-[240px] lg:min-w-0 flex-1 snap-start">
             <Card
-              className="p-5 bg-[#003d1c] dark:bg-[#002a13] border-none text-white flex items-start gap-4 h-full"
+              className="p-5 bg-[#003d1c] border-none text-white flex items-start gap-4 h-full"
               hoverable={true}
             >
               <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
@@ -421,7 +421,7 @@ function AmolnamaContent() {
                 </span>
                 <button
                   onClick={() => setIsMapExpanded(!isMapExpanded)}
-                  className="p-1 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 rounded-lg text-emerald-800 dark:text-emerald-400 cursor-pointer"
+                  className="p-1 hover:bg-emerald-50 rounded-lg text-emerald-800 cursor-pointer"
                 >
                   <Maximize2 size={16} />
                 </button>
@@ -487,7 +487,7 @@ function AmolnamaContent() {
               </div>
 
               {/* Add tagged location button */}
-              <button className="w-full py-3.5 text-xs font-black border border-dashed border-emerald-200 dark:border-emerald-900/50 bg-white dark:bg-zinc-900 text-emerald-800 dark:text-emerald-400 hover:bg-emerald-50/20 dark:hover:bg-emerald-950/5 hover:border-emerald-300 transition-colors select-none cursor-pointer">
+              <button className="w-full py-3.5 text-xs font-black border border-dashed border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50/20 hover:border-emerald-300 transition-colors select-none cursor-pointer">
                 + Add Tagged Location
               </button>
             </div>
@@ -523,7 +523,7 @@ function AmolnamaContent() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
-              <tr className="bg-zinc-50 dark:bg-zinc-900/50 border-b border-[var(--color-border)] text-[var(--color-text-muted)] font-black uppercase text-[10px] tracking-wider">
+              <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-[var(--color-text-muted)] font-black uppercase text-[10px] tracking-wider">
                 <th className="px-6 py-4">Staff Name</th>
                 <th className="px-6 py-4">Location</th>
                 <th className="px-6 py-4">Time</th>
@@ -564,14 +564,14 @@ function AmolnamaContent() {
                       {act.status === 'COMPLETED' ? (
                         <Badge type="target">Completed</Badge>
                       ) : (
-                        <span className="inline-flex items-center justify-center bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-semibold text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wide">
+                        <span className="inline-flex items-center justify-center bg-emerald-50 text-emerald-700 font-semibold text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wide">
                           In Progress
                         </span>
                       )}
                     </td>
                     {/* Action button */}
                     <td className="px-6 py-4.5 text-right">
-                      <button className="p-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 rounded-lg text-emerald-800 dark:text-emerald-400 transition-colors cursor-pointer">
+                      <button className="p-1.5 hover:bg-emerald-50 rounded-lg text-emerald-800 transition-colors cursor-pointer">
                         <MoreVertical size={16} />
                       </button>
                     </td>

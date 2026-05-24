@@ -46,7 +46,11 @@ const HeaderContent = () => {
           type="text"
           value={searchVal}
           onChange={handleSearch}
-          placeholder={pathname === '/reports' ? "Search reports..." : "Search logistics data..."}
+          placeholder={
+            pathname === '/reports' ? "Search reports..." :
+            pathname === '/uncoveredOutlet' ? "Search outlets, orders, SRs..." :
+            "Search logistics data..."
+          }
           className="w-full pl-10 pr-4 py-2 text-sm bg-zinc-50 border border-[var(--color-border)] rounded-full outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)]"
         />
       </div>

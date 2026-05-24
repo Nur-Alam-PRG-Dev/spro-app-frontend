@@ -1,0 +1,74 @@
+{
+  "targetSummary": {
+    "count": 42,
+    "label": "Outlets Uncovered"
+  },
+  "activeList": [
+    {
+      "id": "1",
+      "name": "Mayer Doa Pharmacy",
+      "srName": "Rahman Ali",
+      "iconType": "building",
+      "badge": "clock",
+      "lastVisit": "12 Oct 2024",
+      "lastVisitSubtext": "18 days overdue",
+      "lastVisitOverdue": true,
+      "monthlyOrderAvg": "12,450",
+      "tag": "High Value Outlet",
+      "tagType": "high",
+      "region": "Dhaka North",
+      "contact": "+8801711122233"
+    },
+    {
+      "id": "2",
+      "name": "Hira Store",
+      "srName": "Rahman Ali",
+      "iconType": "store",
+      "badge": "alert",
+      "lastVisit": "NEVER",
+      "lastVisitSubtext": "New Account",
+      "lastVisitOverdue": true,
+      "monthlyOrderAvg": "8,200",
+      "tag": "Mid-Tier Potential",
+      "tagType": "warning",
+      "region": "Chittagong Central",
+      "contact": "+8801722233344"
+    },
+    {
+      "id": "3",
+      "name": "Green General Store",
+      "srName": "Anisur Khan",
+      "iconType": "bag",
+      "badge": "clock",
+      "lastVisit": "08 Oct 2024",
+      "lastVisitSubtext": "22 days overdue",
+      "lastVisitOverdue": true,
+      "monthlyOrderAvg": "15,200",
+      "tag": "Premium Account",
+      "tagType": "success",
+      "region": "Sylhet Zone",
+      "contact": "+8801733344455"
+    },
+    {
+      "id": "4",
+      "name": "Mayer Doa Pharmacy",
+      "srName": "Rahman Ali",
+      "iconType": "building",
+      "badge": "clock",
+      "lastVisit": "12 Oct 2024",
+      "lastVisitSubtext": "18 days overdue",
+      "lastVisitOverdue": true,
+      "monthlyOrderAvg": "25,200",
+      "tag": "Premium Account",
+      "tagType": "success",
+      "region": "Sylhet Zone",
+      "contact": "+8801733344455"
+    }
+  ],
+  "areas": [
+    "All Areas",
+    "Dhaka North",
+    "Chittagong Central",
+    "Sylhet Zone"
+  ]
+}

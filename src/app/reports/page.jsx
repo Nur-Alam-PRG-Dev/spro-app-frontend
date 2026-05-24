@@ -1,13 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import ReportList from '@/components/Reports/ReportList';
-import ReportStats from '@/components/Reports/ReportStats';
-import QuickExport from '@/components/Reports/QuickExport';
-import DataIntegrity from '@/components/Reports/DataIntegrity';
-import { SlidersHorizontal, Plus, ChevronRight } from 'lucide-react';
+import { ChevronRight, Search } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export default function ReportsPage() {
+function ReportsContent() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [searchVal, setSearchVal] = useState(searchParams.get('q') || '');
+
+  // Sync search state with URL query param changes
+  useEffect(() => {
+    setSearchVal(searchParams.get('q') || '');
+  }, [searchParams]);
+
+  const handleSearch = (e) => {
+    const val = e.target.value;
+    setSearchVal(val);
+
+    const params = new URLSearchParams(searchParams);
+    if (val) {
+      params.set('q', val);
+    } else {
+      params.delete('q');
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-10">
       {/* Breadcrumb & Header Title Section */}
@@ -28,37 +49,34 @@ export default function ReportsPage() {
             </p>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-2.5">
-            {/* Filter View button */}
-            <button className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm bg-white  border border-[var(--color-border)] rounded-xl font-bold text-[var(--color-text-main)] shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 dark:hover:text-white transition-colors">
-              <SlidersHorizontal size={16} className="text-[var(--color-text-muted)]" />
-              <span>Filter View</span>
-            </button>
-
-            {/* + New Report button */}
-            <button className="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-sm transition-colors">
-              <Plus size={16} />
-              <span>New Report</span>
-            </button>
+          {/* Search option in content header */}
+          <div className="relative w-full sm:w-72">
+            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+              <Search size={16} />
+            </span>
+            <input
+              type="text"
+              value={searchVal}
+              onChange={handleSearch}
+              placeholder="Search reports..."
+              className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-white border border-[var(--color-border)] rounded-xl outline-none focus:border-[var(--color-primary)] transition-all text-[var(--color-text-main)] font-semibold shadow-xs"
+            />
           </div>
         </div>
       </div>
 
-      {/* Main split content area */}
-      <div className="flex flex-col lg:flex-row items-start gap-6 mt-6">
-        {/* Left Column: List table */}
-        <div className="w-full lg:flex-1">
-          <ReportList />
-        </div>
-
-        {/* Right Column: Stats, exports, integrity */}
-        <div className="w-full lg:w-80 space-y-6 shrink-0">
-          <ReportStats />
-          <QuickExport />
-          <DataIntegrity />
-        </div>
+      {/* Main content area */}
+      <div className="mt-6">
+        <ReportList />
       </div>
     </div>
+  );
+}
+
+export default function ReportsPage() {
+  return (
+    <Suspense fallback={<div className="h-64 bg-zinc-50 border border-[var(--color-border)] rounded-2xl animate-pulse" />}>
+      <ReportsContent />
+    </Suspense>
   );
 }

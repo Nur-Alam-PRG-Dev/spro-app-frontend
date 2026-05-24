@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X, Grid } from 'lucide-react';
+import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X, Grid, ArrowLeft, MoreVertical } from 'lucide-react';
 
 const MobileHeaderContent = () => {
   const pathname = usePathname();
@@ -40,46 +40,33 @@ const MobileHeaderContent = () => {
   };
 
   const isAmolnama = pathname === '/amolnama';
+  const isUncovered = pathname === '/uncoveredOutlet';
+  const isTargetVs = pathname === '/targetVsAchievement';
 
   return (
     <>
       <header className="lg:hidden flex items-center justify-between gap-3 px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
-        {/* Left Side Hamburger */}
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0"
-        >
-          <Menu size={22} />
-        </button>
-
-        {isAmolnama ? (
+        {isUncovered ? (
           <>
-            <span className="font-extrabold tracking-wider text-base uppercase mr-auto ml-2">AMOLNAMA</span>
-            <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
-              <Grid size={22} />
-            </button>
-          </>
-        ) : (
-          <>
-            {/* Persistent Search Field in Mobile Header */}
-            <div className="flex-1 relative">
-              <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
-                <Search size={16} />
-              </span>
-              <input
-                type="text"
-                value={searchVal}
-                onChange={handleSearch}
-                placeholder={
-                  pathname === '/reports' ? "Search reports..." :
-                  pathname.startsWith('/targetVs') ? "Search reps..." :
-                  "Search data..."
-                }
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all text-white font-medium"
-              />
+            <Link href="/reports" className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0 text-white">
+              <ArrowLeft size={22} />
+            </Link>
+            <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Uncovered Outlets</span>
+            <div className="flex items-center gap-1">
+              <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+                <Search size={22} />
+              </button>
+              <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+                <MoreVertical size={22} />
+              </button>
             </div>
-
-            {/* Right User Avatar */}
+          </>
+        ) : isTargetVs ? (
+          <>
+            <Link href="/reports" className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0 text-white">
+              <ArrowLeft size={22} />
+            </Link>
+            <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Target vs. Achievement</span>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
               <img
                 src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
@@ -87,6 +74,54 @@ const MobileHeaderContent = () => {
                 className="w-full h-full object-cover"
               />
             </div>
+          </>
+        ) : (
+          <>
+            {/* Left Side Hamburger */}
+            <button
+              onClick={() => setIsOpen(true)}
+              className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0"
+            >
+              <Menu size={22} />
+            </button>
+
+            {isAmolnama ? (
+              <>
+                <span className="font-extrabold tracking-wider text-base uppercase mr-auto ml-2">AMOLNAMA</span>
+                <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+                  <Grid size={22} />
+                </button>
+              </>
+            ) : (
+              <>
+                {/* Persistent Search Field in Mobile Header */}
+                <div className="flex-1 relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
+                    <Search size={16} />
+                  </span>
+                  <input
+                    type="text"
+                    value={searchVal}
+                    onChange={handleSearch}
+                    placeholder={
+                      pathname === '/reports' ? "Search reports..." :
+                      pathname.startsWith('/targetVs') ? "Search reps..." :
+                      "Search data..."
+                    }
+                    className="w-full pl-9 pr-3 py-1.5 text-xs bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all text-white font-medium"
+                  />
+                </div>
+
+                {/* Right User Avatar */}
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+                  <img
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
       </header>
