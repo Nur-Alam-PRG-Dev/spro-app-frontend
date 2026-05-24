@@ -31,7 +31,7 @@ export default function ReportsPage() {
           {/* Action buttons */}
           <div className="flex items-center gap-2.5">
             {/* Filter View button */}
-            <button className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm bg-white dark:bg-zinc-900 border border-[var(--color-border)] rounded-xl font-bold text-[var(--color-text-main)] shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+            <button className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm bg-white  border border-[var(--color-border)] rounded-xl font-bold text-[var(--color-text-main)] shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 dark:hover:text-white transition-colors">
               <SlidersHorizontal size={16} className="text-[var(--color-text-muted)]" />
               <span>Filter View</span>
             </button>

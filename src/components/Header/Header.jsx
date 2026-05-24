@@ -94,10 +94,11 @@ const HeaderContent = () => {
         <div className="h-6 w-px bg-[var(--color-border)]"></div>
 
         {/* User Profile avatar */}
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <h4 className="text-sm font-bold text-[var(--color-text-main)] leading-none">Marcus Vane</h4>
-            <span className="text-[10px] text-[var(--color-text-muted)] font-medium leading-none">Operations Manager</span>
+        <div className="flex items-center gap-3 select-none">
+          <div className="text-right flex flex-col">
+            <h4 className="text-xs sm:text-sm font-bold text-[var(--color-text-main)] leading-tight">Admin Console</h4>
+            <span className="text-[10px] text-[var(--color-text-muted)] font-bold leading-normal">SPRO</span>
+            <span className="text-[9px] text-[var(--color-text-muted)] font-medium leading-none">Logistics</span>
           </div>
           <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--color-border)] shadow-sm bg-zinc-200">
             <img

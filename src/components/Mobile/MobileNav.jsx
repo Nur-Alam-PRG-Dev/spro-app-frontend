@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X } from 'lucide-react';
+import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X, Grid } from 'lucide-react';
 
 const MobileHeaderContent = () => {
   const pathname = usePathname();
@@ -39,6 +39,8 @@ const MobileHeaderContent = () => {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  const isAmolnama = pathname === '/amolnama';
+
   return (
     <>
       <header className="lg:hidden flex items-center justify-between gap-3 px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
@@ -50,32 +52,43 @@ const MobileHeaderContent = () => {
           <Menu size={22} />
         </button>
 
-        {/* Persistent Search Field in Mobile Header */}
-        <div className="flex-1 relative">
-          <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
-            <Search size={16} />
-          </span>
-          <input
-            type="text"
-            value={searchVal}
-            onChange={handleSearch}
-            placeholder={
-              pathname === '/reports' ? "Search reports..." :
-              pathname.startsWith('/targetVs') ? "Search reps..." :
-              "Search data..."
-            }
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all text-white font-medium"
-          />
-        </div>
+        {isAmolnama ? (
+          <>
+            <span className="font-extrabold tracking-wider text-base uppercase mr-auto ml-2">AMOLNAMA</span>
+            <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+              <Grid size={22} />
+            </button>
+          </>
+        ) : (
+          <>
+            {/* Persistent Search Field in Mobile Header */}
+            <div className="flex-1 relative">
+              <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/70">
+                <Search size={16} />
+              </span>
+              <input
+                type="text"
+                value={searchVal}
+                onChange={handleSearch}
+                placeholder={
+                  pathname === '/reports' ? "Search reports..." :
+                  pathname.startsWith('/targetVs') ? "Search reps..." :
+                  "Search data..."
+                }
+                className="w-full pl-9 pr-3 py-1.5 text-xs bg-white/10 border border-white/20 rounded-full outline-none focus:bg-white focus:text-[var(--color-text-main)] placeholder-white/80 transition-all text-white font-medium"
+              />
+            </div>
 
-        {/* Right User Avatar */}
-        <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
-          <img
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-            alt="avatar"
-            className="w-full h-full object-cover"
-          />
-        </div>
+            {/* Right User Avatar */}
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+              <img
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                alt="avatar"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </>
+        )}
       </header>
 
       {/* Drawer Overlay Backdrop */}
@@ -135,7 +148,7 @@ const MobileHeaderContent = () => {
 
         {/* Drawer Footer download action */}
         <div className="p-4 border-t border-[var(--color-sidebar-hover)]">
-          <button className="w-full flex items-center justify-center gap-2 bg-[#2c8d4f] hover:bg-[#23703e] text-white py-2.5 px-4 rounded-xl text-sm font-bold shadow-md transition-colors">
+          <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] text-[#004b23] py-2.5 px-4 rounded-xl text-sm font-bold shadow-md transition-colors cursor-pointer">
             <Download size={16} />
             Download Reports
           </button>

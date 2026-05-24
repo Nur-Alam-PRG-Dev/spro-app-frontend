@@ -74,7 +74,7 @@ const Sidebar = () => {
         </div>
 
         {/* Download Reports Button */}
-        <button className="w-full flex items-center justify-center gap-2 bg-[#2c8d4f] hover:bg-[#23703e] text-white py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors shadow-sm">
+        <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-[#004b23] dark:text-emerald-300 py-2.5 px-4 rounded-xl text-sm font-semibold transition-colors shadow-sm cursor-pointer">
           <Download size={16} />
           Download Reports
         </button>
