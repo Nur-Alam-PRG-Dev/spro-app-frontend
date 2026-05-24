@@ -52,6 +52,8 @@ function TargetVsAchievementContent() {
     return val < 0 ? `-${formatted}` : formatted;
   };
 
+  const isLabelOverlap = Math.abs(team.achievedPct - team.expectedPct) < 14;
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-10">
       {/* Breadcrumb & Page Header Title */}
@@ -79,7 +81,7 @@ function TargetVsAchievementContent() {
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="appearance-none flex items-center gap-2 pl-9 pr-8 py-2 text-xs sm:text-sm bg-white dark:bg-zinc-900 border border-[var(--color-border)] rounded-xl font-bold text-[var(--color-text-main)] shadow-sm outline-none cursor-pointer focus:border-[var(--color-primary)] transition-colors"
+              className="appearance-none flex items-center gap-2 pl-9 pr-8 py-2 text-xs sm:text-sm border border-[var(--color-border)] rounded-xl font-bold text-[var(--color-text-main)] shadow-sm outline-none cursor-pointer focus:border-[var(--color-primary)] transition-colors"
             >
               {targetData.periodOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -169,14 +171,16 @@ function TargetVsAchievementContent() {
             <div className="absolute left-0 right-0 top-1.5 flex justify-between px-1 pointer-events-none">
               <span 
                 style={{ left: `${team.achievedPct}%` }} 
-                className="absolute -translate-x-1/2 text-emerald-600 font-bold"
+                className="absolute -translate-x-1/2 text-emerald-600 font-bold transition-all duration-300"
               >
                 {team.achievedPct}% ACHIEVED
               </span>
               
               <span 
                 style={{ left: `${team.expectedPct}%` }} 
-                className="absolute -translate-x-1/2 text-amber-600 font-bold"
+                className={`absolute -translate-x-1/2 text-amber-600 font-bold transition-all duration-300 ${
+                  isLabelOverlap ? 'translate-y-3.5' : ''
+                }`}
               >
                 {team.expectedPct}% EXPECTED
               </span>
