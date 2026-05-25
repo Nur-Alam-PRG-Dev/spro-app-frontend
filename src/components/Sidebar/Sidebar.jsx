@@ -37,7 +37,9 @@ const Sidebar = () => {
       <nav className="flex-1 px-4 py-6 space-y-1">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href;
+          const isActive = item.href === '/'
+            ? pathname === '/'
+            : pathname.startsWith(item.href) || (item.href === '/reports' && ['/halfSummary', '/targetVsAchievement', '/uncoveredOutlet'].includes(pathname));
           return (
             <Link
               key={item.name}

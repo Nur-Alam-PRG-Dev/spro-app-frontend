@@ -23,6 +23,25 @@ function TargetVsAchievementContent() {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedPeriod, setSelectedPeriod] = useState(targetData.periodOptions[0].value);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/targetVsAchievement')
+      .then((res) => {
+        if (!res.ok) throw new Error('API Error');
+        return res.json();
+      })
+      .then((payload) => {
+        setData(payload);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to load targetVsAchievement API:', err);
+        setData(targetData);
+        setLoading(false);
+      });
+  }, []);
 
   const query = searchParams.get('q')?.toLowerCase() || '';
   const [searchVal, setSearchVal] = useState(query);
@@ -45,9 +64,18 @@ function TargetVsAchievementContent() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const team = targetData.teamPerformance;
-  const reps = targetData.salesReps;
-  const logs = targetData.detailedLogs;
+  if (loading || !data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-emerald-100 border-t-emerald-800 animate-spin" />
+        <span className="text-sm font-bold text-[var(--color-text-muted)]">Loading metrics...</span>
+      </div>
+    );
+  }
+
+  const team = data.teamPerformance;
+  const reps = data.salesReps;
+  const logs = data.detailedLogs;
 
   // Filter representatives by search term
   const filteredReps = reps.filter(rep => 
@@ -287,16 +315,16 @@ function TargetVsAchievementContent() {
                     {/* Today's Pulse */}
                     <div className="bg-[#f2f2f7]/50 border border-zinc-200 rounded-xl p-3 space-y-1.5">
                       <span className="block text-[8px] font-black text-[#8e8e93] tracking-wider uppercase">Today's Pulse</span>
-                      <div className="grid grid-cols-2 text-[10px] font-semibold text-zinc-500">
+                      <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Order:</span>
-                          <div className="text-xs sm:text-sm font-extrabold text-emerald-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-emerald-700 mt-0.5">
                             {formatNum(rep.todayPulse.order)}
                           </div>
                         </div>
-                        <div>
+                        <div className="text-right">
                           <span>Tgt:</span>
-                          <div className="text-xs sm:text-sm font-extrabold text-red-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-red-700 mt-0.5">
                             {formatNum(rep.todayPulse.target)}
                           </div>
                         </div>
@@ -306,16 +334,16 @@ function TargetVsAchievementContent() {
                     {/* MTD Progress */}
                     <div className="bg-[#f2f2f7]/50 border border-zinc-200 rounded-xl p-3 space-y-1.5">
                       <span className="block text-[8px] font-black text-[#8e8e93] tracking-wider uppercase">MTD Progress</span>
-                      <div className="grid grid-cols-2 text-[10px] font-semibold text-zinc-500">
+                      <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Ach:</span>
-                          <div className="text-xs sm:text-sm font-extrabold text-emerald-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-emerald-700 mt-0.5">
                             {formatNum(rep.mtdProgress.achieved)}
                           </div>
                         </div>
-                        <div>
+                        <div className="text-right">
                           <span>Exp:</span>
-                          <div className="text-xs sm:text-sm font-extrabold text-amber-500 mt-0.5">
+                          <div className="text-xs font-extrabold text-amber-500 mt-0.5">
                             {formatNum(rep.mtdProgress.expected)}
                           </div>
                         </div>

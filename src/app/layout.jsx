@@ -24,6 +24,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="h-full bg-[var(--color-bg-main)] text-[var(--color-text-main)] overflow-hidden">
         <div className="flex h-screen w-screen overflow-hidden">

@@ -1,0 +1,159 @@
+{
+  "lastUpdated": "Today, 14:30 PM",
+  "fiscalYear": "Fiscal Year 2024",
+  "verifiedData": true,
+  "overallSummary": {
+    "firstHalf": {
+      "period": "Jan - Jun",
+      "orderAmount": 1425000,
+      "orderAmountTrend": 12.5,
+      "targetAchievement": 85,
+      "orderCount": 42580,
+      "orderCountTrend": 4,
+      "visitCount": 5820,
+      "visitCountTrend": -2,
+      "productivity": 36.5,
+      "productivityLabel": "Optimal",
+      "strikeRate": 62.1,
+      "strikeRateLabel": "Avg",
+      "lpc": 1.8,
+      "lpcLabel": "Avg"
+    },
+    "secondHalf": {
+      "period": "Jul - Dec",
+      "totalVolume": 1892450,
+      "volumeTrend": 18.2,
+      "targetAchievement": 92,
+      "orderCount": 58120,
+      "orderCountTrend": 12,
+      "visitCount": 6450,
+      "visitCountTrend": 8,
+      "productivity": 48.2,
+      "productivityLabel": "High",
+      "strikeRate": 74.8,
+      "strikeRateLabel": "Exceeding",
+      "lpc": 2.4,
+      "lpcLabel": "High"
+    },
+    "drilldown": [
+      {
+        "metric": "Total Sales Amount",
+        "q1Actual": 712500,
+        "q2Actual": 845200,
+        "growth": 18.6,
+        "status": "On Track"
+      },
+      {
+        "metric": "Order Fulfilment",
+        "q1Actual": 21040,
+        "q2Actual": 23450,
+        "growth": 11.4,
+        "status": "On Track"
+      },
+      {
+        "metric": "Active Outlets",
+        "q1Actual": 1240,
+        "q2Actual": 1180,
+        "growth": -4.8,
+        "status": "Needs Attention"
+      },
+      {
+        "metric": "Strike Rate (Avg)",
+        "q1Actual": 58.2,
+        "q2Actual": 64.5,
+        "growth": 6.3,
+        "status": "Exceeding"
+      }
+    ]
+  },
+  "teamWise": {
+    "stats": {
+      "totalTeamRevenue": 1482900,
+      "revenueGrowth": 12.4,
+      "totalOrders": 2104,
+      "ordersGrowth": 8,
+      "activeReps": "18 / 20",
+      "avgStrikeRate": 74.2
+    },
+    "reps": [
+      {
+        "id": "SR-08",
+        "name": "Rahman Ali",
+        "role": "SALES REPRESENTATIVE (SR)",
+        "initials": "R",
+        "avatarColor": "primary",
+        "status": "Active",
+        "statusVariant": "success",
+        "revenue": 482900,
+        "performanceH1": {
+          "orderAmount": 232450,
+          "orderCount": 580,
+          "visits": 2100,
+          "productivity": 68,
+          "lpc": 2.4,
+          "strike": 42
+        },
+        "performanceH2": {
+          "orderAmount": 250450,
+          "orderCount": 660,
+          "visits": 2450,
+          "productivity": 74,
+          "lpc": 2.8,
+          "strike": 48
+        }
+      },
+      {
+        "id": "SR-12",
+        "name": "Siddiqur Rahman",
+        "role": "SALES REPRESENTATIVE (SR)",
+        "initials": "S",
+        "avatarColor": "info",
+        "status": "Active",
+        "statusVariant": "success",
+        "revenue": 392100,
+        "performanceH1": {
+          "orderAmount": 185000,
+          "orderCount": 480,
+          "visits": 1900,
+          "productivity": 62,
+          "lpc": 2.1,
+          "strike": 40
+        },
+        "performanceH2": {
+          "orderAmount": 207100,
+          "orderCount": 510,
+          "visits": 2150,
+          "productivity": 66,
+          "lpc": 2.3,
+          "strike": 44
+        }
+      },
+      {
+        "id": "SR-15",
+        "name": "Anisur Khan",
+        "role": "SALES REPRESENTATIVE (SR)",
+        "initials": "A",
+        "avatarColor": "success",
+        "status": "Active",
+        "statusVariant": "success",
+        "revenue": 342500,
+        "performanceH1": {
+          "orderAmount": 165000,
+          "orderCount": 410,
+          "visits": 1700,
+          "productivity": 58,
+          "lpc": 1.9,
+          "strike": 38
+        },
+        "performanceH2": {
+          "orderAmount": 177500,
+          "orderCount": 440,
+          "visits": 1850,
+          "productivity": 60,
+          "lpc": 2.0,
+          "strike": 41
+        }
+      }
+    ]
+  }
+}

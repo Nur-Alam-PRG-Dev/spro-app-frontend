@@ -42,6 +42,7 @@ const MobileHeaderContent = () => {
   const isAmolnama = pathname === '/amolnama';
   const isUncovered = pathname === '/uncoveredOutlet';
   const isTargetVs = pathname === '/targetVsAchievement';
+  const isHalfSummary = pathname === '/halfSummary';
 
   return (
     <>
@@ -67,6 +68,20 @@ const MobileHeaderContent = () => {
               <ArrowLeft size={22} />
             </Link>
             <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Target vs. Achievement</span>
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+              <img
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                alt="avatar"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </>
+        ) : isHalfSummary ? (
+          <>
+            <Link href="/reports" className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0 text-white">
+              <ArrowLeft size={22} />
+            </Link>
+            <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Half Summary Report</span>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
               <img
                 src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
@@ -162,7 +177,9 @@ const MobileHeaderContent = () => {
         <nav className="flex-1 px-3 py-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = pathname === item.href;
+            const isActive = item.href === '/'
+              ? pathname === '/'
+              : pathname.startsWith(item.href) || (item.href === '/reports' && ['/halfSummary', '/targetVsAchievement', '/uncoveredOutlet'].includes(pathname));
             return (
               <Link
                 key={item.name}
@@ -215,7 +232,9 @@ export const MobileTabBar = () => {
     <div className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--color-card-bg)] border-t border-[var(--color-border)] flex items-center justify-around px-2 z-30 shadow-lg">
       {tabItems.map((tab) => {
         const Icon = tab.icon;
-        const isActive = pathname === tab.href;
+        const isActive = tab.href === '/'
+          ? pathname === '/'
+          : pathname.startsWith(tab.href) || (tab.href === '/reports' && ['/halfSummary', '/targetVsAchievement', '/uncoveredOutlet'].includes(pathname));
         return (
           <Link
             key={tab.name}
