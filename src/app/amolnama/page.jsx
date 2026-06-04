@@ -4,6 +4,7 @@ import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import AmolnamaFilters from '@/components/Reports/AmolnamaFilters';
 import {
   ChevronRight,
   Calendar,
@@ -31,6 +32,15 @@ function AmolnamaContent() {
   const [activeSubTab, setActiveSubTab] = useState('Thana Wise');
   const [activeActivityTab, setActiveActivityTab] = useState('All Activities');
   const [isMapExpanded, setIsMapExpanded] = useState(false);
+  const [employeeSearch, setEmployeeSearch] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handleClearFilters = () => {
+    setEmployeeSearch('');
+    setStartDate('');
+    setEndDate('');
+  };
 
   // Mock data matching the screenshots
   const supervisor = {
@@ -135,34 +145,73 @@ function AmolnamaContent() {
 
   const recentActivities = [
     {
+      id: 'EMP00241',
       name: 'Kamal Hossain',
       avatar: 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp',
       location: 'Green Road Pharmacy, Zone B',
       time: '01:15 PM',
+      date: '2026-05-02',
       status: 'COMPLETED'
     },
     {
+      id: 'EMP00318',
       name: 'Rahim Ali',
       avatar: 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp',
       location: 'Central Plaza Mart, Zone A',
       time: '12:50 PM',
+      date: '2026-05-02',
       status: 'COMPLETED'
     },
     {
+      id: 'EMP00429',
       name: 'Selim Reza',
       avatar: 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp',
       location: 'North Point Store, Zone C',
       time: '12:30 PM',
+      date: '2026-05-03',
       status: 'IN PROGRESS'
+    },
+    {
+      id: 'EMP00102',
+      name: 'Abul Kalam',
+      avatar: 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp',
+      location: 'Dhanmondi Pharmacy, Zone A',
+      time: '10:00 AM',
+      date: '2026-05-04',
+      status: 'COMPLETED'
+    },
+    {
+      id: 'EMP00550',
+      name: 'Nural Amin',
+      avatar: 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp',
+      location: 'Banani Drug House, Zone D',
+      time: '04:15 PM',
+      date: '2026-05-05',
+      status: 'COMPLETED'
     }
   ];
 
-  // Filtering based on search query
-  const filteredActivities = recentActivities.filter(activity =>
-    activity.name.toLowerCase().includes(query) ||
-    activity.location.toLowerCase().includes(query) ||
-    activity.status.toLowerCase().includes(query)
-  );
+  // Filtering based on search query, employee search, and date range
+  const filteredActivities = recentActivities.filter(activity => {
+    const headerMatch = !query || 
+      activity.name.toLowerCase().includes(query) ||
+      activity.location.toLowerCase().includes(query) ||
+      activity.status.toLowerCase().includes(query);
+
+    const employeeMatch = !employeeSearch ||
+      activity.name.toLowerCase().includes(employeeSearch.toLowerCase()) ||
+      activity.id.toLowerCase().includes(employeeSearch.toLowerCase());
+
+    let dateMatch = true;
+    if (startDate) {
+      dateMatch = dateMatch && activity.date >= startDate;
+    }
+    if (endDate) {
+      dateMatch = dateMatch && activity.date <= endDate;
+    }
+
+    return headerMatch && employeeMatch && dateMatch;
+  });
 
   const activeCoverage = coverageDetails[activeSubTab];
 
@@ -260,6 +309,17 @@ function AmolnamaContent() {
           </div>
         </div>
       </div>
+
+      {/* ─── Search and Date Range Filters ─── */}
+      <AmolnamaFilters
+        employeeSearch={employeeSearch}
+        onEmployeeSearchChange={setEmployeeSearch}
+        startDate={startDate}
+        onStartDateChange={setStartDate}
+        endDate={endDate}
+        onEndDateChange={setEndDate}
+        onClearFilters={handleClearFilters}
+      />
 
       {/* ─── Daily Summary ─── */}
       <div>
@@ -532,7 +592,7 @@ function AmolnamaContent() {
               <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-[var(--color-text-muted)] font-black uppercase text-[10px] tracking-wider">
                 <th className="px-6 py-4">Staff Name</th>
                 <th className="px-6 py-4">Location</th>
-                <th className="px-6 py-4">Time</th>
+                <th className="px-6 py-4">Time & Date</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Action</th>
               </tr>
@@ -554,17 +614,25 @@ function AmolnamaContent() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <span className="font-extrabold text-[var(--color-text-main)] truncate">
-                          {act.name}
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="font-extrabold text-[var(--color-text-main)] truncate leading-tight">
+                            {act.name}
+                          </span>
+                          <span className="text-[10px] text-[var(--color-text-muted)] font-semibold mt-0.5 leading-none">
+                            ID: {act.id}
+                          </span>
+                        </div>
                       </div>
                     </td>
                     {/* Location */}
                     <td className="px-6 py-4.5 text-[var(--color-text-muted)] truncate max-w-[200px] sm:max-w-xs">
                       {act.location}
                     </td>
-                    {/* Time */}
-                    <td className="px-6 py-4.5 text-[var(--color-text-muted)]">{act.time}</td>
+                    {/* Time & Date */}
+                    <td className="px-6 py-4.5 text-[var(--color-text-muted)]">
+                      <div className="leading-tight">{act.time}</div>
+                      <div className="text-[10px] font-semibold text-zinc-400 mt-0.5 leading-none">{act.date}</div>
+                    </td>
                     {/* Status Badge */}
                     <td className="px-6 py-4.5">
                       {act.status === 'COMPLETED' ? (
