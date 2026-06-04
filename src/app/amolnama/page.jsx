@@ -18,7 +18,9 @@ import {
   MoreVertical,
   Building2,
   MapPin,
-  ChevronDown
+  ChevronDown,
+  CalendarCheck,
+  Clock9
 } from 'lucide-react';
 
 function AmolnamaContent() {
@@ -56,13 +58,45 @@ function AmolnamaContent() {
       iconColor: 'text-emerald-700'
     },
     {
-      title: 'Total Orders',
-      value: '142',
+      title: 'Total Retail ACT',
+      value: '124',
       subText: 'Orders processed today',
       icon: ShoppingCart,
       iconBg: 'bg-emerald-50',
       iconColor: 'text-emerald-700'
-    }
+    },
+    {
+      title: 'AVG Retail ACT',
+      value: '124',
+      subText: 'Orders processed today',
+      icon: ShoppingCart,
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
+    },
+    {
+      title: 'Other Activities',
+      value: '124',
+      subText: 'Orders processed today',
+      icon: CalendarCheck,
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
+    },
+    {
+      title: 'AVG TTS',
+      value: '124',
+      subText: 'Orders processed today',
+      icon: Clock9,
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
+    },
+    {
+      title: 'Daily TTS',
+      value: '124',
+      subText: 'Orders processed today',
+      icon: Clock9,
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
+    },
   ];
 
   const visitedSummaryMetrics = [
@@ -261,38 +295,15 @@ function AmolnamaContent() {
               </Card>
             );
           })}
-
-          {/* Growth Status (visible as column 4 on desktop, hidden or placed on mobile) */}
-          <div className="min-w-[240px] lg:min-w-0 flex-1 snap-start">
-            <Card
-              className="p-5 bg-[#003d1c] border-none text-white flex items-start gap-4 h-full"
-              hoverable={true}
-            >
-              <div className="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
-                <TrendingUp size={20} className="text-emerald-400" />
-              </div>
-              <div className="space-y-1">
-                <span className="block text-[10px] font-bold text-emerald-300 tracking-wider uppercase leading-none">
-                  Growth Status
-                </span>
-                <h2 className="text-2xl font-black tracking-tight leading-none text-white">
-                  +12.4%
-                </h2>
-                <p className="text-[10px] text-emerald-100 font-medium leading-normal mt-1.5">
-                  Performance exceeded monthly targets by 26% in this region.
-                </p>
-              </div>
-            </Card>
-          </div>
         </div>
       </div>
 
       {/* ─── Columns Section (Visited Summary & Live Area) ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         {/* Left 2-Columns on Desktop: Visited Summary & Tab contents */}
         <div className="lg:col-span-2 space-y-6">
-          
+
           {/* Visited Summary Header (Mobile only, desktop uses card header) */}
           <div className="block lg:hidden">
             <h3 className="font-extrabold text-sm text-[var(--color-text-main)] mb-3">Visited Summary</h3>
@@ -327,18 +338,15 @@ function AmolnamaContent() {
               {visitedSummaryMetrics.map((m, idx) => (
                 <div
                   key={idx}
-                  className={`p-6 border-r border-b border-[var(--color-border)] last:border-r-0 ${
-                    idx >= 4 ? 'border-b-0' : ''
-                  } ${
-                    (idx + 1) % 4 === 0 ? 'border-r-0' : ''
-                  }`}
+                  className={`p-6 border-r border-b border-[var(--color-border)] last:border-r-0 ${idx >= 4 ? 'border-b-0' : ''
+                    } ${(idx + 1) % 4 === 0 ? 'border-r-0' : ''
+                    }`}
                 >
                   <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
                     {m.label}
                   </span>
-                  <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${
-                    m.isNegative ? 'text-rose-600' : 'text-[var(--color-text-main)]'
-                  }`}>
+                  <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${m.isNegative ? 'text-rose-600' : 'text-[var(--color-text-main)]'
+                    }`}>
                     {m.value}
                   </h3>
                 </div>
@@ -354,11 +362,10 @@ function AmolnamaContent() {
                 <button
                   key={tab}
                   onClick={() => setActiveSubTab(tab)}
-                  className={`pb-3.5 px-4 font-bold text-xs sm:text-sm border-b-2 transition-all ${
-                    activeSubTab === tab
-                      ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
-                      : 'border-transparent text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
-                  }`}
+                  className={`pb-3.5 px-4 font-bold text-xs sm:text-sm border-b-2 transition-all ${activeSubTab === tab
+                    ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
+                    : 'border-transparent text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
+                    }`}
                 >
                   {tab}
                 </button>
@@ -442,7 +449,7 @@ function AmolnamaContent() {
                 alt="Mobile Area Coverage map"
                 className="block md:hidden w-full h-full object-cover"
               />
-              
+
               {/* Floating Pulse pin on mobile layout */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none md:hidden">
                 <div className="relative flex items-center justify-center">
@@ -507,11 +514,10 @@ function AmolnamaContent() {
               <button
                 key={tab}
                 onClick={() => setActiveActivityTab(tab)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-colors ${
-                  activeActivityTab === tab
-                    ? 'bg-white text-[var(--color-text-main)] shadow-sm'
-                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-colors ${activeActivityTab === tab
+                  ? 'bg-white text-[var(--color-text-main)] shadow-sm'
+                  : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
+                  }`}
               >
                 {tab}
               </button>

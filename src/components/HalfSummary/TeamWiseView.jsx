@@ -18,7 +18,7 @@ export default function TeamWiseView({
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        
+
         {/* Total Team Revenue */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-2xl p-5 shadow-xs border border-emerald-800">
           <span className="block text-[9px] font-black text-emerald-200/80 uppercase tracking-widest">
@@ -119,7 +119,7 @@ export default function TeamWiseView({
                 onClick={() => toggleRepExpand(rep.id)}
                 className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-zinc-50/50 transition-colors cursor-pointer text-left focus:outline-none"
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3 min-w-0 mr-2">
                   {/* Initials Avatar */}
                   <div className={`w-11 h-11 rounded-xl ${getAvatarBg(rep.avatarColor)} flex items-center justify-center font-extrabold text-sm shrink-0`}>
                     {rep.initials}
@@ -128,7 +128,7 @@ export default function TeamWiseView({
                     <h4 className="font-extrabold text-sm sm:text-base text-[var(--color-text-main)] truncate leading-tight">
                       {rep.name}
                     </h4>
-                    <span className="text-xs text-[var(--color-text-muted)] font-semibold mt-1 block">
+                    <span className="text-[8px] text-[var(--color-text-muted)] font-semibold mt-1 block">
                       {rep.role}
                     </span>
                   </div>
@@ -139,7 +139,7 @@ export default function TeamWiseView({
                     <span className="block text-[8px] font-black text-[var(--color-text-muted)] uppercase tracking-wider">
                       Total Revenue
                     </span>
-                    <span className="text-sm sm:text-base font-extrabold text-[var(--color-text-main)]">
+                    <span className="text-[12px] sm:text-base font-extrabold text-[var(--color-text-main)]">
                       {formatCurrency(rep.revenue)}
                     </span>
                   </div>
@@ -154,7 +154,7 @@ export default function TeamWiseView({
               {isExpanded && (
                 <div className="border-t border-[var(--color-border)] bg-[#fdfdfd] p-5 sm:p-6 space-y-6">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
+
                     {/* 1st Half Performance block */}
                     <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4">
                       <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
