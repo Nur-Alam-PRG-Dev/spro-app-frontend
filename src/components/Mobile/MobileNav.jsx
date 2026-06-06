@@ -21,10 +21,15 @@ const MobileHeaderContent = () => {
     { name: 'Support', href: '#', icon: HelpCircle },
   ];
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   // Synchronize state with URL search param changes
   useEffect(() => {
-    setSearchVal(searchParams.get('q') || '');
-  }, [searchParams]);
+    const currentQ = searchParams.get('q') || '';
+    if (searchVal !== currentQ) {
+      setSearchVal(currentQ);
+    }
+  }, [searchParams, searchVal]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleSearch = (e) => {
     const val = e.target.value;

@@ -2,18 +2,23 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Search, Bell, History, Grid } from 'lucide-react';
+import { Search, Bell, History, Grid, Menu } from 'lucide-react';
 
-const HeaderContent = () => {
+const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchVal, setSearchVal] = useState(searchParams.get('q') || '');
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   // Synchronize state with URL search param changes
   useEffect(() => {
-    setSearchVal(searchParams.get('q') || '');
-  }, [searchParams]);
+    const currentQ = searchParams.get('q') || '';
+    if (searchVal !== currentQ) {
+      setSearchVal(currentQ);
+    }
+  }, [searchParams, searchVal]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const tabs = [
     { name: 'Dashboard', path: '/' },
@@ -37,22 +42,33 @@ const HeaderContent = () => {
 
   return (
     <header className="h-16 border-b border-[var(--color-border)] bg-[var(--color-card-bg)] px-8 flex items-center justify-between sticky top-0 z-20 hidden lg:flex">
-      {/* Search Input Container */}
-      <div className="relative w-80">
-        <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[var(--color-text-muted)]">
-          <Search size={18} />
-        </span>
-        <input
-          type="text"
-          value={searchVal}
-          onChange={handleSearch}
-          placeholder={
-            pathname === '/reports' ? "Search reports..." :
-            pathname === '/uncoveredOutlet' ? "Search outlets, orders, SRs..." :
-            "Search logistics data..."
-          }
-          className="w-full pl-10 pr-4 py-2 text-sm bg-zinc-50 border border-[var(--color-border)] rounded-full outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)]"
-        />
+      {/* Left side actions and search */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg text-[var(--color-text-main)] transition-colors cursor-pointer"
+          title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+        >
+          <Menu size={20} />
+        </button>
+        
+        {/* Search Input Container */}
+        <div className="relative w-80">
+          <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+            <Search size={18} />
+          </span>
+          <input
+            type="text"
+            value={searchVal}
+            onChange={handleSearch}
+            placeholder={
+              pathname === '/reports' ? "Search reports..." :
+              pathname === '/uncoveredOutlet' ? "Search outlets, orders, SRs..." :
+              "Search logistics data..."
+            }
+            className="w-full pl-10 pr-4 py-2 text-sm bg-zinc-50 border border-[var(--color-border)] rounded-full outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)]"
+          />
+        </div>
       </div>
 
       {/* Right Header Navigation & Actions */}
@@ -117,10 +133,10 @@ const HeaderContent = () => {
   );
 };
 
-const Header = () => {
+const Header = ({ toggleSidebar, isSidebarOpen }) => {
   return (
     <React.Suspense fallback={<div className="h-16 bg-[var(--color-card-bg)] border-b border-[var(--color-border)] hidden lg:block" />}>
-      <HeaderContent />
+      <HeaderContent toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
     </React.Suspense>
   );
 };

@@ -22,9 +22,12 @@ function HalfSummaryContent() {
   useEffect(() => {
     const tab = searchParams.get('tab');
     if (tab && (tab === 'overall' || tab === 'team')) {
-      setActiveTab(tab);
+      if (activeTab !== tab) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setActiveTab(tab);
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, activeTab]);
 
   // Fetch half summary metrics
   useEffect(() => {
@@ -89,7 +92,7 @@ function HalfSummaryContent() {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-6 pb-10">
       {/* ─── Page Title and Tab Switcher Header ─── */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[var(--color-border)] pb-5">
         <div>

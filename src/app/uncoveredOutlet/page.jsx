@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
@@ -103,14 +104,14 @@ function UncoveredOutletContent() {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10">
+    <div className="space-y-6 pb-10">
 
       {/* ─── Breadcrumbs ─── */}
       <div className="hidden lg:block">
         <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-2">
-          <a href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</a>
+          <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
           <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
-          <a href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</a>
+          <Link href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</Link>
           <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
           <span className="text-[var(--color-text-main)] font-bold">Uncovered Outlets</span>
         </div>

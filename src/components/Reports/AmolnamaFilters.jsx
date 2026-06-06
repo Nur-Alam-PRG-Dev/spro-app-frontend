@@ -33,14 +33,18 @@ const AmolnamaFilters = ({
   const [currentMonth, setCurrentMonth] = useState(4); // 4 = May (0-indexed)
   const [hoveredDate, setHoveredDate] = useState(null);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   // Sync calendar display month with selected startDate when it changes
   useEffect(() => {
     if (startDate) {
       const date = new Date(startDate);
-      setCurrentYear(date.getFullYear());
-      setCurrentMonth(date.getMonth());
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      if (currentYear !== year) setCurrentYear(year);
+      if (currentMonth !== month) setCurrentMonth(month);
     }
-  }, [startDate]);
+  }, [startDate, currentYear, currentMonth]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Helper to format date labels beautifully
   const formatDateLabel = (dateStr) => {

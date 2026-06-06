@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import ReportList from '@/components/Reports/ReportList';
 import { ChevronRight, Search } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 function ReportsContent() {
   const router = useRouter();
@@ -13,8 +14,12 @@ function ReportsContent() {
 
   // Sync search state with URL query param changes
   useEffect(() => {
-    setSearchVal(searchParams.get('q') || '');
-  }, [searchParams]);
+    const currentQ = searchParams.get('q') || '';
+    if (searchVal !== currentQ) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSearchVal(currentQ);
+    }
+  }, [searchParams, searchVal]);
 
   const handleSearch = (e) => {
     const val = e.target.value;
@@ -30,11 +35,11 @@ function ReportsContent() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10">
+    <div className="space-y-6 pb-10">
       {/* Breadcrumb & Header Title Section */}
       <div>
         <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-2">
-          <a href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</a>
+          <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
           <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
           <span className="text-[var(--color-text-main)]">Web Reports</span>
         </div>

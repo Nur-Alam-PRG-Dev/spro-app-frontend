@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
@@ -21,7 +22,8 @@ import {
   MapPin,
   ChevronDown,
   CalendarCheck,
-  Clock9
+  Clock9,
+  Info
 } from 'lucide-react';
 
 function AmolnamaContent() {
@@ -109,15 +111,97 @@ function AmolnamaContent() {
     },
   ];
 
+  const currentStart = startDate || '2026-06-03';
+  const currentEnd = endDate || '2026-06-06';
+
+  const getPreviousPeriod = (startStr, endStr) => {
+    if (!startStr || !endStr) {
+      return { start: '2026-05-03', end: '2026-05-06' };
+    }
+    const s = new Date(startStr);
+    const e = new Date(endStr);
+
+    const prevStart = new Date(s.getFullYear(), s.getMonth() - 1, s.getDate());
+    const prevEnd = new Date(e.getFullYear(), e.getMonth() - 1, e.getDate());
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    return {
+      start: formatDate(prevStart),
+      end: formatDate(prevEnd)
+    };
+  };
+
+  const prevPeriod = getPreviousPeriod(currentStart, currentEnd);
+
+  const getTooltipAlignment = (index, totalCols = 4) => {
+    const colIndex = index % totalCols;
+    if (colIndex === 0) {
+      return 'left-0 origin-bottom-left';
+    }
+    if (colIndex === totalCols - 1) {
+      return 'right-0 origin-bottom-right';
+    }
+    return 'left-1/2 -translate-x-1/2';
+  };
+
+  const getTooltipArrowAlignment = (index, totalCols = 4) => {
+    const colIndex = index % totalCols;
+    if (colIndex === 0) {
+      return 'left-3';
+    }
+    if (colIndex === totalCols - 1) {
+      return 'right-3';
+    }
+    return 'left-1/2 -translate-x-1/2';
+  };
+
   const visitedSummaryMetrics = [
-    { label: 'Total Outlets', value: '1,940' },
-    { label: 'Total Visits', value: '9' },
-    { label: 'Unique Visits', value: '8' },
-    { label: 'Visit Coverage', value: '0.41%' },
-    { label: 'No. of Orders', value: '0' },
-    { label: 'Order Value', value: '0' },
-    { label: 'ND', value: '-23', isNegative: true },
-    { label: 'Del. Amount', value: '0' }
+    {
+      label: 'TOTAL OUTLETS',
+      description: 'Total outlets for the supervisor and their team',
+      value: '0'
+    },
+    {
+      label: 'TOTAL VISITS',
+      description: 'Total outlet visits by selected staff including repeats',
+      value: '0'
+    },
+    {
+      label: 'UNIQUE VISITS',
+      description: 'Unique outlets visited by the selected staff',
+      value: '0'
+    },
+    {
+      label: 'VISIT COVERAGE',
+      description: 'Unique visit ÷ Total olt',
+      value: '0.00%'
+    },
+    {
+      label: 'NO. OF ORDERS',
+      description: 'Total orders from visited outlets',
+      value: '0'
+    },
+    {
+      label: 'ORDER VALUE',
+      description: 'Total order amount',
+      value: '0'
+    },
+    {
+      label: 'DEL. AMOUNT',
+      description: 'Total delivered amount',
+      value: '0'
+    },
+    {
+      label: 'LPC',
+      description: 'Lines per call',
+      value: '0'
+    }
   ];
 
   const coverageDetails = {
@@ -193,7 +277,7 @@ function AmolnamaContent() {
 
   // Filtering based on search query, employee search, and date range
   const filteredActivities = recentActivities.filter(activity => {
-    const headerMatch = !query || 
+    const headerMatch = !query ||
       activity.name.toLowerCase().includes(query) ||
       activity.location.toLowerCase().includes(query) ||
       activity.status.toLowerCase().includes(query);
@@ -216,13 +300,13 @@ function AmolnamaContent() {
   const activeCoverage = coverageDetails[activeSubTab];
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10">
+    <div className="space-y-6 pb-10">
       {/* ─── Breadcrumbs ─── */}
       <div className="hidden lg:block">
         <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-2">
-          <a href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</a>
+          <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
           <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
-          <a href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</a>
+          <Link href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</Link>
           <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
           <span className="text-[var(--color-text-main)] font-bold">Amolnama</span>
         </div>
@@ -241,13 +325,13 @@ function AmolnamaContent() {
         </div>
 
         {/* Supervisor details card on MOBILE */}
-        <div className="block lg:hidden">
+
+        {/*<div className="block lg:hidden">
           <Card className="p-4" hoverable={false}>
             <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-3">
               Supervisor Details
             </span>
             <div className="space-y-4">
-              {/* Supervisor Info */}
               <div className="flex items-center justify-between py-1 border-b border-[var(--color-border)] pb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[var(--color-primary)] flex items-center justify-center border border-emerald-100 shadow-2xs">
@@ -260,7 +344,6 @@ function AmolnamaContent() {
                 <ChevronDown size={18} className="text-emerald-800" />
               </div>
 
-              {/* Reporting Date / Filter */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[var(--color-primary)] flex items-center justify-center border border-emerald-100 shadow-2xs">
@@ -274,11 +357,12 @@ function AmolnamaContent() {
               </div>
             </div>
           </Card>
-        </div>
+        </div>*/}
+
 
         {/* Supervisor details selector on DESKTOP */}
-        <div className="hidden lg:flex items-center gap-4 select-none">
-          {/* Supervisor Card */}
+
+        {/* <div className="hidden lg:flex items-center gap-4 select-none">
           <div className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-2xl px-5 py-2.5 shadow-sm min-w-[320px]">
             <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[var(--color-primary)] flex items-center justify-center border border-emerald-100">
               <Building2 size={18} />
@@ -293,8 +377,6 @@ function AmolnamaContent() {
             </div>
             <ChevronDown size={18} className="text-emerald-800 cursor-pointer" />
           </div>
-
-          {/* Date Selector Card */}
           <div className="flex items-center gap-3 bg-white border border-[var(--color-border)] rounded-2xl px-5 py-2.5 shadow-sm min-w-[260px]">
             <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[var(--color-primary)] flex items-center justify-center border border-emerald-100">
               <Calendar size={18} />
@@ -307,7 +389,7 @@ function AmolnamaContent() {
             </div>
             <SlidersHorizontal size={18} className="text-emerald-800 cursor-pointer hover:text-emerald-600 transition-colors ml-2" />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* ─── Search and Date Range Filters ─── */}
@@ -323,13 +405,13 @@ function AmolnamaContent() {
 
       {/* ─── Daily Summary ─── */}
       <div>
-        <div className="flex items-center justify-between mb-3 lg:hidden">
+        <div className="flex items-center justify-between mb-3">
           <h3 className="font-extrabold text-sm text-[var(--color-text-main)]">Daily Summary</h3>
           <button className="text-xs font-bold text-[var(--color-primary)] hover:underline">View Detailed</button>
         </div>
 
         {/* Responsive Row (Horizontal scroll on mobile, grid on desktop) */}
-        <div className="flex lg:grid lg:grid-cols-4 gap-4 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none snap-x">
+        <div className="flex lg:grid lg:grid-cols-4 xl:grid-cols-7 gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none snap-x">
           {dailySummary.map((item, idx) => {
             const Icon = item.icon;
             return (
@@ -364,23 +446,85 @@ function AmolnamaContent() {
         {/* Left 2-Columns on Desktop: Visited Summary & Tab contents */}
         <div className="lg:col-span-2 space-y-6">
 
-          {/* Visited Summary Header (Mobile only, desktop uses card header) */}
-          <div className="block lg:hidden">
-            <h3 className="font-extrabold text-sm text-[var(--color-text-main)] mb-3">Visited Summary</h3>
+          {/* Visited Summary Header & Sub-header (Mobile only) */}
+          <div className="block lg:hidden space-y-2">
+            <h3 className="font-extrabold text-base text-[var(--color-text-main)]">Visited Summary</h3>
+            <div className="text-xs font-black tracking-wider text-[var(--color-text-muted)] uppercase">
+              Outlet Performance
+            </div>
           </div>
 
-          {/* Mobile metrics list: separate cards. Desktop metrics list: single card 2x4 grid */}
-          <div className="lg:hidden grid grid-cols-2 gap-3">
+          {/* Mobile metrics list: compact 2-column grid */}
+          <div className="lg:hidden grid grid-cols-3 gap-2">
             {visitedSummaryMetrics.map((m, idx) => (
-              <Card key={idx} className="p-4 flex flex-col justify-between" hoverable={false}>
-                <span className="text-[10px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase mb-1.5 block">
-                  {m.label}
-                </span>
-                <span className={`text-xl font-black tracking-tight ${m.isNegative ? 'text-red-500' : 'text-slate-800'}`}>
+              <div
+                key={idx}
+                tabIndex={0}
+                className="relative group flex flex-col justify-between p-2.5 bg-white border border-[var(--color-border)] rounded-xl shadow-2xs hover:shadow-xs focus:outline-none active:bg-zinc-50 transition-all duration-200 cursor-pointer select-none"
+              >
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <span className="text-[9px] font-bold text-zinc-500 tracking-wider uppercase truncate">
+                    {m.label}
+                  </span>
+                  <Info size={10} className="text-zinc-400 group-hover:text-zinc-600 group-focus-within:text-zinc-600 shrink-0" />
+                </div>
+                <span className="text-lg font-black tracking-tight text-[var(--color-text-main)]">
                   {m.value}
                 </span>
-              </Card>
+
+                {/* Tooltip bubble */}
+                <div className={`absolute bottom-full mb-1.5 w-40 p-2 bg-zinc-900 text-[10px] text-white font-medium rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible pointer-events-none text-center leading-tight transition-all duration-200 z-50 ${getTooltipAlignment(idx, 2)}`}>
+                  {m.description}
+                  <div className={`absolute top-full border-4 border-transparent border-t-zinc-900 ${getTooltipArrowAlignment(idx, 2)}`} />
+                </div>
+              </div>
             ))}
+          </div>
+
+          {/* Mobile Numeric Distribution (ND) Section */}
+          <div className="block lg:hidden mt-4">
+            <span className="text-xs font-black tracking-wider text-[var(--color-text-muted)] uppercase">
+              Numeric Distribution (ND)
+            </span>
+          </div>
+
+          {/* Mobile Numeric Distribution: High density 3-column layout */}
+          <div className="lg:hidden grid grid-cols-3 gap-2">
+            {/* Current Period */}
+            <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between">
+              <span className="block text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5">
+                Current Period
+              </span>
+              <span className="block text-[9px] font-semibold text-zinc-400 mb-1 leading-none">
+                {currentStart} &rarr; {currentEnd}
+              </span>
+              <h4 className="text-xs font-black text-[var(--color-text-main)] leading-none mt-1">
+                0 <span className="text-[9px] font-bold text-[var(--color-text-muted)]">Sites</span>
+              </h4>
+            </div>
+
+            {/* Previous Period */}
+            <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between">
+              <span className="block text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5">
+                Prev Period
+              </span>
+              <span className="block text-[9px] font-semibold text-zinc-400 mb-1 leading-none">
+                {prevPeriod.start} &rarr; {prevPeriod.end}
+              </span>
+              <h4 className="text-xs font-black text-[var(--color-text-main)] leading-none mt-1">
+                0 <span className="text-[9px] font-bold text-[var(--color-text-muted)]">Sites</span>
+              </h4>
+            </div>
+
+            {/* ND */}
+            <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between items-center text-center">
+              <span className="text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-2">
+                ND
+              </span>
+              <span className="text-sm font-black text-[var(--color-text-main)] leading-none">
+                0
+              </span>
+            </div>
           </div>
 
           {/* Desktop Single Card View */}
@@ -393,24 +537,85 @@ function AmolnamaContent() {
               </a>
             </div>
 
+            {/* Outlet Performance Sub-Header */}
+            <div className="px-6 py-3 bg-zinc-50/50 border-b border-[var(--color-border)]">
+              <span className="text-xs font-black tracking-wider text-[var(--color-text-muted)] uppercase">
+                Outlet Performance
+              </span>
+            </div>
+
             {/* 2x4 Metric Grid */}
             <div className="grid grid-cols-4 border-b border-[var(--color-border)]">
               {visitedSummaryMetrics.map((m, idx) => (
                 <div
                   key={idx}
-                  className={`p-6 border-r border-b border-[var(--color-border)] last:border-r-0 ${idx >= 4 ? 'border-b-0' : ''
-                    } ${(idx + 1) % 4 === 0 ? 'border-r-0' : ''
-                    }`}
+                  tabIndex={0}
+                  className={`p-5 border-r border-b border-[var(--color-border)] relative group focus:outline-none transition-colors hover:bg-zinc-50/50 ${(idx + 1) % 4 === 0 ? 'border-r-0' : ''
+                    } ${idx >= 4 ? 'border-b-0' : ''}`}
                 >
-                  <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
-                    {m.label}
-                  </span>
-                  <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${m.isNegative ? 'text-rose-600' : 'text-[var(--color-text-main)]'
-                    }`}>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span className="block text-xs font-bold text-zinc-500 tracking-wider uppercase">
+                      {m.label}
+                    </span>
+                    <Info size={12} className="text-zinc-400 group-hover:text-zinc-600 group-focus-within:text-zinc-600 shrink-0" />
+                  </div>
+                  <h3 className="text-2xl font-black tracking-tight text-[var(--color-text-main)]">
                     {m.value}
                   </h3>
+
+                  {/* Tooltip bubble */}
+                  <div className={`absolute bottom-full mb-2 w-52 p-2.5 bg-zinc-900 text-[11px] text-white font-medium rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible pointer-events-none text-center normal-case leading-snug transition-all duration-200 z-50 ${getTooltipAlignment(idx, 4)}`}>
+                    {m.description}
+                    <div className={`absolute top-full border-4 border-transparent border-t-zinc-900 ${getTooltipArrowAlignment(idx, 4)}`} />
+                  </div>
                 </div>
               ))}
+            </div>
+
+            {/* Numeric Distribution (ND) Sub-Header */}
+            <div className="px-6 py-3 bg-zinc-50/50 border-b border-[var(--color-border)]">
+              <span className="text-xs font-black tracking-wider text-[var(--color-text-muted)] uppercase">
+                Numeric Distribution (ND)
+              </span>
+            </div>
+
+            {/* ND Column Grid */}
+            <div className="grid grid-cols-3 divide-x divide-[var(--color-border)]">
+              {/* Current Period */}
+              <div className="p-6">
+                <span className="block text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
+                  Current Period
+                </span>
+                <span className="block text-xs font-semibold text-[var(--color-text-muted)] mb-2">
+                  {currentStart} &rarr; {currentEnd}
+                </span>
+                <h3 className="text-xl font-black text-[var(--color-text-main)]">
+                  0 <span className="text-xs font-bold text-[var(--color-text-muted)]">Unique Sites</span>
+                </h3>
+              </div>
+
+              {/* Previous Period */}
+              <div className="p-6">
+                <span className="block text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
+                  Previous Period
+                </span>
+                <span className="block text-xs font-semibold text-[var(--color-text-muted)] mb-2">
+                  {prevPeriod.start} &rarr; {prevPeriod.end}
+                </span>
+                <h3 className="text-xl font-black text-[var(--color-text-main)]">
+                  0 <span className="text-xs font-bold text-[var(--color-text-muted)]">Unique Sites</span>
+                </h3>
+              </div>
+
+              {/* ND */}
+              <div className="p-6 flex flex-col justify-center">
+                <span className="block text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
+                  ND
+                </span>
+                <h3 className="text-3xl font-black text-[var(--color-text-main)]">
+                  0
+                </h3>
+              </div>
             </div>
           </Card>
 
@@ -562,106 +767,6 @@ function AmolnamaContent() {
         </div>
       </div>
 
-      {/* ─── Recent Field Activities ─── */}
-      <Card className="p-0 overflow-hidden" hoverable={false}>
-        {/* Header */}
-        <div className="px-6 py-5 border-b border-[var(--color-border)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h3 className="font-extrabold text-base text-[var(--color-text-main)]">
-            Recent Field Activities
-          </h3>
-          <div className="flex bg-zinc-100 dark:bg-zinc-300 p-0.5 rounded-xl self-start select-none">
-            {['All Activities', 'Alerts Only'].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveActivityTab(tab)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-colors ${activeActivityTab === tab
-                  ? 'bg-white text-[var(--color-text-main)] shadow-sm'
-                  : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
-                  }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Table representation */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-[var(--color-text-muted)] font-black uppercase text-[10px] tracking-wider">
-                <th className="px-6 py-4">Staff Name</th>
-                <th className="px-6 py-4">Location</th>
-                <th className="px-6 py-4">Time & Date</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
-              {filteredActivities.length > 0 ? (
-                filteredActivities.map((act, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 transition-colors font-semibold text-[var(--color-text-main)]"
-                  >
-                    {/* Name / Avatar */}
-                    <td className="px-6 py-4.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full overflow-hidden border border-[var(--color-border)] shrink-0 bg-zinc-200">
-                          <img
-                            src={act.avatar}
-                            alt={act.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="font-extrabold text-[var(--color-text-main)] truncate leading-tight">
-                            {act.name}
-                          </span>
-                          <span className="text-[10px] text-[var(--color-text-muted)] font-semibold mt-0.5 leading-none">
-                            ID: {act.id}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                    {/* Location */}
-                    <td className="px-6 py-4.5 text-[var(--color-text-muted)] truncate max-w-[200px] sm:max-w-xs">
-                      {act.location}
-                    </td>
-                    {/* Time & Date */}
-                    <td className="px-6 py-4.5 text-[var(--color-text-muted)]">
-                      <div className="leading-tight">{act.time}</div>
-                      <div className="text-[10px] font-semibold text-zinc-400 mt-0.5 leading-none">{act.date}</div>
-                    </td>
-                    {/* Status Badge */}
-                    <td className="px-6 py-4.5">
-                      {act.status === 'COMPLETED' ? (
-                        <Badge type="target">Completed</Badge>
-                      ) : (
-                        <span className="inline-flex items-center justify-center bg-emerald-50 text-emerald-700 font-semibold text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wide">
-                          In Progress
-                        </span>
-                      )}
-                    </td>
-                    {/* Action button */}
-                    <td className="px-6 py-4.5 text-right">
-                      <button className="p-1.5 hover:bg-emerald-50 rounded-lg text-emerald-800 transition-colors cursor-pointer">
-                        <MoreVertical size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="text-center py-8 text-xs font-semibold text-[var(--color-text-muted)]">
-                    No matching activity logs found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
     </div>
   );
 }

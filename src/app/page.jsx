@@ -9,7 +9,7 @@ import { Calendar, Plus } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="relative space-y-6 max-w-7xl mx-auto pb-10">
+    <div className="relative space-y-6 pb-10">
       {/* Page Header Title Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

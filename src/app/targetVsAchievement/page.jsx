@@ -5,15 +5,15 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import targetData from '@/dummyData/targetVsAchievement.json';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
-import { 
-  ChevronRight, 
-  Calendar, 
-  Filter, 
-  Download, 
-  TrendingDown, 
+import {
+  ChevronRight,
+  Calendar,
+  Filter,
+  Download,
+  TrendingDown,
   TrendingUp,
-  MoreVertical, 
-  Plus, 
+  MoreVertical,
+  Plus,
   AlertTriangle,
   Search
 } from 'lucide-react';
@@ -46,10 +46,15 @@ function TargetVsAchievementContent() {
   const query = searchParams.get('q')?.toLowerCase() || '';
   const [searchVal, setSearchVal] = useState(query);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   // Synchronize state with URL search param changes
   useEffect(() => {
-    setSearchVal(searchParams.get('q') || '');
-  }, [searchParams]);
+    const currentQ = searchParams.get('q') || '';
+    if (searchVal !== currentQ) {
+      setSearchVal(currentQ);
+    }
+  }, [searchParams, searchVal]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleLocalSearch = (e) => {
     const val = e.target.value;
@@ -78,14 +83,14 @@ function TargetVsAchievementContent() {
   const logs = data.detailedLogs;
 
   // Filter representatives by search term
-  const filteredReps = reps.filter(rep => 
+  const filteredReps = reps.filter(rep =>
     rep.name.toLowerCase().includes(query) ||
     rep.id.toLowerCase().includes(query) ||
     rep.status.toLowerCase().includes(query)
   );
 
   // Filter logs by search term
-  const filteredLogs = logs.filter(log => 
+  const filteredLogs = logs.filter(log =>
     log.region.toLowerCase().includes(query) ||
     log.manager.toLowerCase().includes(query)
   );
@@ -105,7 +110,7 @@ function TargetVsAchievementContent() {
   const isLabelOverlap = Math.abs(team.achievedPct - team.expectedPct) < 14;
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-6 pb-10">
       {/* ─── Page Title Header (Desktop Only) ─── */}
       <div className="hidden lg:block">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -205,40 +210,39 @@ function TargetVsAchievementContent() {
         <div className="mt-8 space-y-2 pb-4">
           <div className="relative w-full h-3 bg-[#eedad5] rounded-full overflow-hidden flex">
             {/* Achieved green segment */}
-            <div 
-              style={{ width: `${team.achievedPct}%` }} 
+            <div
+              style={{ width: `${team.achievedPct}%` }}
               className="h-full bg-[#136336] rounded-l-full"
             />
             {/* Expected target overflow amber segment */}
-            <div 
-              style={{ width: `${team.expectedPct - team.achievedPct}%` }} 
+            <div
+              style={{ width: `${team.expectedPct - team.achievedPct}%` }}
               className="h-full bg-[#e0a01a]"
             />
           </div>
-          
+
           {/* Progress Bar Indicators */}
           <div className="relative flex justify-between text-[10px] font-extrabold tracking-wide pt-1.5 text-zinc-400">
             <span>0%</span>
-            
+
             {/* Dynamic offset elements */}
             <div className="absolute left-0 right-0 top-1.5 flex justify-between px-1 pointer-events-none">
-              <span 
-                style={{ left: `${team.achievedPct}%` }} 
+              <span
+                style={{ left: `${team.achievedPct}%` }}
                 className="absolute -translate-x-1/2 text-[#136336] font-bold transition-all duration-300"
               >
                 {team.achievedPct}% ACHIEVED
               </span>
-              
-              <span 
-                style={{ left: `${team.expectedPct}%` }} 
-                className={`absolute -translate-x-1/2 text-[#e0a01a] font-bold transition-all duration-300 ${
-                  isLabelOverlap ? 'translate-y-3.5' : ''
-                }`}
+
+              <span
+                style={{ left: `${team.expectedPct}%` }}
+                className={`absolute -translate-x-1/2 text-[#e0a01a] font-bold transition-all duration-300 ${isLabelOverlap ? 'translate-y-3.5' : ''
+                  }`}
               >
                 {team.expectedPct}% EXPECTED
               </span>
             </div>
-            
+
             <span className="ml-auto">100%</span>
           </div>
         </div>
@@ -301,10 +305,9 @@ function TargetVsAchievementContent() {
                     <div className="text-right">
                       <span className="block text-[8px] font-black text-[#8e8e93] tracking-wide uppercase">Status</span>
                       <div className="flex items-center gap-1.5 mt-0.5 justify-end">
-                        <span className={`w-2 h-2 rounded-full ${
-                          rep.statusVariant === 'success' ? 'bg-[#22683e]' :
-                          rep.statusVariant === 'warning' ? 'bg-amber-500' : 'bg-rose-500'
-                        }`} />
+                        <span className={`w-2 h-2 rounded-full ${rep.statusVariant === 'success' ? 'bg-[#22683e]' :
+                            rep.statusVariant === 'warning' ? 'bg-amber-500' : 'bg-rose-500'
+                          }`} />
                         <span className="text-xs font-bold text-[var(--color-text-main)]">{rep.status}</span>
                       </div>
                     </div>
@@ -314,7 +317,7 @@ function TargetVsAchievementContent() {
                   <div className="grid grid-cols-2 gap-3.5 mb-4">
                     {/* Today's Pulse */}
                     <div className="bg-[#f2f2f7]/50 border border-zinc-200 rounded-xl p-3 space-y-1.5">
-                      <span className="block text-[8px] font-black text-[#8e8e93] tracking-wider uppercase">Today's Pulse</span>
+                      <span className="block text-[8px] font-black text-[#8e8e93] tracking-wider uppercase">Today&apos;s Pulse</span>
                       <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Order:</span>
@@ -357,13 +360,13 @@ function TargetVsAchievementContent() {
                   <div className="flex items-center gap-3">
                     {/* Progress Bar Container */}
                     <div className="flex-1 h-2 bg-[#eedad5] rounded-full overflow-hidden flex">
-                      <div 
-                        style={{ width: `${rep.mtdProgress.pct}%` }} 
+                      <div
+                        style={{ width: `${rep.mtdProgress.pct}%` }}
                         className="h-full bg-[#136336] rounded-l-full"
                       />
                       {!rep.mtdProgress.isAhead && (
-                        <div 
-                          style={{ width: '12%' }} 
+                        <div
+                          style={{ width: '12%' }}
                           className="h-full bg-[#e0a01a]"
                         />
                       )}
@@ -387,62 +390,7 @@ function TargetVsAchievementContent() {
         </div>
       </div>
 
-      {/* ─── Detailed Logs Section ─── */}
-      <Card className="p-0 overflow-hidden" hoverable={false}>
-        {/* Section Header */}
-        <div className="px-6 py-5 border-b border-[var(--color-border)] flex items-center justify-between">
-          <h3 className="font-extrabold text-sm sm:text-base text-[var(--color-text-main)]">Detailed Logs</h3>
-          <button className="flex items-center gap-1.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-1.5 px-3 rounded-lg text-xs font-bold transition-colors shadow-2xs">
-            <Plus size={14} />
-            <span>Log Entry</span>
-          </button>
-        </div>
 
-        {/* Table of Detailed Logs */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-[var(--color-text-muted)] font-black uppercase text-[10px] tracking-wider">
-                <th className="px-6 py-4">Region</th>
-                <th className="px-6 py-4">Manager</th>
-                <th className="px-6 py-4">Achievement</th>
-                <th className="px-6 py-4">Gap</th>
-                <th className="px-6 py-4">Efficiency</th>
-                <th className="px-6 py-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
-              {filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-zinc-50/50 transition-colors font-semibold text-[var(--color-text-main)]">
-                  <td className="px-6 py-4 font-extrabold">{log.region}</td>
-                  <td className="px-6 py-4 text-[var(--color-text-muted)]">{log.manager}</td>
-                  <td className="px-6 py-4 font-extrabold">{formatNum(log.achievement)}</td>
-                  <td className={`px-6 py-4 font-black ${log.gap < 0 ? 'text-red-600' : 'text-emerald-700'}`}>
-                    {log.gap > 0 ? `+${formatNum(log.gap)}` : formatNum(log.gap)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      {/* Linear progress bar */}
-                      <div className="w-24 h-2 bg-zinc-100 rounded-full overflow-hidden shrink-0">
-                        <div 
-                          style={{ width: `${Math.min(log.efficiencyPct, 100)}%` }} 
-                          className={`h-full ${log.efficiencyVariant === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`}
-                        />
-                      </div>
-                      <span className="font-extrabold text-[var(--color-text-main)]">{log.efficiencyPct}%</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="p-1.5 hover:bg-zinc-100 rounded text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors">
-                      <MoreVertical size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
 
       {/* Floating Add Action Button (Mobile/Tablet accessibility) */}
       <button className="fixed bottom-20 right-6 lg:hidden w-14 h-14 bg-[#0a5c36] hover:bg-[#074629] text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 z-30">

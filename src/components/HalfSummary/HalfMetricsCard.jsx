@@ -1,137 +1,137 @@
+'use client';
+
 import React from 'react';
 import Card from '@/components/ui/Card';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import {
+  TrendingUp,
+  ShoppingBag
+} from 'lucide-react';
 
 export default function HalfMetricsCard({
+  type = 'am', // 'am' or 'pm'
   title,
   period,
-  sessionLabel,
-  sessionBadgeType,
   heroLabel,
   heroAmount,
   heroTrend,
-  targetAchievement,
   orderCount,
-  orderCountTrend,
   visitCount,
-  visitCountTrend,
-  productivity,
-  productivityLabel,
   strikeRate,
-  strikeRateLabel,
   lpc,
-  lpcLabel,
   formatCurrency,
   formatNum
 }) {
+  // Productive and Non-Productive Outlet Calculations
+  const productive = Math.round(visitCount * (strikeRate / 100));
+  const nonProductive = Math.max(0, visitCount - productive);
+
+  const isAM = type === 'am';
+
   return (
-    <Card className="p-5 sm:p-6" hoverable={false}>
-      <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-3 mb-5">
+    <div className="space-y-4">
+      {/* Section Header */}
+      <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-2">
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-6 bg-emerald-700 rounded-full" />
+          <span className="w-1.5 h-5 bg-[#267043] rounded-full" />
           <h3 className="font-extrabold text-base text-[var(--color-text-main)]">{title}</h3>
-          <span className="text-xs text-[var(--color-text-muted)] font-medium">({period})</span>
         </div>
-        <span className={`text-[10px] font-black tracking-wide px-2.5 py-1 rounded-full uppercase border ${
-          sessionBadgeType === 'am'
-            ? 'bg-emerald-50 text-emerald-800 border-emerald-100'
-            : 'bg-zinc-100 text-zinc-800 border-zinc-200'
+        <span className={`text-[10px] font-black tracking-wide px-2.5 py-1 rounded-full uppercase font-bold ${
+          isAM 
+            ? 'bg-[#e1f5fe] text-[#0288d1]' 
+            : 'bg-[#f1f1f1] text-[#616161] border border-zinc-200'
         }`}>
-          {sessionLabel}
+          {isAM ? 'AM Session' : 'PM Session'}
         </span>
       </div>
 
-      {/* Hero card */}
-      <div className="bg-[#fcfdfe] border border-[var(--color-border)] rounded-2xl p-5 mb-5 space-y-2">
-        <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">
-          {heroLabel}
-        </span>
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl sm:text-3xl font-black text-emerald-800 tracking-tight">
-            {formatCurrency(heroAmount)}
-          </h2>
-          <span className="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
-            <TrendingUp size={12} className="stroke-[2.5px]" />
-            {heroTrend}%
-          </span>
-        </div>
-
-        <div className="space-y-1.5 pt-3">
-          <div className="flex justify-between text-[10px] font-extrabold text-[var(--color-text-muted)]">
-            <span>Target Achievement</span>
-            <span className="text-emerald-800">{targetAchievement}%</span>
+      {/* Hero Card: Order Amount / Total Volume */}
+      <Card className="p-5" hoverable={false}>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">
+            <ShoppingBag size={14} className="text-[var(--color-text-muted)]" />
+            <span>{heroLabel}</span>
           </div>
-          <div className="w-full h-2.5 bg-zinc-100 rounded-full overflow-hidden">
-            <div
-              style={{ width: `${targetAchievement}%` }}
-              className="h-full bg-emerald-700 rounded-full"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Grid of stats */}
-      <div className="grid grid-cols-2 gap-4 mb-5">
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[92px]">
-          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase">Order Count</span>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-lg font-black text-[var(--color-text-main)]">{formatNum(orderCount)}</span>
-            <span className="text-xs font-bold text-emerald-700">+{orderCountTrend}%</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[92px]">
-          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase">Visit Count</span>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-lg font-black text-[var(--color-text-main)]">{formatNum(visitCount)}</span>
-            <span className={`text-xs font-bold ${visitCountTrend > 0 ? 'text-emerald-700' : 'text-rose-600'}`}>
-              {visitCountTrend > 0 ? `+${visitCountTrend}%` : `${visitCountTrend}%`}
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-3xl font-black text-emerald-800 tracking-tight">
+              {formatCurrency(heroAmount)}
+            </h2>
+            <span className="inline-flex items-center gap-0.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+              <TrendingUp size={12} className="stroke-[2.5px]" />
+              {heroTrend}%
             </span>
           </div>
         </div>
+      </Card>
 
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[92px]">
-          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase">Productivity %</span>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-lg font-black text-[var(--color-text-main)]">{productivity}%</span>
-            <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 uppercase tracking-wider">{productivityLabel}</span>
-          </div>
+      {/* 6-Column Compact Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {/* Order Count */}
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[88px]">
+          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Count</span>
+          <span className="text-xl font-black text-[var(--color-text-main)] mt-2">
+            {formatNum(orderCount)}
+          </span>
         </div>
 
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[92px]">
-          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase">Strike Rate</span>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-lg font-black text-[var(--color-text-main)]">{strikeRate}%</span>
-            <span className={`text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider ${
-              strikeRateLabel === 'Exceeding' ? 'bg-emerald-800 text-white' : 'bg-zinc-100 text-zinc-800'
-            }`}>{strikeRateLabel}</span>
-          </div>
+        {/* Visit Count */}
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[88px]">
+          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Visit Count</span>
+          <span className="text-xl font-black text-[#136336] mt-2">
+            {formatNum(visitCount)}
+          </span>
+        </div>
+
+        {/* Prod. Outlets */}
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[88px]">
+          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Prod. Outlets</span>
+          <span className="text-xl font-black text-[var(--color-text-main)] mt-2">
+            {formatNum(productive)}
+          </span>
+        </div>
+
+        {/* Non-Prod. */}
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[88px]">
+          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Non-Prod.</span>
+          <span className="text-xl font-black text-[#a61c1c] mt-2">
+            {formatNum(nonProductive)}
+          </span>
+        </div>
+
+        {/* LPC */}
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[88px]">
+          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">LPC</span>
+          <span className="text-xl font-black text-[var(--color-text-main)] mt-2">
+            {lpc}
+          </span>
+        </div>
+
+        {/* Strike Rate */}
+        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex flex-col justify-between min-h-[88px]">
+          <span className="block text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Strike Rate</span>
+          <span className="text-xl font-black text-[#136336] mt-2">
+            {strikeRate}%
+          </span>
         </div>
       </div>
 
-      {/* LPC indicator */}
-      <div className="border border-[var(--color-border)] rounded-2xl p-4 space-y-3">
-        <div className="flex justify-between items-center text-[10px] font-extrabold text-[var(--color-text-muted)]">
-          <span>LPC (Lines Per Call)</span>
-          <span className={`px-2 py-0.5 rounded font-black ${
-            lpcLabel === 'High' ? 'bg-emerald-800 text-white' : 'bg-zinc-100 text-zinc-800'
-          }`}>{lpcLabel}</span>
+      {/* Promo banner card */}
+      <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 flex items-center justify-between shadow-2xs">
+        <div className="space-y-1 z-10 max-w-[70%]">
+          <p className="text-sm font-extrabold text-zinc-950 leading-snug">
+            Real-time visibility into your team&apos;s efficiency.
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-black text-[var(--color-text-main)]">{lpc}</span>
-          <div className="flex-1 relative py-2">
-            <div className="h-1.5 w-full bg-zinc-100 rounded-full" />
-            <div
-              style={{ left: `${(lpc / 5.0) * 100}%` }}
-              className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-emerald-800 border-2 border-white shadow-sm -ml-2"
-            />
-            <div
-              style={{ width: `${(lpc / 5.0) * 100}%` }}
-              className="absolute top-1/2 -translate-y-1/2 h-1.5 bg-emerald-800 rounded-full pointer-events-none"
-            />
+        
+        {/* Decorative Floating Labels */}
+        <div className="flex gap-1.5 items-center opacity-70">
+          <div className="flex flex-col items-center bg-zinc-50 border border-zinc-150 p-1.5 rounded-lg shadow-3xs">
+            <span className="text-[8px] font-bold text-zinc-400">Around Me</span>
+          </div>
+          <div className="flex flex-col items-center bg-zinc-50 border border-zinc-150 p-1.5 rounded-lg shadow-3xs">
+            <span className="text-[8px] font-bold text-zinc-400">Location</span>
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
