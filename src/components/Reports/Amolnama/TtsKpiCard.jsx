@@ -12,7 +12,7 @@ const ttsKpiData = [
 
 export default function TtsKpiCard() {
   return (
-    <Card className="p-6" hoverable={false}>
+    <Card className="p-3.5 sm:p-6" hoverable={false}>
       <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4 mb-4">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-5 bg-[var(--color-primary)] rounded-full" />
@@ -26,18 +26,18 @@ export default function TtsKpiCard() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse text-xs">
+        <table className="w-full text-left border-collapse text-[10px] sm:text-xs">
           <thead>
-            <tr className="text-zinc-500 font-black text-[9px] tracking-wider uppercase border-b border-zinc-150 pb-2">
-              <th className="py-2.5">DURATION</th>
-              <th className="py-2.5 text-right">NO. OF OUTLETS</th>
+            <tr className="text-zinc-500 font-black text-[8px] sm:text-[9px] tracking-wider uppercase border-b border-zinc-150 pb-2">
+              <th className="py-2 sm:py-2.5">DURATION</th>
+              <th className="py-2 sm:py-2.5 text-right">NO. OF OUTLETS</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100 font-semibold text-zinc-700">
             {ttsKpiData.map((row, idx) => (
               <tr key={idx} className="hover:bg-zinc-50/50">
-                <td className="py-2.5 font-bold text-zinc-800">{row.duration}</td>
-                <td className="py-2.5 text-right text-zinc-900 font-black">{row.count}</td>
+                <td className="py-2 sm:py-2.5 font-bold text-zinc-800">{row.duration}</td>
+                <td className="py-2 sm:py-2.5 text-right text-zinc-900 font-black">{row.count}</td>
               </tr>
             ))}
           </tbody>

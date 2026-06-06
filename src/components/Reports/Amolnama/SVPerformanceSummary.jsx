@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Card from '@/components/ui/Card';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import PerformanceTable from './PerformanceTable';
 import CoWorkReport from './CoWorkReport';
 import TtsKpiCard from './TtsKpiCard';
@@ -41,16 +41,16 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
         </div>
 
         {/* Collapsed progress card strictly matching screenshot & project theme */}
-        <Card className="max-w-md p-5 bg-white border border-[var(--color-border)] rounded-2xl" hoverable={false}>
+        <Card className="max-w-md p-3.5 sm:p-5 bg-white border border-[var(--color-border)] rounded-2xl" hoverable={false}>
           {/* Tab Switcher */}
-          <div className="flex border-b border-[var(--color-border)] -mx-5 px-5 pb-0">
+          <div className="flex border-b border-[var(--color-border)] -mx-3.5 sm:-mx-5 px-3.5 sm:px-5 pb-0">
             {['Thana Wise', 'Zone Wise', 'District Wise'].map((tab) => {
               const isActive = activeSubTab === tab;
               return (
                 <button
                   key={tab}
                   onClick={() => setActiveSubTab(tab)}
-                  className={`pb-2.5 px-4 text-xs sm:text-sm font-extrabold border-b-2 transition-all cursor-pointer relative -mb-[2px] ${
+                  className={`pb-2.5 px-3 sm:px-4 text-xs sm:text-sm font-extrabold border-b-2 transition-all cursor-pointer relative -mb-[2px] ${
                     isActive
                       ? 'border-[#267043] text-[#267043]'
                       : 'border-transparent text-zinc-400 hover:text-zinc-600'
@@ -98,10 +98,17 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
   return (
     <div className="space-y-6">
       {/* Title Header for SV Field Performance Summary */}
-      <div className="border-b border-[var(--color-border)] pb-2.5">
+      <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-2.5">
         <h2 className="text-lg font-black text-[var(--color-text-main)] tracking-tight">
           SV Field Performance Summary
         </h2>
+        <button
+          onClick={() => setIsMinimized(true)}
+          className="flex items-center gap-1.5 text-xs font-black text-[var(--color-primary)] hover:underline cursor-pointer bg-transparent border-0"
+        >
+          <span>Minimize</span>
+          <ChevronUp size={14} className="stroke-[2.5px]" />
+        </button>
       </div>
 
       {/* ─── Centered Sub-Tab Switcher ─── */}
@@ -111,7 +118,7 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
             <button
               key={tab}
               onClick={() => setActiveSubTab(tab)}
-              className={`px-5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-2.5 py-1.5 sm:px-5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all duration-200 cursor-pointer ${
                 activeSubTab === tab
                   ? 'bg-[var(--color-primary)] text-white shadow-xs'
                   : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] bg-transparent'
@@ -131,7 +138,6 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
           <PerformanceTable 
             activeSubTab={activeSubTab} 
             searchQuery={searchQuery} 
-            onMinimize={() => setIsMinimized(true)} 
           />
           <CoWorkReport />
         </div>

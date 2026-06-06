@@ -17,9 +17,8 @@ export default function TeamWiseView({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
-        {/* Total Team Revenue */}
         <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-2xl p-5 shadow-xs border border-emerald-800">
           <span className="block text-[9px] font-black text-emerald-200/80 uppercase tracking-widest">
             Total Team Revenue
@@ -38,7 +37,6 @@ export default function TeamWiseView({
           </div>
         </div>
 
-        {/* Total Orders */}
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 flex flex-col justify-between min-h-[110px] shadow-2xs">
           <div>
             <span className="block text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
@@ -55,7 +53,6 @@ export default function TeamWiseView({
           </div>
         </div>
 
-        {/* Active Reps */}
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 flex flex-col justify-between min-h-[110px] shadow-2xs">
           <div>
             <span className="block text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
@@ -70,7 +67,6 @@ export default function TeamWiseView({
           </div>
         </div>
 
-        {/* Avg. Strike Rate */}
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 flex flex-col justify-between min-h-[110px] shadow-2xs">
           <div>
             <span className="block text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
@@ -90,7 +86,7 @@ export default function TeamWiseView({
           </div>
         </div>
 
-      </div>
+      </div> */}
 
       {/* Collapsible Sales Representatives Section */}
       <div className="space-y-4">

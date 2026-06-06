@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '@/components/ui/Card';
-import { ChevronUp, MapPin, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ChevronUp, ChevronDown, MapPin, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 const thanaData = [
   { sl: 1, name: '2020-KHALIDIYA', totalShops: 757, visitedShops: '1 (0%)', visitedCount: 1, avgDuration: '00:08:24', visitDays: '1 Days', nonAssigned: true },
@@ -27,7 +27,9 @@ const districtData = [
   { sl: 3, name: 'Fujairah', totalShops: 2336, visitedShops: '69 (3%)', visitedCount: 69, avgDuration: '00:03:23', visitDays: '3 Days', nonAssigned: true },
 ];
 
-export default function PerformanceTable({ activeSubTab, searchQuery = '', onMinimize }) {
+export default function PerformanceTable({ activeSubTab, searchQuery = '' }) {
+  const [isTableMinimized, setIsTableMinimized] = useState(false);
+
   const getSubTabData = () => {
     switch (activeSubTab) {
       case 'Zone Wise':
@@ -84,7 +86,7 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '', onMin
   });
 
   return (
-    <Card className="p-6 overflow-hidden" hoverable={false}>
+    <Card className="p-3.5 sm:p-6 overflow-hidden" hoverable={false}>
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4.5 mb-5">
         <div className="flex items-center gap-2">
@@ -94,60 +96,70 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '', onMin
           </h3>
         </div>
         <button
-          onClick={onMinimize}
+          onClick={() => setIsTableMinimized(!isTableMinimized)}
           className="flex items-center gap-1.5 text-xs font-bold text-[var(--color-primary)] hover:underline cursor-pointer bg-transparent border-0"
         >
-          <span>Minimize</span>
-          <ChevronUp
-            size={14}
-            className="transition-transform duration-200"
-          />
+          <span>{isTableMinimized ? 'Expand' : 'Minimize'}</span>
+          {isTableMinimized ? (
+            <ChevronDown
+              size={14}
+              className="stroke-[2.5px]"
+            />
+          ) : (
+            <ChevronUp
+              size={14}
+              className="stroke-[2.5px]"
+            />
+          )}
         </button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Hero Metrics cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-4">
           {/* Total Card */}
-          <div className="flex items-center gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-2xl p-4.5">
-            <div className="w-10 h-10 rounded-full bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center border border-[var(--color-primary-light-hover)] shrink-0">
-              <MapPin size={20} className="stroke-[2.5px]" />
+          <div className="flex items-center gap-1.5 sm:gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-xl sm:rounded-2xl p-2 sm:p-4.5">
+            <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center border border-[var(--color-primary-light-hover)] shrink-0">
+              <MapPin size={12} className="sm:hidden stroke-[2.5px]" />
+              <MapPin size={20} className="hidden sm:block stroke-[2.5px]" />
             </div>
-            <div>
-              <span className="block text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none">
+            <div className="min-w-0">
+              <span className="block text-[8px] sm:text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none truncate">
                 {currentSummary.totalLabel}
               </span>
-              <h2 className="text-2xl font-black text-[var(--color-text-main)] mt-1.5 leading-none">
+              <h2 className="text-sm sm:text-2xl font-black text-[var(--color-text-main)] mt-1 sm:mt-1.5 leading-none">
                 {currentSummary.totalCount}
               </h2>
             </div>
           </div>
 
           {/* Visited Card */}
-          <div className="flex items-center gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-2xl p-4.5">
-            <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shrink-0">
-              <CheckCircle2 size={20} className="stroke-[2.5px]" />
+          <div className="flex items-center gap-1.5 sm:gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-xl sm:rounded-2xl p-2 sm:p-4.5">
+            <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shrink-0">
+              <CheckCircle2 size={12} className="sm:hidden stroke-[2.5px]" />
+              <CheckCircle2 size={20} className="hidden sm:block stroke-[2.5px]" />
             </div>
-            <div>
-              <span className="block text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none">
+            <div className="min-w-0">
+              <span className="block text-[8px] sm:text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none truncate">
                 {currentSummary.visitedLabel}
               </span>
-              <h2 className="text-2xl font-black text-emerald-600 mt-1.5 leading-none underline decoration-emerald-500/40 decoration-2 underline-offset-4">
+              <h2 className="text-sm sm:text-2xl font-black text-emerald-600 mt-1 sm:mt-1.5 leading-none underline decoration-emerald-500/40 decoration-2 underline-offset-4">
                 {currentSummary.visitedCount}
               </h2>
             </div>
           </div>
 
           {/* Pending Card */}
-          <div className="flex items-center gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-2xl p-4.5">
-            <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 shrink-0">
-              <AlertTriangle size={20} className="stroke-[2.5px]" />
+          <div className="flex items-center gap-1.5 sm:gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-xl sm:rounded-2xl p-2 sm:p-4.5">
+            <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 shrink-0">
+              <AlertTriangle size={12} className="sm:hidden stroke-[2.5px]" />
+              <AlertTriangle size={20} className="hidden sm:block stroke-[2.5px]" />
             </div>
-            <div>
-              <span className="block text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none">
+            <div className="min-w-0">
+              <span className="block text-[8px] sm:text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none truncate">
                 {currentSummary.pendingLabel}
               </span>
-              <h2 className="text-2xl font-black text-rose-600 mt-1.5 leading-none">
+              <h2 className="text-sm sm:text-2xl font-black text-rose-600 mt-1 sm:mt-1.5 leading-none">
                 {currentSummary.pendingCount}
               </h2>
             </div>
@@ -155,67 +167,69 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '', onMin
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto border border-[var(--color-border)] rounded-2xl bg-white">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-zinc-500 font-bold uppercase text-[9px] tracking-wider">
-                <th className="px-4 py-3 text-center w-12">SL</th>
-                <th className="px-4 py-3">{currentSummary.nameHeader}</th>
-                <th className="px-4 py-3 text-right">TOTAL SHOPS</th>
-                <th className="px-4 py-3 text-right">{currentSummary.visitedHeader}</th>
-                <th className="px-4 py-3 text-right">AVG SHOP VISIT DURATION</th>
-                <th className="px-4 py-3 text-right">{currentSummary.daysHeader}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[var(--color-border)]">
-              {filteredTableData.length > 0 ? (
-                filteredTableData.map((row) => {
-                  const isHighVisited = row.visitedCount >= 3;
-                  return (
-                    <tr
-                      key={row.sl}
-                      className={`transition-colors font-medium text-[var(--color-text-main)] hover:bg-zinc-50/60 ${
-                        isHighVisited ? 'bg-emerald-50/30' : ''
-                      }`}
-                    >
-                      <td className="px-4 py-3 text-center font-bold text-zinc-900 w-12">
-                        {row.sl}
-                      </td>
-                      <td className="px-4 py-3 font-extrabold">
-                        <div className="flex items-center gap-2">
-                          <span>{row.name}</span>
-                          {row.nonAssigned && (
-                            <span className="bg-rose-50 text-rose-600 border border-rose-100 rounded px-1.5 py-0.5 font-bold text-[8px] uppercase tracking-wide shrink-0">
-                              NON-ASSIGNED
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-right font-semibold text-zinc-600">
-                        {row.totalShops}
-                      </td>
-                      <td className="px-4 py-3 text-right font-bold text-zinc-800">
-                        {row.visitedShops}
-                      </td>
-                      <td className="px-4 py-3 text-right font-semibold text-zinc-600">
-                        {row.avgDuration}
-                      </td>
-                      <td className="px-4 py-3 text-right font-semibold text-zinc-600">
-                        {row.visitDays}
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={6} className="text-center py-8 text-xs font-semibold text-[var(--color-text-muted)]">
-                    No matching records found.
-                  </td>
+        {!isTableMinimized && (
+          <div className="overflow-x-auto border border-[var(--color-border)] rounded-2xl bg-white">
+            <table className="w-full text-left border-collapse text-[10px] sm:text-xs">
+              <thead>
+                <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-zinc-500 font-bold uppercase text-[8px] sm:text-[9px] tracking-wider whitespace-nowrap">
+                  <th className="px-1.5 py-2 sm:px-4 sm:py-3 text-center w-8 sm:w-12">SL</th>
+                  <th className="px-1.5 py-2 sm:px-4 sm:py-3">{currentSummary.nameHeader}</th>
+                  <th className="px-1.5 py-2 sm:px-4 sm:py-3 text-right">TOTAL SHOPS</th>
+                  <th className="px-1.5 py-2 sm:px-4 sm:py-3 text-right">{currentSummary.visitedHeader}</th>
+                  <th className="px-1.5 py-2 sm:px-4 sm:py-3 text-right">AVG SHOP DURATION</th>
+                  <th className="px-1.5 py-2 sm:px-4 sm:py-3 text-right">{currentSummary.daysHeader}</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-border)]">
+                {filteredTableData.length > 0 ? (
+                  filteredTableData.map((row) => {
+                    const isHighVisited = row.visitedCount >= 3;
+                    return (
+                      <tr
+                        key={row.sl}
+                        className={`transition-colors font-medium text-[var(--color-text-main)] hover:bg-zinc-50/60 ${
+                          isHighVisited ? 'bg-emerald-50/30' : ''
+                        }`}
+                      >
+                        <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-center font-bold text-zinc-900 w-8 sm:w-12">
+                          {row.sl}
+                        </td>
+                        <td className="px-1.5 py-2 sm:px-4 sm:py-3 font-extrabold">
+                          <div className="flex items-center gap-1.5 sm:gap-2">
+                            <span className="whitespace-nowrap">{row.name}</span>
+                            {row.nonAssigned && (
+                              <span className="bg-rose-50 text-rose-600 border border-rose-100 rounded px-1.5 py-0.5 font-bold text-[8px] uppercase tracking-wide shrink-0 whitespace-nowrap">
+                                NON-ASSIGNED
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-right font-semibold text-zinc-600">
+                          {row.totalShops}
+                        </td>
+                        <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-right font-bold text-zinc-800 whitespace-nowrap">
+                          {row.visitedShops}
+                        </td>
+                        <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-right font-semibold text-zinc-600 whitespace-nowrap">
+                          {row.avgDuration}
+                        </td>
+                        <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-right font-semibold text-zinc-600 whitespace-nowrap">
+                          {row.visitDays}
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="text-center py-8 text-xs font-semibold text-[var(--color-text-muted)]">
+                      No matching records found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </Card>
   );

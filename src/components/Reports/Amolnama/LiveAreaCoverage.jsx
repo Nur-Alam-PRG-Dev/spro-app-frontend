@@ -53,7 +53,7 @@ export default function LiveAreaCoverage() {
       </div>
 
       {/* Key Locations Listing (Nested within side container/card) */}
-      <div className="p-5 space-y-4 bg-white">
+      <div className="p-3.5 sm:p-5 space-y-4 bg-white">
         <div className="flex items-center justify-between text-[10px] font-black tracking-wider uppercase text-zinc-400 border-b border-[var(--color-border)] pb-2.5">
           <div className="flex items-center gap-1.5">
             <MapPin size={12} className="text-rose-500 stroke-[2px]" />
@@ -65,18 +65,18 @@ export default function LiveAreaCoverage() {
         </div>
 
         {/* List */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {keyLocations.map((loc, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-3.5 p-3 rounded-2xl bg-zinc-50/50 border border-[var(--color-border)] hover:bg-zinc-50 transition-colors"
+              className="flex items-center gap-2 sm:gap-3.5 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-zinc-50/50 border border-[var(--color-border)] hover:bg-zinc-50 transition-colors"
             >
               <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 shadow-xs shadow-emerald-500/30" />
               <div className="min-w-0 flex-1">
-                <h4 className="font-extrabold text-xs text-zinc-950 uppercase tracking-wide truncate">
+                <h4 className="font-extrabold text-[10px] sm:text-xs text-zinc-950 uppercase tracking-wide truncate">
                   {loc.name}
                 </h4>
-                <p className="text-[9px] text-zinc-400 font-semibold mt-0.5 leading-none">
+                <p className="text-[8px] sm:text-[9px] text-zinc-400 font-semibold mt-0.5 leading-none">
                   {loc.time}
                 </p>
               </div>

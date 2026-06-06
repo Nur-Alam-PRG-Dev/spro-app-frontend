@@ -123,28 +123,29 @@ const AmolnamaFilters = ({
   };
 
   return (
-    <Card className="p-5" hoverable={false}>
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end">
+    <Card className="p-3.5 sm:p-5 -mt-10 lg:mt-0" hoverable={false}>
+      <div className="flex flex-col gap-3 sm:gap-5 lg:flex-row lg:items-end">
         {/* Search Input Box */}
-        <div className="flex-1 space-y-1.5">
-          <label className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase leading-none">
+        <div className="flex-1 space-y-1 sm:space-y-1.5">
+          <label className="block text-[9px] sm:text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase leading-none">
             Search Employee
           </label>
           <div className="relative">
-            <span className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
-              <User size={18} className="text-emerald-800/70" />
+            <span className="absolute inset-y-0 left-3 sm:left-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
+              <User size={14} className="sm:hidden text-emerald-800/70" />
+              <User size={18} className="hidden sm:block text-emerald-800/70" />
             </span>
             <input
               type="text"
               value={employeeSearch}
               onChange={(e) => onEmployeeSearchChange(e.target.value)}
               placeholder="Search by ID or Name..."
-              className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm bg-zinc-50 border border-[var(--color-border)] rounded-2xl outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)] font-semibold shadow-2xs placeholder:text-zinc-400"
+              className="w-full pl-8 sm:pl-10 pr-8 sm:pr-10 py-1.5 sm:py-2.5 text-[11px] sm:text-sm bg-zinc-50 border border-[var(--color-border)] rounded-2xl outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)] font-semibold shadow-2xs placeholder:text-zinc-400"
             />
             {employeeSearch && (
               <button
                 onClick={() => onEmployeeSearchChange('')}
-                className="absolute inset-y-0 right-3.5 flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-600 transition-colors"
+                className="absolute inset-y-0 right-3 sm:right-3.5 flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-600 transition-colors"
               >
                 ✕
               </button>
@@ -153,25 +154,26 @@ const AmolnamaFilters = ({
         </div>
 
         {/* Date Selector and presets */}
-        <div className="flex-2 space-y-1.5 lg:w-auto relative">
-          <label className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase leading-none">
+        <div className="flex-2 space-y-1 sm:space-y-1.5 lg:w-auto relative">
+          <label className="block text-[9px] sm:text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase leading-none">
             Date Range Selector
           </label>
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
             {/* Unified Input Card Selector */}
-            <div className="relative flex-1 min-w-[280px]">
-              <div 
+            <div className="relative flex-1 min-w-[250px] sm:min-w-[280px]">
+              <div
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center gap-2 bg-zinc-50 border rounded-2xl px-3.5 py-2.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${
-                  isOpen ? 'border-[var(--color-primary)] bg-white ring-1 ring-[var(--color-primary)]' : 'border-[var(--color-border)]'
-                }`}
+                className={`flex items-center gap-1.5 sm:gap-2 bg-zinc-50 border rounded-2xl px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${isOpen ? 'border-[var(--color-primary)] bg-white ring-1 ring-[var(--color-primary)]' : 'border-[var(--color-border)]'
+                  }`}
               >
-                <Calendar size={16} className="text-emerald-800/70 shrink-0" />
-                <span className={`text-xs sm:text-sm font-semibold select-none ${startDate ? 'text-[var(--color-text-main)]' : 'text-zinc-400'}`}>
+                <Calendar size={13} className="sm:hidden text-emerald-800/70 shrink-0" />
+                <Calendar size={16} className="hidden sm:block text-emerald-800/70 shrink-0" />
+                <span className={`text-[11px] sm:text-sm font-semibold select-none ${startDate ? 'text-[var(--color-text-main)]' : 'text-zinc-400'}`}>
                   {startDate ? formatDateLabel(startDate) : 'Start Date'}
                 </span>
-                <ArrowRight size={14} className="text-zinc-400 shrink-0 mx-1" />
-                <span className={`text-xs sm:text-sm font-semibold select-none ${endDate ? 'text-[var(--color-text-main)]' : 'text-zinc-400'}`}>
+                <ArrowRight size={12} className="sm:hidden text-zinc-400 shrink-0 mx-0.5" />
+                <ArrowRight size={14} className="hidden sm:block text-zinc-400 shrink-0 mx-1" />
+                <span className={`text-[11px] sm:text-sm font-semibold select-none ${endDate ? 'text-[var(--color-text-main)]' : 'text-zinc-400'}`}>
                   {endDate ? formatDateLabel(endDate) : 'End Date'}
                 </span>
               </div>
@@ -183,7 +185,7 @@ const AmolnamaFilters = ({
                   <div className="absolute left-0 mt-2 bg-white border border-[var(--color-border)] rounded-2xl p-4 shadow-xl z-40 w-72 sm:w-80 select-none">
                     {/* Header: Month/Year navigation */}
                     <div className="flex items-center justify-between pb-3 border-b border-[var(--color-border)] mb-3">
-                      <button 
+                      <button
                         onClick={handlePrevMonth}
                         className="p-1 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer text-zinc-500"
                       >
@@ -192,7 +194,7 @@ const AmolnamaFilters = ({
                       <span className="text-xs sm:text-sm font-extrabold text-[var(--color-text-main)]">
                         {MONTH_NAMES[currentMonth]} {currentYear}
                       </span>
-                      <button 
+                      <button
                         onClick={handleNextMonth}
                         className="p-1 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer text-zinc-500"
                       >
@@ -281,7 +283,7 @@ const AmolnamaFilters = ({
             </div>
 
             {/* Presets badges */}
-            <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none snap-x whitespace-nowrap -mx-3.5 px-3.5 sm:mx-0 sm:px-0 shrink-0">
               {PRESETS.map((preset) => {
                 const isActive = startDate === preset.start && endDate === preset.end;
                 return (
@@ -291,11 +293,10 @@ const AmolnamaFilters = ({
                       onStartDateChange(preset.start);
                       onEndDateChange(preset.end);
                     }}
-                    className={`px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold border transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-[var(--color-primary)] border-[var(--color-primary)] text-white shadow-xs'
-                        : 'bg-white border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-zinc-400 hover:text-[var(--color-text-main)]'
-                    }`}
+                    className={`shrink-0 snap-start px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold border transition-all cursor-pointer ${isActive
+                      ? 'bg-[var(--color-primary)] border-[var(--color-primary)] text-white shadow-xs'
+                      : 'bg-white border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-zinc-400 hover:text-[var(--color-text-main)]'
+                      }`}
                   >
                     {preset.label}
                   </button>

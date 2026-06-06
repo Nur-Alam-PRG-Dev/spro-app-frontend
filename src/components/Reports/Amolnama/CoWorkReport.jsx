@@ -5,7 +5,7 @@ import Card from '@/components/ui/Card';
 
 export default function CoWorkReport() {
   return (
-    <Card className="p-6 overflow-hidden" hoverable={false}>
+    <Card className="p-3.5 sm:p-6 overflow-hidden" hoverable={false}>
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4.5 mb-5">
         <div className="flex items-center gap-2">
@@ -21,13 +21,13 @@ export default function CoWorkReport() {
 
       {/* Table */}
       <div className="overflow-x-auto border border-[var(--color-border)] rounded-2xl bg-white">
-        <table className="w-full text-left border-collapse text-xs">
+        <table className="w-full text-left border-collapse text-[10px] sm:text-xs">
           <thead>
-            <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-zinc-500 font-bold uppercase text-[9px] tracking-wider">
-              <th className="px-4 py-3 text-center w-12">SL</th>
-              <th className="px-4 py-3">DATE</th>
-              <th className="px-4 py-3">CO-WORKER NAME</th>
-              <th className="px-4 py-3">STATUS</th>
+            <tr className="bg-zinc-50 border-b border-[var(--color-border)] text-zinc-500 font-bold uppercase text-[8px] sm:text-[9px] tracking-wider whitespace-nowrap">
+              <th className="px-2 py-2.5 sm:px-4 sm:py-3 text-center w-10 sm:w-12">SL</th>
+              <th className="px-2 py-2.5 sm:px-4 sm:py-3">DATE</th>
+              <th className="px-2 py-2.5 sm:px-4 sm:py-3">CO-WORKER NAME</th>
+              <th className="px-2 py-2.5 sm:px-4 sm:py-3">STATUS</th>
             </tr>
           </thead>
           <tbody>
