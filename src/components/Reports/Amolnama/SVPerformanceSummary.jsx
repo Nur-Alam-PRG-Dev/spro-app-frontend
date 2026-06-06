@@ -50,11 +50,10 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
                 <button
                   key={tab}
                   onClick={() => setActiveSubTab(tab)}
-                  className={`pb-2.5 px-3 sm:px-4 text-xs sm:text-sm font-extrabold border-b-2 transition-all cursor-pointer relative -mb-[2px] ${
-                    isActive
-                      ? 'border-[#267043] text-[#267043]'
-                      : 'border-transparent text-zinc-400 hover:text-zinc-600'
-                  }`}
+                  className={`pb-2.5 px-3 sm:px-4 text-xs sm:text-sm font-extrabold border-b-2 transition-all cursor-pointer relative -mb-[2px] ${isActive
+                    ? 'border-[#267043] text-[#267043]'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-600'
+                    }`}
                 >
                   {tab}
                 </button>
@@ -118,11 +117,10 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
             <button
               key={tab}
               onClick={() => setActiveSubTab(tab)}
-              className={`px-2.5 py-1.5 sm:px-5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all duration-200 cursor-pointer ${
-                activeSubTab === tab
-                  ? 'bg-[var(--color-primary)] text-white shadow-xs'
-                  : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] bg-transparent'
-              }`}
+              className={`px-2.5 py-1.5 sm:px-5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all duration-200 cursor-pointer ${activeSubTab === tab
+                ? 'bg-[var(--color-primary)] text-white shadow-xs'
+                : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] bg-transparent'
+                }`}
             >
               {tab}
             </button>
@@ -132,12 +130,12 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
 
       {/* ─── Main Grid Layout (2/3 Left, 1/3 Right) ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         {/* Left Pane (2/3 width) */}
         <div className="lg:col-span-2 space-y-6">
-          <PerformanceTable 
-            activeSubTab={activeSubTab} 
-            searchQuery={searchQuery} 
+          <PerformanceTable
+            activeSubTab={activeSubTab}
+            searchQuery={searchQuery}
           />
           <CoWorkReport />
         </div>

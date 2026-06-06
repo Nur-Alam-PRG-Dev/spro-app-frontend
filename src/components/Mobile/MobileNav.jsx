@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X, Grid, ArrowLeft, MoreVertical } from 'lucide-react';
+import { Menu, Search, Home, FileText, Users, User, Settings, HelpCircle, Download, X, Grid, ArrowLeft, MoreVertical, LogOut } from 'lucide-react';
 
 const MobileHeaderContent = () => {
   const pathname = usePathname();
@@ -203,11 +203,18 @@ const MobileHeaderContent = () => {
           })}
         </nav>
 
-        {/* Drawer Footer download action */}
-        <div className="p-4 border-t border-[var(--color-sidebar-hover)]">
+        {/* Drawer Footer actions */}
+        <div className="p-4 border-t border-[var(--color-sidebar-hover)] space-y-3">
           <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] text-[#004b23] py-2.5 px-4 rounded-xl text-sm font-bold shadow-md transition-colors cursor-pointer">
             <Download size={16} />
             Download Reports
+          </button>
+          <button 
+            onClick={() => { setIsOpen(false); router.push('/login'); }} 
+            className="w-full flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 py-2.5 px-4 rounded-xl text-sm font-bold transition-colors cursor-pointer border border-rose-500/20"
+          >
+            <LogOut size={16} />
+            Logout
           </button>
         </div>
       </div>

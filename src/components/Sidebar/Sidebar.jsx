@@ -2,11 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, FileText, Users, User, Settings, HelpCircle, Download, ChevronLeft, ChevronRight } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Home, FileText, Users, User, Settings, HelpCircle, Download, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
 
 const Sidebar = ({ isOpen = true, toggleSidebar }) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const menuItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -116,6 +117,25 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
             className="w-full flex items-center justify-center bg-[#86efac] hover:bg-[#6ee7b7] dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-[#004b23] dark:text-emerald-300 p-2.5 rounded-xl transition-colors shadow-sm cursor-pointer"
           >
             <Download size={16} />
+          </button>
+        )}
+
+        {/* Logout Button */}
+        {isOpen ? (
+          <button 
+            onClick={() => router.push('/login')}
+            className="w-full flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 py-2 px-3 rounded-xl text-sm font-semibold transition-colors cursor-pointer border border-rose-500/20"
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={() => router.push('/login')}
+            title="Logout"
+            className="w-full flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 p-2.5 rounded-xl transition-colors cursor-pointer border border-rose-500/20"
+          >
+            <LogOut size={16} />
           </button>
         )}
 

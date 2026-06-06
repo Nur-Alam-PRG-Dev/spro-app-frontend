@@ -1,16 +1,66 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Header from "@/components/Header/Header";
 import { MobileHeader, MobileTabBar } from "@/components/Mobile/MobileNav";
 
+import { usePathname, useRouter } from 'next/navigation';
+
 export default function MainLayoutWrapper({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
   };
+
+  const isLoginPage = pathname === '/login';
+
+  useEffect(() => {
+    // If we're already on the login page, no need for timeout
+    if (isLoginPage) return;
+
+    let timeoutId;
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      // Set timeout for 5 minutes (300,000 ms)
+      timeoutId = setTimeout(() => {
+        router.push('/login');
+      }, 5 * 60 * 1000);
+    };
+
+    // Events that denote user activity
+    const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+
+    const setupListeners = () => {
+      events.forEach(event => window.addEventListener(event, resetTimer));
+    };
+
+    const cleanupListeners = () => {
+      events.forEach(event => window.removeEventListener(event, resetTimer));
+      clearTimeout(timeoutId);
+    };
+
+    // Initialize timer and listeners
+    resetTimer();
+    setupListeners();
+
+    // Cleanup on unmount
+    return cleanupListeners;
+  }, [isLoginPage, router]);
+
+  if (isLoginPage) {
+    return (
+      <div className="flex h-screen w-screen overflow-hidden bg-[var(--color-bg-main)]">
+        <main className="flex-1 overflow-y-auto bg-[var(--color-bg-main)]">
+          {children}
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[var(--color-bg-main)]">

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Search, Bell, History, Grid, Menu } from 'lucide-react';
+import { Search, Bell, History, Grid, Menu, LogOut } from 'lucide-react';
 
 const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
   const pathname = usePathname();
@@ -113,20 +113,30 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
 
         <div className="h-6 w-px bg-[var(--color-border)]"></div>
 
-        {/* User Profile avatar */}
-        <div className="flex items-center gap-3 select-none">
-          <div className="text-right flex flex-col">
-            <h4 className="text-xs sm:text-sm font-bold text-[var(--color-text-main)] leading-tight">Admin Console</h4>
-            <span className="text-[10px] text-[var(--color-text-muted)] font-bold leading-normal">SPRO</span>
-            <span className="text-[9px] text-[var(--color-text-muted)] font-medium leading-none">Logistics</span>
+        {/* User Profile dropdown */}
+        <div className="dropdown dropdown-end">
+          <div tabIndex={0} role="button" className="flex items-center gap-3 select-none">
+            <div className="text-right flex flex-col">
+              <h4 className="text-xs sm:text-sm font-bold text-[var(--color-text-main)] leading-tight">Admin Console</h4>
+              <span className="text-[10px] text-[var(--color-text-muted)] font-bold leading-normal">SPRO</span>
+              <span className="text-[9px] text-[var(--color-text-muted)] font-medium leading-none">Logistics</span>
+            </div>
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--color-border)] shadow-sm bg-zinc-200">
+              <img
+                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                alt="User profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
-          <div className="w-10 h-10 rounded-full overflow-hidden border border-[var(--color-border)] shadow-sm bg-zinc-200">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              alt="User profile"
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-52 mt-4 border border-[var(--color-border)]">
+            <li>
+              <a onClick={() => router.push('/login')} className="text-red-600 font-bold hover:bg-red-50">
+                <LogOut size={16} />
+                Logout
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </header>

@@ -187,9 +187,8 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '' }) {
                     return (
                       <tr
                         key={row.sl}
-                        className={`transition-colors font-medium text-[var(--color-text-main)] hover:bg-zinc-50/60 ${
-                          isHighVisited ? 'bg-emerald-50/30' : ''
-                        }`}
+                        className={`transition-colors font-medium text-[var(--color-text-main)] hover:bg-zinc-50/60 ${isHighVisited ? 'bg-emerald-50/30' : ''
+                          }`}
                       >
                         <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-center font-bold text-zinc-900 w-8 sm:w-12">
                           {row.sl}

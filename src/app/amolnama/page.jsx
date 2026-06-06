@@ -236,7 +236,7 @@ function AmolnamaContent() {
             return (
               <Card
                 key={idx}
-                className="p-5 flex items-center gap-4 min-w-[240px] lg:min-w-0 flex-1 snap-start"
+                className="p-3 flex items-center gap-2 min-w-[240px] lg:min-w-0 flex-1 snap-start"
                 hoverable={true}
               >
                 <div className={`w-11 h-11 rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 border border-black/5`}>
@@ -246,7 +246,7 @@ function AmolnamaContent() {
                   <span className="block text-[10px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase leading-none mb-1">
                     {item.title}
                   </span>
-                  <h2 className="text-2xl font-black text-[var(--color-text-main)] tracking-tight leading-none mb-1.5">
+                  <h2 className="text-xl font-black text-[var(--color-text-main)] tracking-tight leading-none mb-1.5">
                     {item.value}
                   </h2>
                   <span className="block text-[10px] text-[var(--color-text-muted)] font-semibold leading-none">
