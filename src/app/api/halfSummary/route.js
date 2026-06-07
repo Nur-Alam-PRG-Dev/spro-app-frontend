@@ -13,11 +13,14 @@ export async function POST(request) {
       report_type
     };
 
-    const response = await fetch('http://sprodevtest.prgfms.com/api/v1/report/srHalfSummaryReport', {
+    const baseUrl = process.env.SPRO_API_BASE_URL || 'http://sprodevtest.prgfms.com/api/v1';
+    const apiKey = process.env.SPRO_API_KEY || 'f06ff43be382';
+
+    const response = await fetch(`${baseUrl}/report/srHalfSummaryReport`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'ApiKey': 'f06ff43be382'
+        'ApiKey': apiKey
       },
       body: JSON.stringify(payload)
     });

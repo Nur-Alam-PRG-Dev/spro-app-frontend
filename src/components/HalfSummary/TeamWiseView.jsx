@@ -150,111 +150,175 @@ export default function TeamWiseView({
               {isExpanded && (
                 <div className="border-t border-[var(--color-border)] bg-[#fdfdfd] p-5 sm:p-6 space-y-6">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
                     {/* 1st Half Performance block */}
-                    <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4">
-                      <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
-                        <Calendar size={14} className="text-[var(--color-text-muted)]" />
-                        <span className="text-xs font-extrabold text-[var(--color-text-main)] uppercase tracking-wider">
-                          1st Half Performance (Jan - Jun)
-                        </span>
-                      </div>
+                    {(() => {
+                      const data = rep.performanceH1;
+                      const heroTrend = data.orderAmountChange || 0;
+                      return (
+                        <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4 shadow-2xs">
+                          <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
+                            <Calendar size={14} className="text-[var(--color-text-muted)]" />
+                            <span className="text-xs font-extrabold text-[var(--color-text-main)] uppercase tracking-wider">
+                              1st Half Performance (AM)
+                            </span>
+                          </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        {/* Order Amount */}
-                        <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100">
-                          <span className="block text-[9px] font-bold text-[var(--color-text-muted)] uppercase">Order Amount</span>
-                          <span className="block text-base font-black text-emerald-800 mt-1">
-                            {formatCurrency(rep.performanceH1.orderAmount)}
-                          </span>
-                        </div>
-                        {/* Order Count */}
-                        <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100">
-                          <span className="block text-[9px] font-bold text-[var(--color-text-muted)] uppercase">Order Count</span>
-                          <span className="block text-base font-black text-[var(--color-text-main)] mt-1">
-                            {formatNum(rep.performanceH1.orderCount)}
-                          </span>
-                        </div>
-                      </div>
+                          <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100 flex items-center justify-between">
+                            <div className="space-y-1">
+                              <span className="block text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Amount</span>
+                              <span className="block text-xl font-black text-emerald-800">
+                                {formatCurrency(data.orderAmount)}
+                              </span>
+                            </div>
 
-                      {/* Detail Grid */}
-                      <div className="grid grid-cols-4 gap-2 pt-2 text-center">
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">Visits</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{formatNum(rep.performanceH1.visits)}</span>
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col items-end">
+                                <span className={`text-[10px] font-black ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                  {heroTrend > 0 ? '+' : heroTrend < 0 ? '-' : ''}{Math.abs(heroTrend)}%
+                                </span>
+                                <span className="text-[7px] font-extrabold text-zinc-400 uppercase tracking-widest">Change</span>
+                              </div>
+                              <div className="relative flex items-center justify-center w-8 h-8">
+                                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                  <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
+                                  <circle cx="18" cy="18" r="14" fill="none" className={heroTrend > 0 ? "stroke-emerald-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
+                                </svg>
+                                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                   <TrendingUp size={10} className={`stroke-[3px] ${heroTrend < 0 ? 'rotate-180' : ''}`} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Count</span>
+                              <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] mt-1">{formatNum(data.orderCount)}</span>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Visit Count</span>
+                              <span className="text-sm sm:text-base font-black text-[#136336] mt-1">{formatNum(data.visits)}</span>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Prod. Outlets</span>
+                              <div className="mt-1 space-y-1">
+                                <div className="flex items-baseline gap-1">
+                                  <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] leading-none">{formatNum(data.productiveOutlets)}</span>
+                                  <span className="text-[8px] font-bold text-zinc-400">/ {formatNum(data.visits)}</span>
+                                </div>
+                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full rounded-full" style={{ width: `${(data.productiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
+                              </div>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Non-Prod.</span>
+                              <div className="mt-1 space-y-1">
+                                <div className="flex items-baseline gap-1">
+                                  <span className="text-sm sm:text-base font-black text-[#a61c1c] leading-none">{formatNum(data.nonProductiveOutlets)}</span>
+                                  <span className="text-[8px] font-bold text-zinc-400">/ {formatNum(data.visits)}</span>
+                                </div>
+                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-rose-500 h-full rounded-full" style={{ width: `${(data.nonProductiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
+                              </div>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">LPC</span>
+                              <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] mt-1">{data.lpc}</span>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Strike Rate</span>
+                              <div className="mt-1 space-y-1">
+                                <span className="text-sm sm:text-base font-black text-[#136336] leading-none block">{data.strike}%</span>
+                                <div className="w-full h-1 bg-emerald-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-600 rounded-full" style={{ width: `${Math.min(100, Math.max(0, data.strike))}%` }} /></div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">Prod. %</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{rep.performanceH1.productivity}%</span>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">LPC</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{rep.performanceH1.lpc}</span>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">Strike %</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{rep.performanceH1.strike}%</span>
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })()}
 
                     {/* 2nd Half Performance block */}
-                    <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4">
-                      <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
-                        <Calendar size={14} className="text-[var(--color-text-muted)]" />
-                        <span className="text-xs font-extrabold text-[var(--color-text-main)] uppercase tracking-wider">
-                          2nd Half Performance (Jul - Dec)
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        {/* Order Amount */}
-                        <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100">
-                          <span className="block text-[9px] font-bold text-[var(--color-text-muted)] uppercase">Order Amount</span>
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <span className="text-base font-black text-emerald-800">
-                              {formatCurrency(rep.performanceH2.orderAmount)}
-                            </span>
-                            <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-1 rounded flex items-center">
-                              ▲
+                    {(() => {
+                      const data = rep.performanceH2;
+                      const heroTrend = data.orderAmountChange || 0;
+                      return (
+                        <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4 shadow-2xs">
+                          <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
+                            <Calendar size={14} className="text-[var(--color-text-muted)]" />
+                            <span className="text-xs font-extrabold text-[var(--color-text-main)] uppercase tracking-wider">
+                              2nd Half Performance (PM)
                             </span>
                           </div>
-                        </div>
-                        {/* Order Count */}
-                        <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100">
-                          <span className="block text-[9px] font-bold text-[var(--color-text-muted)] uppercase">Order Count</span>
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <span className="text-base font-black text-[var(--color-text-main)]">
-                              {formatNum(rep.performanceH2.orderCount)}
-                            </span>
-                            <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-1 rounded flex items-center">
-                              ▲
-                            </span>
+
+                          <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100 flex items-center justify-between">
+                            <div className="space-y-1">
+                              <span className="block text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Amount</span>
+                              <span className="block text-xl font-black text-emerald-800">
+                                {formatCurrency(data.orderAmount)}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col items-end">
+                                <span className={`text-[10px] font-black ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                  {heroTrend > 0 ? '+' : heroTrend < 0 ? '-' : ''}{Math.abs(heroTrend)}%
+                                </span>
+                                <span className="text-[7px] font-extrabold text-zinc-400 uppercase tracking-widest">Change</span>
+                              </div>
+                              <div className="relative flex items-center justify-center w-8 h-8">
+                                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                  <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
+                                  <circle cx="18" cy="18" r="14" fill="none" className={heroTrend > 0 ? "stroke-emerald-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
+                                </svg>
+                                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                   <TrendingUp size={10} className={`stroke-[3px] ${heroTrend < 0 ? 'rotate-180' : ''}`} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Count</span>
+                              <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] mt-1">{formatNum(data.orderCount)}</span>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Visit Count</span>
+                              <span className="text-sm sm:text-base font-black text-[#136336] mt-1">{formatNum(data.visits)}</span>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Prod. Outlets</span>
+                              <div className="mt-1 space-y-1">
+                                <div className="flex items-baseline gap-1">
+                                  <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] leading-none">{formatNum(data.productiveOutlets)}</span>
+                                  <span className="text-[8px] font-bold text-zinc-400">/ {formatNum(data.visits)}</span>
+                                </div>
+                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full rounded-full" style={{ width: `${(data.productiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
+                              </div>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Non-Prod.</span>
+                              <div className="mt-1 space-y-1">
+                                <div className="flex items-baseline gap-1">
+                                  <span className="text-sm sm:text-base font-black text-[#a61c1c] leading-none">{formatNum(data.nonProductiveOutlets)}</span>
+                                  <span className="text-[8px] font-bold text-zinc-400">/ {formatNum(data.visits)}</span>
+                                </div>
+                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-rose-500 h-full rounded-full" style={{ width: `${(data.nonProductiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
+                              </div>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">LPC</span>
+                              <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] mt-1">{data.lpc}</span>
+                            </div>
+                            <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
+                              <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Strike Rate</span>
+                              <div className="mt-1 space-y-1">
+                                <span className="text-sm sm:text-base font-black text-[#136336] leading-none block">{data.strike}%</span>
+                                <div className="w-full h-1 bg-emerald-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-600 rounded-full" style={{ width: `${Math.min(100, Math.max(0, data.strike))}%` }} /></div>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Detail Grid */}
-                      <div className="grid grid-cols-4 gap-2 pt-2 text-center">
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">Visits</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{formatNum(rep.performanceH2.visits)}</span>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">Prod. %</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{rep.performanceH2.productivity}%</span>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">LPC</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{rep.performanceH2.lpc}</span>
-                        </div>
-                        <div className="space-y-1">
-                          <span className="block text-[8px] font-extrabold text-[var(--color-text-muted)] uppercase">Strike %</span>
-                          <span className="block text-xs font-black text-[var(--color-text-main)]">{rep.performanceH2.strike}%</span>
-                        </div>
-                      </div>
-                    </div>
-
+                      );
+                    })()}
                   </div>
                 </div>
               )}

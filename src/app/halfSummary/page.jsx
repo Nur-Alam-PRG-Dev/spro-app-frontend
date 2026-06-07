@@ -1,38 +1,44 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import OverallSummaryView from '@/components/HalfSummary/OverallSummaryView';
 import TeamWiseView from '@/components/HalfSummary/TeamWiseView';
 import AmolnamaFilters from '@/components/Reports/AmolnamaFilters';
-import { Info, User } from 'lucide-react';
+import { Info, User, Loader2 } from 'lucide-react';
 import Card from '@/components/ui/Card';
 
 function HalfSummaryContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const abortControllerRef = useRef(null);
 
   // Selected tab: 'overall' or 'team'
   const initialTab = searchParams.get('tab') || 'overall';
   const [activeTab, setActiveTab] = useState(initialTab);
-  
+
   // Filter States
   const [employeeSearch, setEmployeeSearch] = useState('547943'); // Default demo ID
   const [startDate, setStartDate] = useState('2026-06-04');
   const [endDate, setEndDate] = useState('2026-06-06');
-  
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expandedRep, setExpandedRep] = useState(null);
 
   const handleClearFilters = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
     setEmployeeSearch('');
     setStartDate('');
     setEndDate('');
     setData(null);
     setError(null);
+    setLoading(false);
   };
 
   // Synchronize state when tab search parameter changes
@@ -46,167 +52,180 @@ function HalfSummaryContent() {
   }, [searchParams, activeTab]);
 
   // Fetch half summary metrics
-  useEffect(() => {
+  const handleSearch = async () => {
     if (!employeeSearch || !startDate || !endDate) {
       setData(null);
+      setError('Please enter Employee ID and select Date Range to search.');
       return;
     }
 
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const payload = {
-          country_id: 26,
-          aemp_id: employeeSearch,
-          start_date: startDate,
-          end_date: endDate,
-          report_type: 'team_wise'
-        };
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+    const { signal } = abortControllerRef.current;
 
-        const res = await fetch('/api/halfSummary', {
+    setLoading(true);
+    setError(null);
+    try {
+      const basePayload = {
+        country_id: 2,
+        aemp_id: employeeSearch,
+        start_date: startDate,
+        end_date: endDate
+      };
+
+      const [overallRes, teamWiseRes] = await Promise.all([
+        fetch('/api/halfSummary', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+          body: JSON.stringify({ ...basePayload, report_type: 'overall' }),
+          signal
+        }),
+        fetch('/api/halfSummary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...basePayload, report_type: 'team_wise' }),
+          signal
+        })
+      ]);
 
-        if (!res.ok) throw new Error('Failed to load half summary report.');
-        
-        const responseData = await res.json();
-        
-        // Data Transformation
-        const teamWiseData = responseData?.receive_data?.team_wise || [];
-        const meta = responseData?.receive_data?.meta || {};
+      if (!overallRes.ok || !teamWiseRes.ok) throw new Error('Failed to load half summary report.');
 
-        if (teamWiseData.length === 0) {
-          setData(null);
-          setLoading(false);
-          return;
-        }
+      const overallData = await overallRes.json();
+      const teamWiseResponseData = await teamWiseRes.json();
 
-        // 1. Transform Team Wise Array
-        const mappedReps = teamWiseData.map((rep) => ({
-          id: rep.sr_id,
-          name: rep.sr_name,
-          role: "SALES REPRESENTATIVE (SR)",
-          initials: rep.sr_name.charAt(0).toUpperCase(),
-          avatarColor: "primary",
-          status: "Active",
-          statusVariant: "success",
-          revenue: (rep.first_half.order_amount || 0) + (rep.second_half.order_amount || 0),
-          performanceH1: {
-            orderAmount: rep.first_half.order_amount || 0,
-            orderCount: rep.first_half.order_count || 0,
-            visits: rep.first_half.visit_count || 0,
-            productivity: rep.first_half.productivity || 0,
-            lpc: rep.first_half.lpc || 0,
-            strike: rep.first_half.strike_rate || 0
-          },
-          performanceH2: {
-            orderAmount: rep.second_half.order_amount || 0,
-            orderCount: rep.second_half.order_count || 0,
-            visits: rep.second_half.visit_count || 0,
-            productivity: rep.second_half.productivity || 0,
-            lpc: rep.second_half.lpc || 0,
-            strike: rep.second_half.strike_rate || 0
-          }
-        }));
+      // Data Transformation
+      const teamWiseData = teamWiseResponseData?.receive_data?.team_wise || [];
+      const meta = teamWiseResponseData?.receive_data?.meta || {};
+      const summaryData = overallData?.receive_data?.summary || {};
 
-        // 2. Aggregate Overall Summary Data
-        let h1OrderAmount = 0, h1OrderCount = 0, h1VisitCount = 0;
-        let h2OrderAmount = 0, h2OrderCount = 0, h2VisitCount = 0;
-        let totalH1Prod = 0, totalH1Strike = 0, totalH1Lpc = 0;
-        let totalH2Prod = 0, totalH2Strike = 0, totalH2Lpc = 0;
-
-        teamWiseData.forEach(rep => {
-          h1OrderAmount += rep.first_half.order_amount || 0;
-          h1OrderCount += rep.first_half.order_count || 0;
-          h1VisitCount += rep.first_half.visit_count || 0;
-          totalH1Prod += rep.first_half.productivity || 0;
-          totalH1Strike += rep.first_half.strike_rate || 0;
-          totalH1Lpc += rep.first_half.lpc || 0;
-
-          h2OrderAmount += rep.second_half.order_amount || 0;
-          h2OrderCount += rep.second_half.order_count || 0;
-          h2VisitCount += rep.second_half.visit_count || 0;
-          totalH2Prod += rep.second_half.productivity || 0;
-          totalH2Strike += rep.second_half.strike_rate || 0;
-          totalH2Lpc += rep.second_half.lpc || 0;
-        });
-
-        const repCount = teamWiseData.length || 1;
-
-        const overallSummary = {
-          firstHalf: {
-            period: "AM Session",
-            orderAmount: h1OrderAmount,
-            orderAmountTrend: 0,
-            targetAchievement: 0,
-            orderCount: h1OrderCount,
-            orderCountTrend: 0,
-            visitCount: h1VisitCount,
-            visitCountTrend: 0,
-            productivity: Math.round(totalH1Prod / repCount),
-            productivityLabel: "Avg",
-            strikeRate: Math.round(totalH1Strike / repCount),
-            strikeRateLabel: "Avg",
-            lpc: (totalH1Lpc / repCount).toFixed(1),
-            lpcLabel: "Avg"
-          },
-          secondHalf: {
-            period: "PM Session",
-            totalVolume: h2OrderAmount,
-            volumeTrend: 0,
-            targetAchievement: 0,
-            orderCount: h2OrderCount,
-            orderCountTrend: 0,
-            visitCount: h2VisitCount,
-            visitCountTrend: 0,
-            productivity: Math.round(totalH2Prod / repCount),
-            productivityLabel: "Avg",
-            strikeRate: Math.round(totalH2Strike / repCount),
-            strikeRateLabel: "Avg",
-            lpc: (totalH2Lpc / repCount).toFixed(1),
-            lpcLabel: "Avg"
-          }
-        };
-
-        const totalTeamRevenue = h1OrderAmount + h2OrderAmount;
-        const totalOrders = h1OrderCount + h2OrderCount;
-        const avgStrikeRate = Math.round((overallSummary.firstHalf.strikeRate + overallSummary.secondHalf.strikeRate) / 2);
-
-        setData({
-          lastUpdated: meta.updated_at || "Now",
-          fiscalYear: "2026",
-          verifiedData: true,
-          overallSummary,
-          teamWise: {
-            stats: {
-              totalTeamRevenue,
-              revenueGrowth: 0,
-              totalOrders,
-              ordersGrowth: 0,
-              activeReps: `${repCount} / ${repCount}`,
-              avgStrikeRate
-            },
-            reps: mappedReps
-          }
-        });
-        
-        if (mappedReps.length > 0) {
-          setExpandedRep(mappedReps[0].id);
-        }
-
-      } catch (err) {
-        console.error('Failed to load halfSummary API:', err);
-        setError(err.message);
-      } finally {
+      if (teamWiseData.length === 0 && !summaryData.first_half) {
+        setData(null);
         setLoading(false);
+        return;
       }
-    };
 
-    fetchData();
-  }, [employeeSearch, startDate, endDate]);
+      // 1. Transform Team Wise Array
+      const mappedReps = teamWiseData.map((rep) => ({
+        id: rep.sr_id,
+        name: rep.sr_name,
+        role: "SALES REPRESENTATIVE (SR)",
+        initials: rep.sr_name.charAt(0).toUpperCase(),
+        avatarColor: "primary",
+        status: "Active",
+        statusVariant: "success",
+        revenue: (rep.first_half?.order_amount || 0) + (rep.second_half?.order_amount || 0),
+        performanceH1: {
+          orderAmount: rep.first_half?.order_amount || 0,
+          orderAmountChange: rep.first_half?.order_amount_change || 0,
+          orderCount: rep.first_half?.order_count || 0,
+          visits: rep.first_half?.visit_count || 0,
+          productiveOutlets: rep.first_half?.productive_outlets || 0,
+          nonProductiveOutlets: rep.first_half?.non_productive_outlets || 0,
+          productivity: rep.first_half?.productivity || 0,
+          lpc: rep.first_half?.lpc || 0,
+          strike: rep.first_half?.strike_rate || 0
+        },
+        performanceH2: {
+          orderAmount: rep.second_half?.order_amount || 0,
+          orderAmountChange: rep.second_half?.order_amount_change || 0,
+          orderCount: rep.second_half?.order_count || 0,
+          visits: rep.second_half?.visit_count || 0,
+          productiveOutlets: rep.second_half?.productive_outlets || 0,
+          nonProductiveOutlets: rep.second_half?.non_productive_outlets || 0,
+          productivity: rep.second_half?.productivity || 0,
+          lpc: rep.second_half?.lpc || 0,
+          strike: rep.second_half?.strike_rate || 0
+        }
+      }));
+
+      // 2. Destructure Overall Summary Data directly
+      const { first_half: h1 = {}, second_half: h2 = {} } = summaryData;
+
+      const repCount = teamWiseData.length;
+
+      const overallSummary = {
+        firstHalf: {
+          period: h1.session_name || "AM Session Analysis",
+          orderAmount: h1.order_amount || 0,
+          orderAmountTrend: h1.order_amount_change || 0,
+          targetAchievement: h1.target_achievement || 0,
+          orderCount: h1.order_count || 0,
+          orderCountTrend: h1.order_count_change || 0,
+          visitCount: h1.visit_count || 0,
+          visitCountTrend: h1.visit_count_change || 0,
+          productiveOutlets: h1.productive_outlets || 0,
+          nonProductiveOutlets: h1.non_productive_outlets || 0,
+          productivity: h1.productivity || 0,
+          productivityLabel: h1.productivity_status || "Avg",
+          strikeRate: h1.strike_rate || 0,
+          strikeRateLabel: h1.strike_rate_status || "Avg",
+          lpc: h1.lpc || 0,
+          lpcLabel: "Avg"
+        },
+        secondHalf: {
+          period: h2.session_name || "PM Session Analysis",
+          totalVolume: h2.order_amount || 0,
+          volumeTrend: h2.order_amount_change || 0,
+          targetAchievement: h2.target_achievement || 0,
+          orderCount: h2.order_count || 0,
+          orderCountTrend: h2.order_count_change || 0,
+          visitCount: h2.visit_count || 0,
+          visitCountTrend: h2.visit_count_change || 0,
+          productiveOutlets: h2.productive_outlets || 0,
+          nonProductiveOutlets: h2.non_productive_outlets || 0,
+          productivity: h2.productivity || 0,
+          productivityLabel: h2.productivity_status || "Avg",
+          strikeRate: h2.strike_rate || 0,
+          strikeRateLabel: h2.strike_rate_status || "Avg",
+          lpc: h2.lpc || 0,
+          lpcLabel: "Avg"
+        }
+      };
+
+      const totalTeamRevenue = (h1.order_amount || 0) + (h2.order_amount || 0);
+      const totalOrders = (h1.order_count || 0) + (h2.order_count || 0);
+      const avgStrikeRate = (((h1.strike_rate || 0) + (h2.strike_rate || 0)) / 2).toFixed(2);
+
+      // If switching from team tab to overall when team size is < 2
+      if (mappedReps.length < 2 && activeTab === 'team') {
+        setActiveTab('overall');
+      }
+
+      setData({
+        lastUpdated: meta.updated_at || "Now",
+        fiscalYear: "2026",
+        verifiedData: true,
+        overallSummary,
+        teamWise: {
+          stats: {
+            totalTeamRevenue,
+            revenueGrowth: 0,
+            totalOrders,
+            ordersGrowth: 0,
+            activeReps: `${repCount} / ${repCount}`,
+            avgStrikeRate
+          },
+          reps: mappedReps
+        }
+      });
+
+      if (mappedReps.length > 0) {
+        setExpandedRep(mappedReps[0].id);
+      }
+
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        console.log('Search aborted by user');
+        return;
+      }
+      console.error('Failed to load halfSummary API:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -257,24 +276,24 @@ function HalfSummaryContent() {
         <div className="flex bg-zinc-100/80 p-1 rounded-xl self-start md:self-auto shadow-2xs border border-zinc-200/50">
           <button
             onClick={() => handleTabChange('overall')}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              activeTab === 'overall'
-                ? 'bg-emerald-800 text-white shadow-sm'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
+            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'overall'
+              ? 'bg-emerald-800 text-white shadow-sm'
+              : 'text-zinc-600 hover:text-zinc-900'
+              }`}
           >
             Overall Summary
           </button>
-          <button
-            onClick={() => handleTabChange('team')}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-              activeTab === 'team'
+          {data && data.teamWise.reps.length >= 2 && (
+            <button
+              onClick={() => handleTabChange('team')}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'team'
                 ? 'bg-emerald-800 text-white shadow-sm'
                 : 'text-zinc-600 hover:text-zinc-900'
-            }`}
-          >
-            Team Wise
-          </button>
+                }`}
+            >
+              Team Wise
+            </button>
+          )}
         </div>
       </div>
 
@@ -287,6 +306,8 @@ function HalfSummaryContent() {
         endDate={endDate}
         onEndDateChange={setEndDate}
         onClearFilters={handleClearFilters}
+        onSearch={handleSearch}
+        isLoading={loading}
       />
 
       {/* ─── Error Message ─── */}
@@ -297,11 +318,15 @@ function HalfSummaryContent() {
         </Card>
       )}
 
-      {/* ─── Skeleton Loading ─── */}
+      {/* ─── Fancy Spinner Loading ─── */}
       {loading && (
-        <div className="space-y-6 animate-pulse">
-          <div className="h-64 bg-zinc-50 border border-[var(--color-border)] rounded-2xl" />
-        </div>
+        <Card className="p-12 flex flex-col items-center justify-center space-y-4 border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" hoverable={false}>
+          <div className="relative">
+            <div className="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-75" />
+            <Loader2 className="w-12 h-12 text-emerald-800 animate-spin relative z-10" />
+          </div>
+          <span className="text-sm font-extrabold text-[var(--color-text-muted)] animate-pulse tracking-wide">Fetching report metrics...</span>
+        </Card>
       )}
 
       {/* ─── Empty State Placeholder ─── */}

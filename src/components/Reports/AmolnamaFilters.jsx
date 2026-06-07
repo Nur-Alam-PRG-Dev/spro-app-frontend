@@ -4,12 +4,42 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, RotateCcw, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from '@/components/ui/Card';
 
-const PRESETS = [
-  { label: 'All Dates', start: '', end: '' },
-  { label: 'Today', start: '2026-05-02', end: '2026-05-02' },
-  { label: 'Last 3 Days', start: '2026-05-02', end: '2026-05-04' },
-  { label: 'Active Range', start: '2026-05-02', end: '2026-05-05' }
-];
+const getDynamicPresets = () => {
+  const today = new Date();
+
+  const formatDate = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+
+  const todayStr = formatDate(today);
+
+  // This Week (start with last Saturday and end with today)
+  const thisWeekStart = new Date(today);
+  const offsetToSaturday = (today.getDay() + 1) % 7;
+  thisWeekStart.setDate(today.getDate() - offsetToSaturday);
+  const thisWeekEnd = new Date(today);
+
+  // This Month
+  const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  const thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  // Last 7 Days
+  const last7DaysStart = new Date(today);
+  last7DaysStart.setDate(today.getDate() - 6);
+
+  return [
+    { label: 'Today', start: todayStr, end: todayStr },
+    { label: 'This Week', start: formatDate(thisWeekStart), end: formatDate(thisWeekEnd) },
+    { label: 'This Month', start: formatDate(thisMonthStart), end: formatDate(thisMonthEnd) },
+    { label: 'Last 7 Days', start: formatDate(last7DaysStart), end: todayStr },
+    { label: 'All Dates', start: '', end: '' }
+  ];
+};
+
+const PRESETS = getDynamicPresets();
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -23,28 +53,26 @@ const AmolnamaFilters = ({
   onStartDateChange,
   endDate,
   onEndDateChange,
-  onClearFilters
+  onClearFilters,
+  onSearch,
+  isLoading
 }) => {
   const hasActiveFilters = employeeSearch || startDate || endDate;
 
   // Calendar states
   const [isOpen, setIsOpen] = useState(false);
-  const [currentYear, setCurrentYear] = useState(2026);
-  const [currentMonth, setCurrentMonth] = useState(4); // 4 = May (0-indexed)
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [hoveredDate, setHoveredDate] = useState(null);
 
-  /* eslint-disable react-hooks/set-state-in-effect */
   // Sync calendar display month with selected startDate when it changes
   useEffect(() => {
     if (startDate) {
       const date = new Date(startDate);
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      if (currentYear !== year) setCurrentYear(year);
-      if (currentMonth !== month) setCurrentMonth(month);
+      setCurrentYear(date.getFullYear());
+      setCurrentMonth(date.getMonth());
     }
-  }, [startDate, currentYear, currentMonth]);
-  /* eslint-enable react-hooks/set-state-in-effect */
+  }, [startDate]);
 
   // Helper to format date labels beautifully
   const formatDateLabel = (dateStr) => {
@@ -308,20 +336,43 @@ const AmolnamaFilters = ({
       </div>
 
       {/* Dynamic Summary Footer */}
-      <div className="flex items-center justify-between gap-2 mt-4 pt-3.5 border-t border-[var(--color-border)] text-[10px] sm:text-xs font-bold text-[var(--color-text-muted)]">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-2 mt-4 pt-3.5 border-t border-[var(--color-border)] text-[10px] sm:text-xs font-bold text-[var(--color-text-muted)]">
+        <div className="flex items-center gap-2 min-w-0">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
           <span className="truncate">{summaryText}</span>
         </div>
-        {hasActiveFilters && (
+        <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+          {hasActiveFilters && (
+            <button
+              onClick={onClearFilters}
+              className="flex items-center gap-1.5 hover:text-rose-600 transition-colors cursor-pointer text-rose-500 font-extrabold shrink-0"
+            >
+              <RotateCcw size={14} />
+              <span>Reset Filters</span>
+            </button>
+          )}
           <button
-            onClick={onClearFilters}
-            className="flex items-center gap-1 hover:text-rose-600 transition-colors cursor-pointer text-rose-500 font-extrabold shrink-0"
+            onClick={onSearch}
+            disabled={isLoading}
+            className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${
+              isLoading 
+                ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20' 
+                : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50'
+            }`}
           >
-            <RotateCcw size={12} />
-            <span>Reset Filters</span>
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Searching...
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5">
+                <span>Search</span>
+                <ArrowRight size={14} className="stroke-[3px]" />
+              </span>
+            )}
           </button>
-        )}
+        </div>
       </div>
     </Card>
   );
