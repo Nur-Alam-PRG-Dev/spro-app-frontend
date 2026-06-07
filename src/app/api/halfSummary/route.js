@@ -13,12 +13,8 @@ export async function POST(request) {
       report_type
     };
 
-    const baseUrl = process.env.SPRO_API_BASE_URL;
-    const apiKey = process.env.SPRO_API_KEY;
-
-    if (!baseUrl || !apiKey) {
-      return NextResponse.json({ error: 'Server configuration missing.' }, { status: 500 });
-    }
+    const baseUrl = process.env.SPRO_API_BASE_URL || 'http://sprodevtest.prgfms.com/';
+    const apiKey = process.env.SPRO_API_KEY || 'f06ff43be382';
 
     const response = await fetch(`${baseUrl}api/v1/report/srHalfSummaryReport`, {
       method: 'POST',

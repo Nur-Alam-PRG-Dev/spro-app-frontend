@@ -18,15 +18,39 @@ export default function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      if (staffId === '567203' && password === '123456') {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: staffId, password, hris_status: 0 })
+      });
+
+      const resData = await response.json();
+
+      if (!response.ok) {
+        setError(resData.error || 'Invalid Staff ID or Password.');
+        setIsLoading(false);
+        return;
+      }
+
+      if (resData.status === 'success' && resData.data) {
+        // Store user and baseImageUrl in localStorage
+        localStorage.setItem('spro_user', JSON.stringify(resData.data));
+        localStorage.setItem('baseImageUrl', resData.baseImageUrl || '');
+        
+        // Also set login timestamp for 24hr timeout
+        localStorage.setItem('spro_login_time', Date.now().toString());
+
         router.push('/');
       } else {
-        setError('Invalid Staff ID or Password. Try the demo credentials.');
+        setError('Unexpected response from server.');
         setIsLoading(false);
       }
-    }, 800);
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('An error occurred during login. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -105,18 +129,6 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-            </div>
-
-            {/* Demo Credentials Info Box */}
-            <div className="mt-2 p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl text-xs font-semibold text-emerald-800/80">
-              <p className="flex justify-between items-center mb-1">
-                <span>Demo Staff ID:</span>
-                <span className="font-extrabold text-[var(--color-primary)] bg-emerald-100/50 px-2 py-0.5 rounded">567203</span>
-              </p>
-              <p className="flex justify-between items-center">
-                <span>Demo Password:</span>
-                <span className="font-extrabold text-[var(--color-primary)] bg-emerald-100/50 px-2 py-0.5 rounded">123456</span>
-              </p>
             </div>
 
             {/* Submit Button */}

@@ -32,15 +32,12 @@ const MONTH_NAMES = [
 ];
 
 const UncoveredOutletFilters = ({
-  aempId, onAempIdChange,
-  roleId, onRoleIdChange,
-  countryId, onCountryIdChange,
   date, onDateChange,
   onClearFilters,
   onSearch,
   isLoading
 }) => {
-  const hasActiveFilters = aempId || roleId || countryId || date;
+  const hasActiveFilters = !!date;
 
   // Calendar states
   const [isOpen, setIsOpen] = useState(false);
@@ -118,45 +115,6 @@ const UncoveredOutletFilters = ({
 
         {/* Filters Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider ml-1">
-              AEMP ID
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. 547944"
-              value={aempId}
-              onChange={(e) => onAempIdChange(e.target.value)}
-              className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs sm:text-sm font-bold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-zinc-400 placeholder:font-semibold"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider ml-1">
-              Role ID
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. 2"
-              value={roleId}
-              onChange={(e) => onRoleIdChange(e.target.value)}
-              className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs sm:text-sm font-bold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-zinc-400 placeholder:font-semibold"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider ml-1">
-              Country ID
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. 26"
-              value={countryId}
-              onChange={(e) => onCountryIdChange(e.target.value)}
-              className="w-full px-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs sm:text-sm font-bold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-zinc-400 placeholder:font-semibold"
-            />
-          </div>
-
           <div className="space-y-1.5 relative">
             <label className="text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider ml-1">
               Date Selector

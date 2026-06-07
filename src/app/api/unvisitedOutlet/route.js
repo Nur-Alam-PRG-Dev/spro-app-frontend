@@ -12,15 +12,8 @@ export async function POST(request) {
       );
     }
 
-    const apiKey = process.env.UNVISITED_OUTLET_API_KEY;
-    const baseUrl = process.env.SPRO_API_BASE_URL;
-
-    if (!apiKey || !baseUrl) {
-      return NextResponse.json(
-        { error: 'Server configuration missing.' },
-        { status: 500 }
-      );
-    }
+    const apiKey = process.env.UNVISITED_OUTLET_API_KEY || 'f06ff43be3310989';
+    const baseUrl = process.env.SPRO_API_BASE_URL || 'http://sprodevtest.prgfms.com/';
 
     // Create x-www-form-urlencoded payload
     const params = new URLSearchParams();

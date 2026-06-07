@@ -22,14 +22,23 @@ export default function MainLayoutWrapper({ children }) {
     // If we're already on the login page, no need for timeout
     if (isLoginPage) return;
 
+    // Check if 24 hours have already passed since login
+    const loginTime = localStorage.getItem('spro_login_time');
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+    
+    if (loginTime && Date.now() - parseInt(loginTime) > TWENTY_FOUR_HOURS) {
+      router.push('/login');
+      return;
+    }
+
     let timeoutId;
 
     const resetTimer = () => {
       clearTimeout(timeoutId);
-      // Set timeout for 5 minutes (300,000 ms)
+      // Set timeout for 24 hours of inactivity
       timeoutId = setTimeout(() => {
         router.push('/login');
-      }, 5 * 60 * 1000);
+      }, TWENTY_FOUR_HOURS);
     };
 
     // Events that denote user activity

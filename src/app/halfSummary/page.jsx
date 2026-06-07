@@ -18,8 +18,6 @@ function HalfSummaryContent() {
   const initialTab = searchParams.get('tab') || 'overall';
   const [activeTab, setActiveTab] = useState(initialTab);
 
-  // Filter States
-  const [employeeSearch, setEmployeeSearch] = useState('547943'); // Default demo ID
   const [startDate, setStartDate] = useState('2026-06-04');
   const [endDate, setEndDate] = useState('2026-06-06');
 
@@ -33,7 +31,6 @@ function HalfSummaryContent() {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    setEmployeeSearch('');
     setStartDate('');
     setEndDate('');
     setData(null);
@@ -53,9 +50,9 @@ function HalfSummaryContent() {
 
   // Fetch half summary metrics
   const handleSearch = async () => {
-    if (!employeeSearch || !startDate || !endDate) {
+    if (!startDate || !endDate) {
       setData(null);
-      setError('Please enter Employee ID and select Date Range to search.');
+      setError('Please select Date Range to search.');
       return;
     }
 
@@ -68,9 +65,16 @@ function HalfSummaryContent() {
     setLoading(true);
     setError(null);
     try {
+      const userStr = localStorage.getItem('spro_user');
+      if (!userStr) {
+        throw new Error('User session not found. Please log in again.');
+      }
+      const user = JSON.parse(userStr);
+
       const basePayload = {
-        country_id: 2,
-        aemp_id: employeeSearch,
+        country_id: user.cont_id || 2,
+        aemp_id: user.aemp_usnm,
+        role_id: user.role_id,
         start_date: startDate,
         end_date: endDate
       };
@@ -299,8 +303,6 @@ function HalfSummaryContent() {
 
       {/* ─── Search and Date Range Filters ─── */}
       <AmolnamaFilters
-        employeeSearch={employeeSearch}
-        onEmployeeSearchChange={setEmployeeSearch}
         startDate={startDate}
         onStartDateChange={setStartDate}
         endDate={endDate}

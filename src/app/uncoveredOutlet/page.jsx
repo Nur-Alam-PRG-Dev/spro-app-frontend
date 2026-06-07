@@ -19,9 +19,7 @@ function UncoveredOutletContent() {
   const [error, setError] = useState(null);
 
   // Filters State
-  const [aempId, setAempId] = useState('547944');
-  const [roleId, setRoleId] = useState('2');
-  const [countryId, setCountryId] = useState('26');
+
   const [date, setDate] = useState('2026-06-04');
 
   // Active UI filters
@@ -40,9 +38,7 @@ function UncoveredOutletContent() {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    setAempId('');
-    setRoleId('');
-    setCountryId('');
+
     setDate('');
     setData(null);
     setError(null);
@@ -51,9 +47,9 @@ function UncoveredOutletContent() {
   };
 
   const handleSearch = async () => {
-    if (!aempId || !roleId || !countryId || !date) {
+    if (!date) {
       setData(null);
-      setError('Please fill in all search parameters (AEMP ID, Role ID, Country ID, Date).');
+      setError('Please select a Date to search.');
       return;
     }
 
@@ -66,13 +62,19 @@ function UncoveredOutletContent() {
     setLoading(true);
     setError(null);
     try {
+      const userStr = localStorage.getItem('spro_user');
+      if (!userStr) {
+        throw new Error('User session not found. Please log in again.');
+      }
+      const user = JSON.parse(userStr);
+
       const response = await fetch('/api/unvisitedOutlet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          aemp_id: aempId, 
-          role_id: roleId, 
-          country_id: countryId, 
+          aemp_id: user.aemp_usnm, 
+          role_id: user.role_id, 
+          country_id: user.cont_id || 2, 
           date: date
         }),
         signal
@@ -213,11 +215,9 @@ function UncoveredOutletContent() {
         </div>
       </div>
 
-      <UncoveredOutletFilters 
-        aempId={aempId} onAempIdChange={setAempId}
-        roleId={roleId} onRoleIdChange={setRoleId}
-        countryId={countryId} onCountryIdChange={setCountryId}
-        date={date} onDateChange={setDate}
+      <UncoveredOutletFilters
+        date={date}
+        onDateChange={setDate}
         onClearFilters={handleClearFilters}
         onSearch={handleSearch}
         isLoading={loading}

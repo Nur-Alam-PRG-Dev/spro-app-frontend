@@ -47,8 +47,6 @@ const MONTH_NAMES = [
 ];
 
 const AmolnamaFilters = ({
-  employeeSearch,
-  onEmployeeSearchChange,
   startDate,
   onStartDateChange,
   endDate,
@@ -57,7 +55,7 @@ const AmolnamaFilters = ({
   onSearch,
   isLoading
 }) => {
-  const hasActiveFilters = employeeSearch || startDate || endDate;
+  const hasActiveFilters = startDate || endDate;
 
   // Calendar states
   const [isOpen, setIsOpen] = useState(false);
@@ -153,34 +151,6 @@ const AmolnamaFilters = ({
   return (
     <Card className="p-3.5 sm:p-5 -mt-10 lg:mt-0" hoverable={false}>
       <div className="flex flex-col gap-3 sm:gap-5 lg:flex-row lg:items-end">
-        {/* Search Input Box */}
-        <div className="flex-1 space-y-1 sm:space-y-1.5">
-          <label className="block text-[9px] sm:text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase leading-none">
-            Search Employee
-          </label>
-          <div className="relative">
-            <span className="absolute inset-y-0 left-3 sm:left-3.5 flex items-center pointer-events-none text-[var(--color-text-muted)]">
-              <User size={14} className="sm:hidden text-emerald-800/70" />
-              <User size={18} className="hidden sm:block text-emerald-800/70" />
-            </span>
-            <input
-              type="text"
-              value={employeeSearch}
-              onChange={(e) => onEmployeeSearchChange(e.target.value)}
-              placeholder="Search by ID or Name..."
-              className="w-full pl-8 sm:pl-10 pr-8 sm:pr-10 py-1.5 sm:py-2.5 text-[11px] sm:text-sm bg-zinc-50 border border-[var(--color-border)] rounded-2xl outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)] font-semibold shadow-2xs placeholder:text-zinc-400"
-            />
-            {employeeSearch && (
-              <button
-                onClick={() => onEmployeeSearchChange('')}
-                className="absolute inset-y-0 right-3 sm:right-3.5 flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-600 transition-colors"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
-
         {/* Date Selector and presets */}
         <div className="flex-2 space-y-1 sm:space-y-1.5 lg:w-auto relative">
           <label className="block text-[9px] sm:text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase leading-none">

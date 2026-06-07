@@ -49,6 +49,28 @@ const MobileHeaderContent = () => {
   const isTargetVs = pathname === '/targetVsAchievement';
   const isHalfSummary = pathname === '/halfSummary';
 
+  const [user, setUser] = useState(null);
+  const [baseImageUrl, setBaseImageUrl] = useState('');
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('spro_user');
+    const storedBaseUrl = localStorage.getItem('baseImageUrl');
+    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedBaseUrl) setBaseImageUrl(storedBaseUrl);
+  }, []);
+
+  const designation = user ? (user.role_id === 1 ? 'SR' : 'SV') : 'Logistics';
+  const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.aemp_name || 'User')}&background=047857&color=fff&size=128`;
+  const avatarUrl = user && user.aemp_pimg ? `${baseImageUrl}${user.aemp_pimg}` : fallbackAvatar;
+
+  const handleLogout = () => {
+    localStorage.removeItem('spro_user');
+    localStorage.removeItem('baseImageUrl');
+    localStorage.removeItem('spro_login_time');
+    router.push('/login');
+    setIsOpen(false);
+  };
+
   return (
     <>
       <header className="lg:hidden flex items-center justify-between gap-3 px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
@@ -75,9 +97,10 @@ const MobileHeaderContent = () => {
             <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Target vs. Achievement</span>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
               <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                src={avatarUrl}
                 alt="avatar"
                 className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'; }}
               />
             </div>
           </>
@@ -89,9 +112,10 @@ const MobileHeaderContent = () => {
             <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Half Summary Report</span>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
               <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                src={avatarUrl}
                 alt="avatar"
                 className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'; }}
               />
             </div>
           </>
@@ -135,9 +159,10 @@ const MobileHeaderContent = () => {
                 {/* Right User Avatar */}
                 <div className="w-8 h-8 rounded-full overflow-hidden border border-white/50 bg-white/20 flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
                   <img
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    src={avatarUrl}
                     alt="avatar"
                     className="w-full h-full object-cover"
+                    onError={(e) => { e.target.src = fallbackAvatar; }}
                   />
                 </div>
               </>
@@ -160,26 +185,39 @@ const MobileHeaderContent = () => {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } transition-transform duration-350 ease-out flex flex-col shadow-2xl lg:hidden`}
       >
-        <div className="p-5 border-b border-[var(--color-sidebar-hover)] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center font-bold text-[var(--color-sidebar-bg)] text-lg">
-              S
-            </div>
-            <div>
-              <h2 className="font-extrabold text-base tracking-wide">SPRO MOBILE</h2>
-              <p className="text-[9px] text-[var(--color-sidebar-text-muted)] leading-none font-medium">Logistics Intelligence</p>
-            </div>
-          </div>
+        <div className="p-5 border-b border-[var(--color-sidebar-hover)] flex flex-col relative">
           <button
             onClick={() => setIsOpen(false)}
-            className="p-1.5 hover:bg-[var(--color-sidebar-hover)] rounded-full text-[var(--color-sidebar-text-muted)] hover:text-white"
+            className="absolute top-4 right-4 p-1.5 hover:bg-[var(--color-sidebar-hover)] rounded-full text-[var(--color-sidebar-text-muted)] hover:text-white"
           >
             <X size={20} />
           </button>
+          
+          <div className="flex flex-col items-center mt-2 mb-4">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-[var(--color-sidebar-hover)] shadow-md bg-white/10 mb-3">
+              <img
+                src={avatarUrl}
+                alt="Profile"
+                className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = fallbackAvatar; }}
+              />
+            </div>
+            <h2 className="font-extrabold text-lg tracking-tight text-white text-center leading-tight">
+              {user ? user.aemp_name : 'Admin Console'}
+            </h2>
+            <p className="text-xs text-emerald-400 font-bold mt-1">
+              {user ? user.aemp_usnm : 'SPRO'} <span className="text-[var(--color-sidebar-text-muted)] px-1">•</span> {designation}
+            </p>
+            {user && (user.aemp_mob1 || user.aemp_dtsm) && (
+              <p className="text-[11px] text-[var(--color-sidebar-text-muted)] font-medium mt-1.5">
+                {user.aemp_mob1 || user.aemp_dtsm}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Navigation Items inside drawer */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = item.href === '/'
@@ -204,13 +242,13 @@ const MobileHeaderContent = () => {
         </nav>
 
         {/* Drawer Footer actions */}
-        <div className="p-4 border-t border-[var(--color-sidebar-hover)] space-y-3">
+        <div className="p-4 border-t border-[var(--color-sidebar-hover)] space-y-3 shrink-0">
           <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] text-[#004b23] py-2.5 px-4 rounded-xl text-sm font-bold shadow-md transition-colors cursor-pointer">
             <Download size={16} />
             Download Reports
           </button>
           <button 
-            onClick={() => { setIsOpen(false); router.push('/login'); }} 
+            onClick={handleLogout} 
             className="w-full flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 py-2.5 px-4 rounded-xl text-sm font-bold transition-colors cursor-pointer border border-rose-500/20"
           >
             <LogOut size={16} />
