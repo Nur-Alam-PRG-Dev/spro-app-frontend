@@ -11,7 +11,17 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
 
   const menuItems = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'Reports', href: '/reports', icon: FileText },
+    { 
+      name: 'Reports', 
+      href: '/reports', 
+      icon: FileText,
+      subItems: [
+        { name: 'Amolnama', href: '/amolnama' },
+        { name: 'Target Vs Achievement', href: '/targetVsAchievement' },
+        { name: 'Half Summary', href: '/halfSummary' },
+        { name: 'Uncovered Outlets', href: '/uncoveredOutlet' },
+      ]
+    },
     { name: 'Team', href: '#', icon: Users },
     { name: 'Profile', href: '#', icon: User },
   ];
@@ -65,21 +75,67 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
             ? pathname === '/'
             : pathname.startsWith(item.href) || (item.href === '/reports' && ['/halfSummary', '/targetVsAchievement', '/uncoveredOutlet', '/amolnama'].includes(pathname));
           return (
-            <Link
-              key={item.name}
-              href={item.href}
-              title={!isOpen ? item.name : undefined}
-              className={`flex items-center rounded-lg text-sm font-medium transition-all duration-200 ${
-                isOpen ? 'gap-3 px-3 py-2.5' : 'justify-center p-2.5'
-              } ${
-                isActive
-                  ? 'bg-[var(--color-sidebar-active)] text-[var(--color-sidebar-text)]'
-                  : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
-              }`}
-            >
-              <Icon size={18} className={`shrink-0 ${isActive ? 'text-emerald-400' : ''}`} />
-              {isOpen && <span className="whitespace-nowrap overflow-hidden">{item.name}</span>}
-            </Link>
+            <div key={item.name} className="relative group">
+              <Link
+                href={item.href}
+                className={`flex items-center rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isOpen ? 'gap-3 px-3 py-2.5' : 'justify-center p-2.5'
+                } ${
+                  isActive
+                    ? 'bg-[var(--color-sidebar-active)] text-[var(--color-sidebar-text)]'
+                    : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
+                }`}
+              >
+                <Icon size={18} className={`shrink-0 ${isActive ? 'text-emerald-400' : ''}`} />
+                {isOpen && <span className="whitespace-nowrap overflow-hidden">{item.name}</span>}
+              </Link>
+              
+              
+              {/* Flyout Menu / Tooltip for Closed Sidebar */}
+              {!isOpen && (
+                <div className="absolute left-full top-0 ml-2 w-max bg-[var(--color-sidebar-hover)] text-white text-sm font-semibold rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-white/10 flex flex-col pointer-events-auto">
+                  {!item.subItems && (
+                    <div className="px-3 py-2 border-b border-transparent">
+                      {item.name}
+                    </div>
+                  )}
+                  {item.subItems && (
+                    <div className="py-1 min-w-[180px]">
+                      <div className="px-4 py-2 font-black border-b border-white/10 text-emerald-400 tracking-wider text-xs uppercase">{item.name}</div>
+                      {item.subItems.map(subItem => (
+                        <Link 
+                          key={subItem.name} 
+                          href={subItem.href}
+                          className="block px-4 py-2 hover:bg-emerald-900/50 hover:text-emerald-300 transition-colors"
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Inline Submenu for Open Sidebar */}
+              {isOpen && item.subItems && (
+                <div className="pl-9 pr-2 py-1 mt-1 space-y-1 border-l border-white/10 ml-6">
+                  {item.subItems.map(subItem => {
+                    const isSubActive = pathname === subItem.href;
+                    return (
+                      <Link 
+                        key={subItem.name} 
+                        href={subItem.href}
+                        className={`block px-3 py-2 text-xs font-semibold rounded-lg transition-colors ${
+                          isSubActive ? 'bg-emerald-500/20 text-emerald-400' : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
+                        }`}
+                      >
+                        {subItem.name}
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>
@@ -90,17 +146,22 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
           {bottomItems.map((item) => {
             const Icon = item.icon;
             return (
-              <Link
-                key={item.name}
-                href={item.href}
-                title={!isOpen ? item.name : undefined}
-                className={`flex items-center rounded-lg text-sm font-medium text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white transition-all duration-200 ${
-                  isOpen ? 'gap-3 px-3 py-2' : 'justify-center p-2.5'
-                }`}
-              >
-                <Icon size={18} className="shrink-0" />
-                {isOpen && <span className="whitespace-nowrap overflow-hidden">{item.name}</span>}
-              </Link>
+              <div key={item.name} className="relative group">
+                <Link
+                  href={item.href}
+                  className={`flex items-center rounded-lg text-sm font-medium text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white transition-all duration-200 ${
+                    isOpen ? 'gap-3 px-3 py-2' : 'justify-center p-2.5'
+                  }`}
+                >
+                  <Icon size={18} className="shrink-0" />
+                  {isOpen && <span className="whitespace-nowrap overflow-hidden">{item.name}</span>}
+                </Link>
+                {!isOpen && (
+                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-3 py-2 bg-[var(--color-sidebar-hover)] text-white text-sm font-semibold rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-white/10 whitespace-nowrap">
+                    {item.name}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>

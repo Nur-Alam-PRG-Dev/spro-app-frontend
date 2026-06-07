@@ -15,12 +15,20 @@ function UncoveredOutletContent() {
 
   // Local state to store dataset from API
   const [data, setData] = useState(null);
+  const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Filters State
 
-  const [date, setDate] = useState('2026-06-04');
+  const [date, setDate] = useState(() => {
+    // Current date in YYYY-MM-DD
+    const now = new Date();
+    // Use local time for timezone to get current day correctly
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().split('T')[0];
+  });
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Active UI filters
   const [selectedAreaId, setSelectedAreaId] = useState('All');
@@ -41,6 +49,7 @@ function UncoveredOutletContent() {
 
     setDate('');
     setData(null);
+    setSummaryData(null);
     setError(null);
     setLoading(false);
     setCurrentPage(1);
@@ -71,10 +80,10 @@ function UncoveredOutletContent() {
       const response = await fetch('/api/unvisitedOutlet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          aemp_id: user.aemp_usnm, 
-          role_id: user.role_id, 
-          country_id: user.cont_id || 2, 
+        body: JSON.stringify({
+          aemp_id: user.aemp_usnm,
+          role_id: user.role_id,
+          country_id: user.cont_id || 2,
           date: date
         }),
         signal
@@ -82,11 +91,15 @@ function UncoveredOutletContent() {
 
       if (!response.ok) throw new Error('Failed to load unvisited outlets.');
       const resData = await response.json();
-      
-      if (resData.status === 'success' && resData.data) {
-        setData(resData.data);
+
+      if (resData.status === 'success') {
+        setData(resData.data || []);
+        if (resData.summary) {
+          setSummaryData(resData.summary);
+        }
       } else {
         setData([]);
+        setSummaryData(null);
       }
     } catch (err) {
       if (err.name === 'AbortError') return;
@@ -132,7 +145,12 @@ function UncoveredOutletContent() {
     let list = data.filter(outlet => {
       const matchesArea = selectedAreaId === 'All' || outlet.zone_id?.toString() === selectedAreaId;
       const matchesRole = selectedRole === 'All' || outlet.role === selectedRole;
-      return matchesArea && matchesRole;
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch = !searchQuery ||
+        (outlet.site_name && outlet.site_name.toLowerCase().includes(searchLower)) ||
+        (outlet.aemp_name && outlet.aemp_name.toLowerCase().includes(searchLower));
+
+      return matchesArea && matchesRole && matchesSearch;
     });
 
     list.sort((a, b) => {
@@ -151,7 +169,7 @@ function UncoveredOutletContent() {
   // Handle Pagination changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedAreaId, selectedRole, sortOrder]);
+  }, [selectedAreaId, selectedRole, sortOrder, searchQuery]);
 
   const paginatedList = React.useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
@@ -231,38 +249,87 @@ function UncoveredOutletContent() {
       )}
 
       {loading && !data && (
-        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-          <div className="w-12 h-12 rounded-full border-4 border-emerald-100 border-t-emerald-800 animate-spin" />
-          <span className="text-sm font-bold text-[var(--color-text-muted)]">Loading API data...</span>
+        <div className="space-y-4">
+          {/* Skeleton for Top Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-28 bg-zinc-100 rounded-2xl animate-pulse" />
+            ))}
+          </div>
+          {/* Skeleton for Filters */}
+          <div className="flex gap-2">
+            <div className="h-10 w-32 bg-zinc-100 rounded-full animate-pulse" />
+            <div className="h-10 w-32 bg-zinc-100 rounded-full animate-pulse" />
+          </div>
+          {/* Skeleton for Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-48 bg-zinc-100 rounded-2xl animate-pulse" />
+            ))}
+          </div>
         </div>
       )}
 
       {!loading && !error && data && (
         <>
-          {/* ─── Target Summary Section ─── */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            {/* Title / Summary */}
-            <Card className="flex items-center justify-between p-4 sm:p-5 w-full sm:max-w-md" hoverable={false}>
-              <div className="space-y-1">
-                <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase">
-                  Target Summary
+          {/* ─── Summary Metrics & Infographic ─── */}
+          {summaryData && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="p-4 flex flex-col justify-between" hoverable={false}>
+                <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
+                  Total Planned Outlets
                 </span>
                 <div className="flex items-center gap-3">
                   <h2 className="text-3xl sm:text-4xl font-black text-[var(--color-text-main)] tracking-tight leading-none">
-                    {filteredList.length}
+                    {summaryData.total_planned.toLocaleString()}
                   </h2>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-50 border border-rose-100 px-2 py-0.5 rounded-md uppercase tracking-wide">
-                    <AlertTriangle size={12} className="stroke-[2.5px]" />
-                    Outlets Uncovered
+                </div>
+              </Card>
+
+              <Card className="p-4 flex flex-col justify-between" hoverable={false}>
+                <div className="flex justify-between items-start">
+                  <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
+                    Visited Outlets
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full">
+                    {((summaryData.visited_count / summaryData.total_planned) * 100).toFixed(1)}%
                   </span>
                 </div>
-              </div>
+                <h2 className="text-3xl sm:text-4xl font-black text-emerald-700 tracking-tight leading-none">
+                  {summaryData.visited_count.toLocaleString()}
+                </h2>
+                <div className="w-full bg-zinc-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                  <div
+                    className="bg-emerald-500 h-full rounded-full transition-all duration-1000 ease-out"
+                    style={{ width: `${(summaryData.visited_count / summaryData.total_planned) * 100}%` }}
+                  />
+                </div>
+              </Card>
 
-              <button className="w-10 h-10 rounded-xl bg-emerald-800 text-white flex items-center justify-center shadow-md hover:bg-emerald-700 transition-colors shrink-0 cursor-pointer">
-                <FileSpreadsheet size={20} />
-              </button>
-            </Card>
-          </div>
+              <Card className="p-4 flex flex-col justify-between border-rose-100 bg-rose-50/30" hoverable={false}>
+                <div className="flex justify-between items-start">
+                  <span className="block text-[10px] font-black text-rose-800 tracking-wider uppercase mb-1">
+                    Uncovered Outlets
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-800 bg-rose-100 px-2 py-0.5 rounded-full">
+                    {((summaryData.unvisited_count / summaryData.total_planned) * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-3xl sm:text-4xl font-black text-rose-700 tracking-tight leading-none">
+                    {summaryData.unvisited_count.toLocaleString()}
+                  </h2>
+                  <AlertTriangle size={24} className="text-rose-400 opacity-50" />
+                </div>
+                <div className="w-full bg-rose-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                  <div
+                    className="bg-rose-500 h-full rounded-full transition-all duration-1000 ease-out"
+                    style={{ width: `${(summaryData.unvisited_count / summaryData.total_planned) * 100}%` }}
+                  />
+                </div>
+              </Card>
+            </div>
+          )}
 
           {/* ─── Filter Pills Section ─── */}
           <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none select-none">
@@ -318,31 +385,38 @@ function UncoveredOutletContent() {
               <ArrowUpDown size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
               <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
             </div>
+
+            {/* Search Input */}
+            <div className="relative shrink-0">
+              <input
+                type="text"
+                placeholder="Search by site or name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full sm:w-48 pl-4 pr-4 py-2 bg-white border border-[var(--color-border)] rounded-full text-xs font-bold text-[var(--color-text-main)] shadow-2xs outline-none focus:border-[var(--color-primary)] transition-colors placeholder:text-[var(--color-text-muted)]"
+              />
+            </div>
           </div>
 
-          {/* ─── Active List Title/Updated Label ─── */}
-          <div className="flex items-center justify-between text-[10px] sm:text-xs font-black tracking-wider uppercase text-[var(--color-text-muted)] mt-2">
-            <span>Active List ({filteredList.length})</span>
-            <span>Updated 5 Mins Ago</span>
-          </div>
+
 
           {paginationControls}
 
           {/* ─── Cards Grid (Desktop: 3 Column, Mobile: Stacked) ─── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {paginatedList.map((outlet, index) => {
               const orderValue = parseFloat(outlet.avg_3_month_order) || 0;
               const barWidth = `${Math.min(100, (orderValue / maxOrder) * 100)}%`;
 
               return (
-                <Card key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} className="p-5 flex flex-col justify-between" hoverable={true}>
+                <Card key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} className="p-4 flex flex-col justify-between" hoverable={true}>
                   <div>
                     {/* Header section inside card */}
-                    <div className="flex items-start justify-between border-b border-[var(--color-border)] pb-3.5 mb-4">
-                      <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="flex items-start justify-between border-b border-[var(--color-border)] pb-3 mb-3">
+                      <div className="flex items-center gap-3 min-w-0">
                         {/* Rounded Green icon box */}
-                        <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center shrink-0">
-                          <Store size={20} />
+                        <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center shrink-0">
+                          <Store size={16} />
                         </div>
                         <div className="min-w-0">
                           <h4 className="font-extrabold text-sm sm:text-base text-[var(--color-text-main)] truncate leading-tight mb-1" title={outlet.site_name}>
@@ -362,7 +436,7 @@ function UncoveredOutletContent() {
                     </div>
 
                     {/* Card Inner Grid Details */}
-                    <div className="grid grid-cols-2 gap-4 mb-5">
+                    <div className="grid grid-cols-2 gap-3 mb-4">
                       {/* Last Visit details */}
                       <div className="space-y-1">
                         <span className="block text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
@@ -390,8 +464,8 @@ function UncoveredOutletContent() {
                         </div>
                         {/* Infographic progress bar */}
                         <div className="w-full bg-zinc-100 rounded-full h-1.5 mt-1 overflow-hidden" title="Relative Order Volume">
-                          <div 
-                            className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out" 
+                          <div
+                            className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
                             style={{ width: barWidth }}
                           />
                         </div>
@@ -400,8 +474,8 @@ function UncoveredOutletContent() {
                   </div>
 
                   {/* Bottom Buttons */}
-                  <div className="grid grid-cols-2 gap-3 mt-2">
-                    <a 
+                  <div className="grid grid-cols-2 gap-2 mt-1">
+                    <a
                       href={`https://maps.google.com/?q=${outlet.geo_lat},${outlet.geo_lon}`}
                       target="_blank"
                       rel="noreferrer"
@@ -410,7 +484,7 @@ function UncoveredOutletContent() {
                       <MapPin size={14} />
                       Locate
                     </a>
-                    <a 
+                    <a
                       href={`tel:${outlet.aemp_mob1 || outlet.aemp_dtsm}`}
                       className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-emerald-800 text-white rounded-xl text-xs font-black hover:bg-emerald-700 transition-all select-none cursor-pointer"
                     >
@@ -423,29 +497,7 @@ function UncoveredOutletContent() {
             })}
           </div>
 
-          {/* ─── Detailed List Section on MOBILE ─── */}
-          <div className="block md:hidden space-y-3 mt-6">
-            <span className="block text-[10px] font-black tracking-wider uppercase text-[var(--color-text-muted)] mb-1">
-              Detailed List
-            </span>
-            <Card className="p-0 overflow-hidden" hoverable={false}>
-              <div className="divide-y divide-[var(--color-border)]">
-                {paginatedList.map((outlet, index) => (
-                  <div key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} className="p-4 flex items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <h4 className="font-extrabold text-sm text-[var(--color-text-main)] truncate leading-tight">
-                        {outlet.site_name}
-                      </h4>
-                      <span className="block text-[10px] text-[var(--color-text-muted)] font-semibold mt-1">
-                        {outlet.role}: {outlet.aemp_name}
-                      </span>
-                    </div>
-                    <ChevronRight size={16} className="text-[var(--color-text-muted)] shrink-0" />
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
+
 
           {paginationControls}
         </>

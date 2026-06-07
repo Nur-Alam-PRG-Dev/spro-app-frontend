@@ -12,7 +12,7 @@ export default function TeamWiseView({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h3 className="font-extrabold text-sm sm:text-base text-[var(--color-text-muted)] tracking-wide">
-          Team Performance Breakdown • 2024
+          Team Performance Breakdown • {teamWise.reps.length} Members
         </h3>
       </div>
 
@@ -113,21 +113,94 @@ export default function TeamWiseView({
               {/* Collapsible Header */}
               <button
                 onClick={() => toggleRepExpand(rep.id)}
-                className="w-full flex items-center justify-between p-4 sm:p-5 hover:bg-zinc-50/50 transition-colors cursor-pointer text-left focus:outline-none"
+                className="w-full flex items-center justify-between p-3 sm:p-4 hover:bg-zinc-50/50 transition-colors cursor-pointer text-left focus:outline-none"
               >
-                <div className="flex items-center gap-3 min-w-0 mr-2">
+                <div className="flex items-center gap-2 min-w-0 mr-2 w-full max-w-[280px]">
                   {/* Initials Avatar */}
-                  <div className={`w-11 h-11 rounded-xl ${getAvatarBg(rep.avatarColor)} flex items-center justify-center font-extrabold text-sm shrink-0`}>
+                  <div className={`w-9 h-9 rounded-xl ${getAvatarBg(rep.avatarColor)} flex items-center justify-center font-extrabold text-xs shrink-0`}>
                     {rep.initials}
                   </div>
                   <div className="min-w-0">
-                    <h4 className="font-extrabold text-sm sm:text-base text-[var(--color-text-main)] truncate leading-tight">
+                    <h4 className="font-extrabold text-sm text-[var(--color-text-main)] truncate leading-tight">
                       {rep.name}
                     </h4>
-                    <span className="text-[8px] text-[var(--color-text-muted)] font-semibold mt-1 block">
+                    <span className="text-[9px] text-[var(--color-text-muted)] font-semibold block">
                       {rep.role}
                     </span>
                   </div>
+                </div>
+
+                {/* Middle Section: Collapsed Summaries (Hidden on mobile) */}
+                <div className="hidden xl:flex items-center justify-center gap-6 border border-[var(--color-border)] rounded-full px-8 py-1.5 bg-white shadow-2xs mx-4">
+                  {(() => {
+                    const heroTrend1 = rep.performanceH1.orderAmountChange || 0;
+                    return (
+                      <div className="flex flex-col items-center justify-center gap-0.5 min-w-[160px]">
+                        <div className="flex items-center gap-1 text-[8px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
+                          <Calendar size={9} />
+                          1st Half Performance (AM)
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[13px] font-black text-emerald-800 tracking-tight">
+                            {formatCurrency(rep.performanceH1.orderAmount)}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <div className="flex flex-col items-end leading-[1]">
+                              <span className={`text-[8px] font-black ${heroTrend1 > 0 ? 'text-emerald-600' : heroTrend1 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                {heroTrend1 > 0 ? '+' : heroTrend1 < 0 ? '-' : ''}{Math.abs(heroTrend1)}%
+                              </span>
+                              <span className="text-[6px] font-extrabold text-zinc-400 uppercase tracking-widest mt-0.5">Change</span>
+                            </div>
+                            <div className="relative flex items-center justify-center w-5 h-5">
+                              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
+                                <circle cx="18" cy="18" r="14" fill="none" className={heroTrend1 > 0 ? "stroke-emerald-500" : heroTrend1 < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend1))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" />
+                              </svg>
+                              <div className={`absolute inset-0 flex items-center justify-center ${heroTrend1 > 0 ? 'text-emerald-600' : heroTrend1 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                 <TrendingUp size={7} className={`stroke-[3px] ${heroTrend1 < 0 ? 'rotate-180' : ''}`} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
+
+                  <div className="w-px h-8 bg-emerald-800/30"></div>
+
+                  {(() => {
+                    const heroTrend2 = rep.performanceH2.orderAmountChange || 0;
+                    return (
+                      <div className="flex flex-col items-center justify-center gap-0.5 min-w-[160px]">
+                        <div className="flex items-center gap-1 text-[8px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
+                          <Calendar size={9} />
+                          2nd Half Performance (PM)
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[13px] font-black text-emerald-800 tracking-tight">
+                            {formatCurrency(rep.performanceH2.orderAmount)}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <div className="flex flex-col items-end leading-[1]">
+                              <span className={`text-[8px] font-black ${heroTrend2 > 0 ? 'text-emerald-600' : heroTrend2 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                {heroTrend2 > 0 ? '+' : heroTrend2 < 0 ? '-' : ''}{Math.abs(heroTrend2)}%
+                              </span>
+                              <span className="text-[6px] font-extrabold text-zinc-400 uppercase tracking-widest mt-0.5">Change</span>
+                            </div>
+                            <div className="relative flex items-center justify-center w-5 h-5">
+                              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
+                                <circle cx="18" cy="18" r="14" fill="none" className={heroTrend2 > 0 ? "stroke-emerald-500" : heroTrend2 < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend2))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" />
+                              </svg>
+                              <div className={`absolute inset-0 flex items-center justify-center ${heroTrend2 > 0 ? 'text-emerald-600' : heroTrend2 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                 <TrendingUp size={7} className={`stroke-[3px] ${heroTrend2 < 0 ? 'rotate-180' : ''}`} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })()}
                 </div>
 
                 <div className="flex items-center gap-5 shrink-0">
@@ -148,8 +221,8 @@ export default function TeamWiseView({
 
               {/* Collapsible Body Content */}
               {isExpanded && (
-                <div className="border-t border-[var(--color-border)] bg-[#fdfdfd] p-5 sm:p-6 space-y-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="border-t border-[var(--color-border)] bg-[#fdfdfd] p-3 sm:p-4 space-y-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {/* 1st Half Performance block */}
                     {(() => {
                       const data = rep.performanceH1;
@@ -190,7 +263,7 @@ export default function TeamWiseView({
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                             <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
                               <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Count</span>
                               <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] mt-1">{formatNum(data.orderCount)}</span>
@@ -275,7 +348,7 @@ export default function TeamWiseView({
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                             <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
                               <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Count</span>
                               <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] mt-1">{formatNum(data.orderCount)}</span>

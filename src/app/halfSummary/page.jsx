@@ -18,8 +18,16 @@ function HalfSummaryContent() {
   const initialTab = searchParams.get('tab') || 'overall';
   const [activeTab, setActiveTab] = useState(initialTab);
 
-  const [startDate, setStartDate] = useState('2026-06-04');
-  const [endDate, setEndDate] = useState('2026-06-06');
+  const [startDate, setStartDate] = useState(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().split('T')[0];
+  });
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().split('T')[0];
+  });
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -230,6 +238,12 @@ function HalfSummaryContent() {
       setLoading(false);
     }
   };
+
+  // Initially fetch data on mount
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

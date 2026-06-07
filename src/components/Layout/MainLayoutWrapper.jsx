@@ -18,6 +18,14 @@ export default function MainLayoutWrapper({ children }) {
 
   const isLoginPage = pathname === '/login';
 
+  // Auto-collapse sidebar on report pages
+  useEffect(() => {
+    const reportPages = ['/reports', '/amolnama', '/halfSummary', '/targetVsAchievement', '/uncoveredOutlet'];
+    if (reportPages.some(page => pathname.startsWith(page))) {
+      setIsSidebarOpen(false);
+    }
+  }, [pathname]);
+
   useEffect(() => {
     // If we're already on the login page, no need for timeout
     if (isLoginPage) return;
