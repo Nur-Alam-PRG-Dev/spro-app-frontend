@@ -5,22 +5,22 @@ export default function DonutChartWidget({ data, colors, title, subtitle }) {
   // data should be an array of objects like [{ name: 'Visited', value: 400 }, { name: 'Unvisited', value: 300 }]
   
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full min-h-[220px]">
-      <div className="text-center mb-2">
-        {title && <h3 className="text-sm font-extrabold text-[var(--color-text-main)]">{title}</h3>}
-        {subtitle && <p className="text-xs text-[var(--color-text-muted)] font-medium">{subtitle}</p>}
+    <div className="flex flex-col items-center justify-center w-full h-full">
+      <div className="text-center mb-1">
+        {title && <h3 className="text-sm font-extrabold text-[var(--color-text-main)] leading-tight">{title}</h3>}
+        {subtitle && <p className="text-[10px] text-[var(--color-text-muted)] font-medium leading-tight">{subtitle}</p>}
       </div>
       
-      <div className="w-full h-48 sm:h-56">
+      <div className="w-full h-28 sm:h-32">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={5}
+              innerRadius={35}
+              outerRadius={50}
+              paddingAngle={4}
               dataKey="value"
               stroke="none"
               animationBegin={0}
@@ -40,11 +40,12 @@ export default function DonutChartWidget({ data, colors, title, subtitle }) {
               }}
               itemStyle={{ fontWeight: 800, fontSize: '13px' }}
             />
-            <Legend
-              verticalAlign="bottom"
-              height={36}
+            <Legend 
+              verticalAlign="bottom" 
+              height={24} 
               iconType="circle"
-              wrapperStyle={{ fontSize: '12px', fontWeight: 600, color: '#52525b' }}
+              iconSize={8}
+              wrapperStyle={{ fontSize: '10px', fontWeight: 600, color: '#52525b' }} 
             />
           </PieChart>
         </ResponsiveContainer>

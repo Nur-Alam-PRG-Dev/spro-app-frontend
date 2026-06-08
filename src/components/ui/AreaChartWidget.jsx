@@ -5,13 +5,13 @@ export default function AreaChartWidget({ data, dataKey, xAxisKey, color, title,
   // data should be an array of objects
   
   return (
-    <div className="flex flex-col w-full h-[320px]">
-      <div className="mb-4">
-        {title && <h3 className="text-sm font-extrabold text-[var(--color-text-main)]">{title}</h3>}
-        {subtitle && <p className="text-xs text-[var(--color-text-muted)] font-medium">{subtitle}</p>}
+    <div className="flex flex-col w-full h-full">
+      <div className="mb-2 text-center">
+        {title && <h3 className="text-sm font-extrabold text-[var(--color-text-main)] leading-tight">{title}</h3>}
+        {subtitle && <p className="text-[10px] text-[var(--color-text-muted)] font-medium leading-tight">{subtitle}</p>}
       </div>
       
-      <div className="w-full h-[250px]">
+      <div className="w-full h-28 sm:h-32">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
@@ -45,8 +45,8 @@ export default function AreaChartWidget({ data, dataKey, xAxisKey, color, title,
                 border: '1px solid #e4e4e7',
                 boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
               }}
-              itemStyle={{ fontWeight: 800, fontSize: '13px', color: color }}
-              labelStyle={{ fontWeight: 800, fontSize: '12px', color: '#52525b', marginBottom: '8px' }}
+              itemStyle={{ fontWeight: 800, fontSize: '12px', color: color }}
+              labelStyle={{ fontWeight: 800, fontSize: '10px', color: '#52525b', marginBottom: '8px' }}
             />
             <Area 
               type="monotone" 

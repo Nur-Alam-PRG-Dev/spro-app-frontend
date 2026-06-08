@@ -7,9 +7,9 @@ import Card from '@/components/ui/Card';
 import UncoveredOutletFilters from '@/components/Reports/UncoveredOutletFilters';
 import {
   ChevronRight, ChevronLeft, Store, MapPin, Phone, FileSpreadsheet, AlertTriangle, ArrowUpDown, User,
-  ChevronDown, Calendar, Info
+  ChevronDown, Calendar, Info, Search
 } from 'lucide-react';
-import DonutChartWidget from '@/components/ui/DonutChartWidget';
+
 import AreaChartWidget from '@/components/ui/AreaChartWidget';
 
 function UncoveredOutletContent() {
@@ -30,7 +30,7 @@ function UncoveredOutletContent() {
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     return now.toISOString().split('T')[0];
   });
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchQuery = searchParams.get('q') || '';
 
   // Active UI filters
   const [selectedAreaId, setSelectedAreaId] = useState('All');
@@ -166,7 +166,7 @@ function UncoveredOutletContent() {
     });
 
     return list;
-  }, [data, selectedAreaId, selectedRole, sortOrder]);
+  }, [data, selectedAreaId, selectedRole, sortOrder, searchQuery]);
 
   // Handle Pagination changes
   useEffect(() => {
@@ -182,69 +182,90 @@ function UncoveredOutletContent() {
     return Math.max(...filteredList.map(o => parseFloat(o.avg_3_month_order) || 0), 1);
   }, [filteredList]);
 
-  const paginationControls = filteredList.length > 0 && (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 mb-4">
-      <div className="flex items-center gap-2 text-xs font-bold text-[var(--color-text-muted)]">
-        <span>View</span>
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-            setCurrentPage(1);
-          }}
-          className="bg-zinc-50 border border-zinc-200 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 cursor-pointer text-zinc-800"
-        >
-          <option value={20}>20</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
-        <span>per page</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-          disabled={currentPage === 1}
-          className="p-1.5 rounded-lg border border-zinc-200 text-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 cursor-pointer"
-        >
-          <ChevronLeft size={16} />
-        </button>
-        <span className="text-xs font-bold text-[var(--color-text-main)] px-2">
-          Page {currentPage} of {Math.ceil(filteredList.length / pageSize) || 1}
+  const paginationControls = (
+    <div className="flex flex-row items-center justify-between gap-4 mt-2 mb-4 w-full">
+      {/* Active List Count Area */}
+      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50/80 rounded-full border border-emerald-100/50 backdrop-blur-sm shadow-sm shrink-0">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span className="text-[11px] md:text-xs font-extrabold text-emerald-800 tracking-wide">
+          {filteredList.length} Outlets
         </span>
-        <button
-          onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredList.length / pageSize), p + 1))}
-          disabled={currentPage === Math.ceil(filteredList.length / pageSize) || Math.ceil(filteredList.length / pageSize) === 0}
-          className="p-1.5 rounded-lg border border-zinc-200 text-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 cursor-pointer"
-        >
-          <ChevronRight size={16} />
-        </button>
+      </div>
+
+      {/* Pagination Area */}
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0 bg-white/50 px-3 py-1.5 rounded-full border border-zinc-200/50 backdrop-blur-sm shadow-sm">
+        <div className="hidden sm:flex items-center gap-1.5 text-[11px] md:text-xs font-semibold text-zinc-500">
+          <span>Show</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setCurrentPage(1);
+            }}
+            className="bg-transparent font-bold text-zinc-800 outline-none cursor-pointer hover:text-emerald-600 transition-colors"
+          >
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
+
+        <div className="w-px h-4 bg-zinc-200 hidden sm:block"></div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <span className="text-[11px] md:text-xs font-bold text-zinc-800 min-w-[3rem] text-center">
+            {currentPage} <span className="text-zinc-400 font-medium">/</span> {Math.ceil(filteredList.length / pageSize) || 1}
+          </span>
+          <button
+            onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredList.length / pageSize), p + 1))}
+            disabled={currentPage === Math.ceil(filteredList.length / pageSize) || Math.ceil(filteredList.length / pageSize) === 0}
+            className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronRight size={16} />
+          </button>
+        </div>
       </div>
     </div>
   );
 
   return (
     <div className="space-y-6 pb-10">
-      {/* ─── Breadcrumbs ─── */}
-      <div className="hidden lg:block">
-        <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-2">
-          <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
-          <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
-          <Link href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</Link>
-          <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
-          <span className="text-[var(--color-text-main)] font-bold">Uncovered Outlets</span>
+      {/* ─── Page Title & Filters Row ─── */}
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-4 md:mb-6">
+        <div className="hidden xl:block shrink-0">
+          <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-1">
+            <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
+            <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
+            <Link href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</Link>
+          </div>
+          <h1 className="text-2xl font-black text-[var(--color-text-main)] tracking-tight">Uncovered Outlets</h1>
+        </div>
+
+        <div className="flex-1 flex xl:justify-end w-full">
+          <UncoveredOutletFilters
+            date={date}
+            onDateChange={setDate}
+            onClearFilters={handleClearFilters}
+            onSearch={handleSearch}
+            isLoading={loading}
+            uniqueZones={uniqueZones}
+            selectedAreaId={selectedAreaId}
+            onAreaChange={setSelectedAreaId}
+            sortOrder={sortOrder}
+            onSortChange={setSortOrder}
+          />
         </div>
       </div>
 
-      <UncoveredOutletFilters
-        date={date}
-        onDateChange={setDate}
-        onClearFilters={handleClearFilters}
-        onSearch={handleSearch}
-        isLoading={loading}
-      />
-
       {error && (
-        <Card className="p-4 border border-rose-100 bg-rose-50 rounded-2xl flex items-center gap-3 text-xs sm:text-sm font-semibold text-rose-700 hover:border-rose-100">
+        <Card className="p-4 border border-rose-100 bg-rose-50 rounded-2xl flex items-center gap-3 text-xs lg:text-sm font-semibold text-rose-700 hover:border-rose-100">
           <Info size={16} className="shrink-0 text-rose-600" />
           <span>{error}</span>
         </Card>
@@ -276,74 +297,89 @@ function UncoveredOutletContent() {
         <>
           {/* ─── Summary Metrics & Infographic ─── */}
           {summaryData && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              {/* Left Column: Number Metrics */}
-              <div className="md:col-span-1 space-y-4">
-                <Card className="p-4 flex flex-col justify-between" hoverable={false}>
-                  <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
-                    Total Planned
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <h2 className="text-3xl font-black text-[var(--color-text-main)] tracking-tight leading-none">
-                      {summaryData.total_planned.toLocaleString()}
-                    </h2>
-                  </div>
-                </Card>
+            <div className="flex flex-col md:flex-row gap-2 md:gap-3 mb-3 md:mb-4">
+              {/* Left Side: Number Metrics & Progress (Horizontal on all screens) */}
+              <div className="w-full md:w-[40%] xl:w-[35%] flex shrink-0">
+                <Card className="flex-1 p-3 xl:p-4 flex flex-col justify-between bg-gradient-to-br from-white to-zinc-50/80 border border-zinc-200/60 shadow-sm hover:shadow-md transition-all rounded-2xl relative overflow-hidden">
+                  
+                  {/* Decorative Gradient Blob */}
+                  <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
 
-                <Card className="p-4 flex flex-col justify-between" hoverable={false}>
-                  <div className="flex justify-between items-start">
-                    <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
-                      Visited
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full">
-                      {((summaryData.visited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
-                    </span>
+                  {/* Top Section: Title & Planned */}
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="text-sm font-extrabold text-[var(--color-text-main)] leading-tight">Coverage Overview</h3>
+                      <p className="text-[10px] text-[var(--color-text-muted)] font-medium leading-tight mt-0.5">Total Route Targets</p>
+                    </div>
+                    <div className="text-right bg-white/60 px-2.5 py-1 rounded-lg border border-zinc-100 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] backdrop-blur-sm">
+                      <span className="block text-[8px] font-black text-zinc-500 tracking-widest uppercase mb-0.5">Planned</span>
+                      <h2 className="text-sm sm:text-base font-black text-zinc-800 leading-none tracking-tight">
+                        {summaryData.total_planned.toLocaleString()}
+                      </h2>
+                    </div>
                   </div>
-                  <h2 className="text-3xl font-black text-emerald-700 tracking-tight leading-none">
-                    {summaryData.visited_count.toLocaleString()}
-                  </h2>
-                </Card>
 
-                <Card className="p-4 flex flex-col justify-between border-rose-100 bg-rose-50/30" hoverable={false}>
-                  <div className="flex justify-between items-start">
-                    <span className="block text-[10px] font-black text-rose-800 tracking-wider uppercase mb-1">
-                      Uncovered
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-800 bg-rose-100 px-2 py-0.5 rounded-full">
-                      {((summaryData.unvisited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
-                    </span>
+                  {/* Middle Section: Metrics */}
+                  <div className="flex justify-between items-end mb-3 sm:mb-4 px-1">
+                    <div className="flex flex-col">
+                      <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-700 tracking-wider uppercase mb-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"></div>
+                        Visited
+                      </span>
+                      <div className="flex items-baseline gap-1.5">
+                        <h2 className="text-xl sm:text-2xl font-black text-emerald-600 leading-none tracking-tighter">
+                          {summaryData.visited_count.toLocaleString()}
+                        </h2>
+                        <span className="text-[10px] font-bold text-emerald-600/70">
+                          {((summaryData.visited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col text-right items-end">
+                      <span className="flex items-center gap-1.5 text-[9px] font-black text-rose-700 tracking-wider uppercase mb-1.5">
+                        Uncovered
+                        <div className="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.6)]"></div>
+                      </span>
+                      <div className="flex items-baseline gap-1.5 flex-row-reverse">
+                        <h2 className="text-xl sm:text-2xl font-black text-rose-600 leading-none tracking-tighter">
+                          {summaryData.unvisited_count.toLocaleString()}
+                        </h2>
+                        <span className="text-[10px] font-bold text-rose-600/70">
+                          {((summaryData.unvisited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <h2 className="text-3xl font-black text-rose-700 tracking-tight leading-none">
-                      {summaryData.unvisited_count.toLocaleString()}
-                    </h2>
+
+                  {/* Bottom Section: Progress Bar */}
+                  <div className="w-full bg-zinc-100 rounded-full h-2.5 overflow-hidden flex shadow-inner relative border border-zinc-200/50">
+                    <div 
+                      className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all duration-1000 relative"
+                      style={{ width: `${(summaryData.visited_count / (summaryData.total_planned || 1)) * 100}%` }}
+                    >
+                      <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem]"></div>
+                    </div>
+                    <div 
+                      className="h-full bg-gradient-to-r from-rose-400 to-rose-500 transition-all duration-1000"
+                      style={{ width: `${(summaryData.unvisited_count / (summaryData.total_planned || 1)) * 100}%` }}
+                    />
                   </div>
                 </Card>
               </div>
 
-              {/* Right Column: Chart Widgets */}
-              <div className="md:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <Card className="p-4" hoverable={false}>
-                  <DonutChartWidget 
-                    title="Outlet Coverage"
-                    subtitle="Visited vs Uncovered Ratio"
-                    data={[
-                      { name: 'Visited', value: summaryData.visited_count },
-                      { name: 'Uncovered', value: summaryData.unvisited_count }
-                    ]}
-                    colors={['#10b981', '#f43f5e']}
-                  />
-                </Card>
-                <Card className="p-4" hoverable={false}>
-                  <AreaChartWidget 
-                    title="Order Volume Distribution"
+              {/* Right Side: Area Chart (Hidden on mobile, side-by-side with metrics on md+) */}
+              <div className="hidden md:flex w-full md:w-[60%] xl:w-[65%] gap-2 md:gap-3">
+                <Card className="flex-1 p-3 xl:p-4 hover:shadow-lg transition-shadow bg-gradient-to-bl from-white to-sky-50/30 border border-sky-100/50 rounded-2xl" hoverable={true}>
+                  <AreaChartWidget
+                    title="Order Volume"
                     subtitle="Monthly Avg Orders across list"
                     dataKey="Order Value"
                     xAxisKey="name"
                     color="#0ea5e9"
-                    data={filteredList.slice(0, 30).map(o => ({ 
-                      name: o.site_name, 
-                      'Order Value': parseFloat(o.avg_3_month_order) || 0 
+                    data={filteredList.slice(0, 30).map(o => ({
+                      name: o.site_name,
+                      'Order Value': parseFloat(o.avg_3_month_order) || 0
                     }))}
                   />
                 </Card>
@@ -351,98 +387,33 @@ function UncoveredOutletContent() {
             </div>
           )}
 
-
-          <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none select-none">
-            {/* Region/Area selector pill */}
-            <div className="relative shrink-0">
-              <select
-                value={selectedAreaId}
-                onChange={(e) => setSelectedAreaId(e.target.value)}
-                className="appearance-none flex items-center gap-2 pl-4 pr-9 py-2 bg-white border border-[var(--color-border)] rounded-full text-xs font-bold text-[var(--color-text-main)] shadow-2xs outline-none cursor-pointer focus:border-[var(--color-primary)] transition-colors"
-              >
-                <option value="All">All Areas</option>
-                {uniqueZones.map((zone) => (
-                  <option key={zone.id} value={zone.id}>
-                    {zone.name}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
+          {data.length > 0 ? (
+            <div className="mb-2 md:mb-3">
+              {paginationControls}
             </div>
-
-            {/* Role Selector pill */}
-            <div className="relative shrink-0">
-              <select
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
-                className="appearance-none flex items-center gap-2 pl-4 pr-9 py-2 bg-white border border-[var(--color-border)] rounded-full text-xs font-bold text-[var(--color-text-main)] shadow-2xs outline-none cursor-pointer focus:border-[var(--color-primary)] transition-colors"
-              >
-                <option value="All">All Roles</option>
-                {uniqueRoles.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
-            </div>
-
-            {/* Sort pill */}
-            <div className="relative shrink-0">
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
-                className="appearance-none flex items-center gap-2 pl-9 pr-9 py-2 bg-white border border-[var(--color-border)] rounded-full text-xs font-bold text-[var(--color-text-main)] shadow-2xs outline-none cursor-pointer focus:border-[var(--color-primary)] transition-colors"
-              >
-                <option value="default">Default Sort</option>
-                <option value="avg-desc">High Value First</option>
-                <option value="avg-asc">Low Value First</option>
-                <option value="site-asc">Site Name (A-Z)</option>
-                <option value="site-desc">Site Name (Z-A)</option>
-                <option value="sr-asc">Employee Name (A-Z)</option>
-                <option value="sr-desc">Employee Name (Z-A)</option>
-              </select>
-              <ArrowUpDown size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
-              <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
-            </div>
-
-            {/* Search Input */}
-            <div className="relative shrink-0">
-              <input
-                type="text"
-                placeholder="Search by site or name..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full sm:w-48 pl-4 pr-4 py-2 bg-white border border-[var(--color-border)] rounded-full text-xs font-bold text-[var(--color-text-main)] shadow-2xs outline-none focus:border-[var(--color-primary)] transition-colors placeholder:text-[var(--color-text-muted)]"
-              />
-            </div>
-          </div>
-
-
-
-          {paginationControls}
+          ) : null}
 
           {/* ─── Cards Grid (Desktop: 3 Column, Mobile: Stacked) ─── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {paginatedList.map((outlet, index) => {
               const orderValue = parseFloat(outlet.avg_3_month_order) || 0;
               const barWidth = `${Math.min(100, (orderValue / maxOrder) * 100)}%`;
 
               return (
-                <Card key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} className="p-4 flex flex-col justify-between" hoverable={true}>
+                <Card key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} className="p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow border-[var(--color-border)]" hoverable={true}>
                   <div>
                     {/* Header section inside card */}
                     <div className="flex items-start justify-between border-b border-[var(--color-border)] pb-3 mb-3">
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                         {/* Rounded Green icon box */}
-                        <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center shrink-0">
-                          <Store size={16} />
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center shrink-0">
+                          <Store size={14} className="sm:size-16" />
                         </div>
                         <div className="min-w-0">
-                          <h4 className="font-extrabold text-sm sm:text-base text-[var(--color-text-main)] truncate leading-tight mb-1" title={outlet.site_name}>
+                          <h4 className="font-extrabold text-[11px] lg:text-sm text-[var(--color-text-main)] truncate leading-tight mb-0.5 sm:mb-1" title={outlet.site_name}>
                             {outlet.site_name}
                           </h4>
-                          <span className="inline-flex items-center gap-1 text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">
+                          <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-emerald-800 bg-emerald-50 px-1.5 sm:px-2 py-0.5 rounded-full font-bold">
                             <User size={10} />
                             {outlet.role}: {outlet.aemp_name}
                           </span>
@@ -450,7 +421,7 @@ function UncoveredOutletContent() {
                       </div>
 
                       {/* Top-Right Badge */}
-                      <div className="w-7 h-7 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 font-extrabold text-sm shrink-0">
+                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 font-extrabold text-xs lg:text-sm shrink-0">
                         !
                       </div>
                     </div>
@@ -458,32 +429,32 @@ function UncoveredOutletContent() {
                     {/* Card Inner Grid Details */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {/* Last Visit details */}
-                      <div className="space-y-1">
-                        <span className="block text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
+                      <div className="space-y-0.5 sm:space-y-1">
+                        <span className="block text-[8px] sm:text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
                           Last Visit
                         </span>
-                        <div className="flex items-center gap-1.5 text-xs font-black text-rose-900">
+                        <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] lg:text-xs font-black text-rose-900">
                           <Calendar size={12} className="text-rose-700" />
                           <span>{outlet.last_visit_date === 'NOT FOUND' ? 'Never' : outlet.last_visit_date}</span>
                         </div>
                         {outlet.last_visit_date === 'NOT FOUND' && (
-                          <span className="block text-[10px] text-rose-600 font-semibold">
+                          <span className="block text-[9px] sm:text-[10px] text-rose-600 font-semibold">
                             Critical Alert
                           </span>
                         )}
                       </div>
 
                       {/* Monthly Average details */}
-                      <div className="space-y-1">
-                        <span className="block text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
+                      <div className="space-y-0.5 sm:space-y-1">
+                        <span className="block text-[8px] sm:text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
                           Monthly Order Avg.
                         </span>
-                        <div className="flex items-center gap-1 text-xs font-black text-slate-800">
+                        <div className="flex items-center gap-1 text-[11px] lg:text-xs font-black text-slate-800">
                           <span className="text-[var(--color-text-muted)]">৳</span>
                           <span>{outlet.avg_3_month_order}</span>
                         </div>
                         {/* Infographic progress bar */}
-                        <div className="w-full bg-zinc-100 rounded-full h-1.5 mt-1 overflow-hidden" title="Relative Order Volume">
+                        <div className="w-full bg-zinc-100 rounded-full h-1 sm:h-1.5 mt-0.5 sm:mt-1 overflow-hidden" title="Relative Order Volume">
                           <div
                             className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
                             style={{ width: barWidth }}
@@ -494,19 +465,19 @@ function UncoveredOutletContent() {
                   </div>
 
                   {/* Bottom Buttons */}
-                  <div className="grid grid-cols-2 gap-2 mt-1">
+                  <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[var(--color-border)]">
                     <a
                       href={`https://maps.google.com/?q=${outlet.geo_lat},${outlet.geo_lon}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-center gap-1.5 py-2.5 px-3 border border-emerald-800 text-emerald-800 rounded-xl text-xs font-black hover:bg-emerald-50 transition-all select-none cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 py-1.5 px-3 border border-emerald-600/30 text-emerald-700 bg-emerald-50/50 hover:bg-emerald-100/50 hover:border-emerald-600/50 rounded-lg text-[11px] lg:text-xs font-bold transition-all select-none cursor-pointer"
                     >
                       <MapPin size={14} />
                       Locate
                     </a>
                     <a
                       href={`tel:${outlet.aemp_mob1 || outlet.aemp_dtsm}`}
-                      className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-emerald-800 text-white rounded-xl text-xs font-black hover:bg-emerald-700 transition-all select-none cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 py-1.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm hover:shadow rounded-lg text-[11px] lg:text-xs font-bold transition-all select-none cursor-pointer"
                     >
                       <Phone size={14} />
                       Contact
@@ -517,9 +488,29 @@ function UncoveredOutletContent() {
             })}
           </div>
 
-
-
-          {paginationControls}
+          {data.length > 0 ? (
+            <div className="flex justify-end mt-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-1.5 rounded-lg border border-[var(--color-border)] bg-white text-[var(--color-text-main)] shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 transition-colors cursor-pointer"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="text-xs font-bold text-[var(--color-text-main)] px-2 select-none">
+                  Page {currentPage} of {Math.ceil(filteredList.length / pageSize) || 1}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredList.length / pageSize), p + 1))}
+                  disabled={currentPage === Math.ceil(filteredList.length / pageSize) || Math.ceil(filteredList.length / pageSize) === 0}
+                  className="p-1.5 rounded-lg border border-[var(--color-border)] bg-white text-[var(--color-text-main)] shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 transition-colors cursor-pointer"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          ) : null}
         </>
       )}
     </div>

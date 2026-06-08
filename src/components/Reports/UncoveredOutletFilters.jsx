@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Search, ArrowRight, RotateCcw, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
-import Card from '@/components/ui/Card';
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  ArrowRight,
+  RotateCcw,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import Card from "@/components/ui/Card";
 
 const getDynamicPresets = () => {
   const today = new Date();
 
   const formatDate = (date) => {
     const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
     return `${y}-${m}-${d}`;
   };
 
@@ -19,23 +26,39 @@ const getDynamicPresets = () => {
   yesterday.setDate(today.getDate() - 1);
 
   return [
-    { label: 'Today', date: todayStr },
-    { label: 'Yesterday', date: formatDate(yesterday) }
+    { label: "Today", date: todayStr },
+    { label: "Yesterday", date: formatDate(yesterday) },
   ];
 };
 
 const PRESETS = getDynamicPresets();
 
 const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const UncoveredOutletFilters = ({
-  date, onDateChange,
+  date,
+  onDateChange,
   onClearFilters,
   onSearch,
-  isLoading
+  isLoading,
+  uniqueZones = [],
+  selectedAreaId,
+  onAreaChange,
+  sortOrder,
+  onSortChange,
 }) => {
   const hasActiveFilters = !!date;
 
@@ -53,9 +76,13 @@ const UncoveredOutletFilters = ({
   }, [date]);
 
   const formatDateLabel = (dateStr) => {
-    if (!dateStr) return '';
+    if (!dateStr) return "";
     const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -65,26 +92,26 @@ const UncoveredOutletFilters = ({
   const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
   const getDayString = (year, month, day) => {
-    const mm = String(month + 1).padStart(2, '0');
-    const dd = String(day).padStart(2, '0');
+    const mm = String(month + 1).padStart(2, "0");
+    const dd = String(day).padStart(2, "0");
     return `${year}-${mm}-${dd}`;
   };
 
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
       setCurrentMonth(11);
-      setCurrentYear(prev => prev - 1);
+      setCurrentYear((prev) => prev - 1);
     } else {
-      setCurrentMonth(prev => prev - 1);
+      setCurrentMonth((prev) => prev - 1);
     }
   };
 
   const handleNextMonth = () => {
     if (currentMonth === 11) {
       setCurrentMonth(0);
-      setCurrentYear(prev => prev + 1);
+      setCurrentYear((prev) => prev + 1);
     } else {
-      setCurrentMonth(prev => prev + 1);
+      setCurrentMonth((prev) => prev + 1);
     }
   };
 
@@ -101,19 +128,27 @@ const UncoveredOutletFilters = ({
           <div className="space-y-1.5 relative">
             <div
               onClick={() => setIsOpen(!isOpen)}
-              className={`flex items-center gap-1.5 sm:gap-2 bg-zinc-50 border rounded-xl px-4 py-2.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${isOpen ? 'border-[var(--color-primary)] bg-white ring-1 ring-[var(--color-primary)]' : 'border-zinc-200'
-                }`}
+              className={`flex items-center gap-1.5 sm:gap-2 bg-zinc-50 border rounded-xl px-4 py-2.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${
+                isOpen
+                  ? "border-[var(--color-primary)] bg-white ring-1 ring-[var(--color-primary)]"
+                  : "border-zinc-200"
+              }`}
             >
               <Calendar size={16} className="text-emerald-800/70 shrink-0" />
-              <span className={`text-xs sm:text-sm font-semibold select-none flex-1 truncate ${date ? 'text-zinc-900' : 'text-zinc-400'}`}>
-                {date ? formatDateLabel(date) : 'Select Date'}
+              <span
+                className={`text-xs sm:text-sm font-semibold select-none flex-1 truncate ${date ? "text-zinc-900" : "text-zinc-400"}`}
+              >
+                {date ? formatDateLabel(date) : "Select Date"}
               </span>
             </div>
             {/* Dropdown Calendar Panel */}
             {isOpen && (
               <>
-                <div className="fixed inset-0 z-30" onClick={() => setIsOpen(false)} />
-                <div className="absolute right-0 mt-2 bg-white border border-[var(--color-border)] rounded-2xl p-4 shadow-xl z-40 w-72 sm:w-80 select-none">
+                <div
+                  className="fixed inset-0 z-30"
+                  onClick={() => setIsOpen(false)}
+                />
+                <div className="absolute left-0 mt-2 bg-white border border-[var(--color-border)] rounded-2xl p-4 shadow-xl z-40 w-72 sm:w-80 select-none">
                   {/* Header: Month/Year navigation */}
                   <div className="flex items-center justify-between pb-3 border-b border-[var(--color-border)] mb-3">
                     <button
@@ -135,8 +170,10 @@ const UncoveredOutletFilters = ({
 
                   {/* Weekdays header */}
                   <div className="grid grid-cols-7 text-center text-[10px] font-black text-[var(--color-text-muted)] uppercase mb-2">
-                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                      <div key={d} className="py-1">{d}</div>
+                    {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
+                      <div key={d} className="py-1">
+                        {d}
+                      </div>
                     ))}
                   </div>
 
@@ -146,17 +183,25 @@ const UncoveredOutletFilters = ({
                       <div key={`pad-${i}`} className="py-2" />
                     ))}
                     {monthDays.map((day) => {
-                      const dateStr = getDayString(currentYear, currentMonth, day);
+                      const dateStr = getDayString(
+                        currentYear,
+                        currentMonth,
+                        day,
+                      );
                       const isSelected = date === dateStr;
 
-                      let cellClass = "py-2 cursor-pointer transition-colors relative flex items-center justify-center h-8 sm:h-9 rounded-full ";
-                      let innerClass = "w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full ";
+                      let cellClass =
+                        "py-2 cursor-pointer transition-colors relative flex items-center justify-center h-8 sm:h-9 rounded-full ";
+                      let innerClass =
+                        "w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full ";
 
                       if (isSelected) {
                         cellClass += "bg-emerald-50 text-emerald-800";
-                        innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm";
+                        innerClass +=
+                          "bg-emerald-800 text-white font-extrabold shadow-sm";
                       } else {
-                        innerClass += "text-[var(--color-text-main)] hover:bg-zinc-100";
+                        innerClass +=
+                          "text-[var(--color-text-main)] hover:bg-zinc-100";
                       }
 
                       return (
@@ -174,7 +219,7 @@ const UncoveredOutletFilters = ({
                   {/* Actions bar */}
                   <div className="flex items-center justify-between gap-4 mt-4 pt-3 border-t border-[var(--color-border)]">
                     <button
-                      onClick={() => onDateChange('')}
+                      onClick={() => onDateChange("")}
                       className="text-[10px] font-bold text-zinc-500 hover:text-rose-600 transition-colors cursor-pointer"
                     >
                       Clear Date
@@ -199,7 +244,50 @@ const UncoveredOutletFilters = ({
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3">
+          <div className="h-6 w-px bg-[var(--color-border)] hidden sm:block"></div>
+
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none select-none">
+            {/* Region/Area selector */}
+            <div className="relative shrink-0">
+              <select
+                value={selectedAreaId}
+                onChange={(e) => onAreaChange && onAreaChange(e.target.value)}
+                className="appearance-none pl-4 pr-9 py-2 bg-zinc-50 border border-[var(--color-border)] rounded-xl text-xs sm:text-sm font-semibold text-[var(--color-text-main)] shadow-2xs outline-none focus:border-[var(--color-primary)] transition-all cursor-pointer hover:border-zinc-400"
+              >
+                <option value="All">All Areas</option>
+                {uniqueZones?.map((area) => (
+                  <option key={area.id} value={area.id}>
+                    {area.name}
+                  </option>
+                ))}
+              </select>
+              <ArrowRight
+                size={14}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none rotate-90"
+              />
+            </div>
+
+            {/* Sort Order */}
+            <div className="relative shrink-0">
+              <select
+                value={sortOrder}
+                onChange={(e) => onSortChange && onSortChange(e.target.value)}
+                className="appearance-none pl-9 pr-9 py-2 bg-zinc-50 border border-[var(--color-border)] rounded-xl text-xs sm:text-sm font-semibold text-[var(--color-text-main)] shadow-2xs outline-none focus:border-[var(--color-primary)] transition-all cursor-pointer hover:border-zinc-400"
+              >
+                <option value="default">Default Sort</option>
+                <option value="avg-desc">Value (High-Low)</option>
+                <option value="avg-asc">Value (Low-High)</option>
+                <option value="site-asc">Site (A-Z)</option>
+                <option value="site-desc">Site (Z-A)</option>
+                <option value="sr-asc">Employee (A-Z)</option>
+                <option value="sr-desc">Employee (Z-A)</option>
+              </select>
+              <RotateCcw size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none" />
+              <ArrowRight size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] pointer-events-none rotate-90" />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 ml-auto pl-2">
             {hasActiveFilters && (
               <button
                 onClick={onClearFilters}
@@ -212,10 +300,11 @@ const UncoveredOutletFilters = ({
             <button
               onClick={onSearch}
               disabled={isLoading}
-              className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${isLoading
-                ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20'
-                : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50'
-                }`}
+              className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${
+                isLoading
+                  ? "bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20"
+                  : "bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50"
+              }`}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
