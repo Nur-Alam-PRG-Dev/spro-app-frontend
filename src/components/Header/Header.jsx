@@ -72,7 +72,7 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
         >
           <Menu size={20} />
         </button>
-        
+
         {/* Search Input Container */}
         <div className="relative w-80">
           <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[var(--color-text-muted)]">
@@ -84,8 +84,8 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
             onChange={handleSearch}
             placeholder={
               pathname === '/reports' ? "Search reports..." :
-              pathname === '/uncoveredOutlet' ? "Search outlets, orders, SRs..." :
-              "Search logistics data..."
+                pathname === '/uncoveredOutlet' ? "Search outlets, orders, SRs..." :
+                  "Search logistics data..."
             }
             className="w-full pl-10 pr-4 py-2 text-sm bg-zinc-50 border border-[var(--color-border)] rounded-full outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all text-[var(--color-text-main)]"
           />
@@ -104,11 +104,10 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
               <a
                 key={tab.name}
                 href={tab.path}
-                className={`text-sm font-semibold relative py-5 ${
-                  isActive
-                    ? 'text-[var(--color-primary)] after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[var(--color-primary)]'
-                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
-                } transition-colors`}
+                className={`text-sm font-semibold relative py-5 ${isActive
+                  ? 'text-[var(--color-primary)] after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[var(--color-primary)]'
+                  : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
+                  } transition-colors`}
               >
                 {tab.name}
               </a>
@@ -118,14 +117,14 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
 
         {/* Action Icons Panel */}
         <div className="flex items-center gap-4 text-[var(--color-text-muted)]">
-          <button className="p-2 hover:bg-zinc-100 rounded-full hover:text-[var(--color-text-main)] transition-colors relative">
+          {/* <button className="p-2 hover:bg-zinc-100 rounded-full hover:text-[var(--color-text-main)] transition-colors relative">
             <Bell size={20} />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
           
           <button className="p-2 hover:bg-zinc-100 rounded-full hover:text-[var(--color-text-main)] transition-colors">
             <History size={20} />
-          </button>
+          </button> */}
 
           <button className="p-2 hover:bg-zinc-100 rounded-full hover:text-[var(--color-text-main)] transition-colors">
             <Grid size={20} />

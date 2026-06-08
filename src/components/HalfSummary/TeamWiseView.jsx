@@ -22,7 +22,7 @@ export default function TeamWiseView({
       </div>
 
       {/* Team Revenue Distribution Chart */}
-      <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 sm:p-6 shadow-2xs mb-6">
+      <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 mb-6">
         <BidirectionalBarChartWidget 
           title="Total Revenue"
           subtitle="AM vs PM Contribution"
@@ -58,7 +58,7 @@ export default function TeamWiseView({
           return (
             <div
               key={rep.id}
-              className="bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden transition-all shadow-2xs"
+              className="bg-white border border-[var(--color-border)] rounded-2xl overflow-hidden transition-all shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               {/* Collapsible Header */}
               <button
@@ -91,7 +91,7 @@ export default function TeamWiseView({
                 </div>
 
                 {/* Middle Section: Collapsed Summaries (Hidden on mobile) */}
-                <div className="hidden xl:flex items-center justify-center gap-6 border border-[var(--color-border)] rounded-full px-8 py-1.5 bg-white shadow-2xs mx-4">
+                <div className="hidden xl:flex items-center justify-center gap-6 border border-[var(--color-border)] rounded-full px-8 py-1.5 bg-white shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 mx-4">
                   {(() => {
                     const heroTrend1 = rep.performanceH1.orderAmountChange || 0;
                     return (
@@ -188,7 +188,7 @@ export default function TeamWiseView({
                       const data = rep.performanceH1;
                       const heroTrend = data.orderAmountChange || 0;
                       return (
-                        <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4 shadow-2xs">
+                        <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                           <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
                             <Calendar size={14} className="text-[var(--color-text-muted)]" />
                             <span className="text-xs font-extrabold text-[var(--color-text-main)] uppercase tracking-wider">
@@ -273,7 +273,7 @@ export default function TeamWiseView({
                       const data = rep.performanceH2;
                       const heroTrend = data.orderAmountChange || 0;
                       return (
-                        <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4 shadow-2xs">
+                        <div className="border border-[var(--color-border)] rounded-2xl p-4 bg-white space-y-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                           <div className="flex items-center gap-2 border-b border-[var(--color-border)] pb-2">
                             <Calendar size={14} className="text-[var(--color-text-muted)]" />
                             <span className="text-xs font-extrabold text-[var(--color-text-main)] uppercase tracking-wider">

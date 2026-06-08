@@ -43,7 +43,7 @@ export default function HalfMetricsCard({
         </span>
       </div>
 
-      <Card className="p-4 sm:p-5" hoverable={false}>
+      <Card className="p-4 sm:p-5 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">
             <ShoppingBag size={14} className="text-[var(--color-text-muted)]" />
@@ -104,7 +104,7 @@ export default function HalfMetricsCard({
       {/* 6-Column Compact Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {/* Order Count */}
-        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden">
+        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <span className="block text-[9px] sm:text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Count</span>
           <span className="text-lg sm:text-xl font-black text-[var(--color-text-main)] mt-1">
             {formatNum(orderCount)}
@@ -112,7 +112,7 @@ export default function HalfMetricsCard({
         </div>
 
         {/* Visit Count */}
-        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden">
+        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <span className="block text-[9px] sm:text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Visit Count</span>
           <span className="text-lg sm:text-xl font-black text-[#136336] mt-1">
             {formatNum(visitCount)}
@@ -120,7 +120,7 @@ export default function HalfMetricsCard({
         </div>
 
         {/* Prod. Outlets */}
-        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden">
+        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <span className="block text-[9px] sm:text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Prod. Outlets</span>
           <div className="mt-1 space-y-1.5">
             <div className="flex items-baseline gap-1">
@@ -134,7 +134,7 @@ export default function HalfMetricsCard({
         </div>
 
         {/* Non-Prod. */}
-        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden">
+        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <span className="block text-[9px] sm:text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Non-Prod.</span>
           <div className="mt-1 space-y-1.5">
             <div className="flex items-baseline gap-1">
@@ -148,7 +148,7 @@ export default function HalfMetricsCard({
         </div>
 
         {/* LPC */}
-        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden">
+        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <span className="block text-[9px] sm:text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">LPC</span>
           <span className="text-lg sm:text-xl font-black text-[var(--color-text-main)] mt-1">
             {lpc}
@@ -156,7 +156,7 @@ export default function HalfMetricsCard({
         </div>
 
         {/* Strike Rate */}
-        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden">
+        <div className="bg-white border border-[var(--color-border)] rounded-xl p-3 flex flex-col justify-between min-h-[76px] relative overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <span className="block text-[9px] sm:text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Strike Rate</span>
           <div className="mt-1 space-y-1.5">
             <span className="text-lg sm:text-xl font-black text-[#136336] leading-none block">

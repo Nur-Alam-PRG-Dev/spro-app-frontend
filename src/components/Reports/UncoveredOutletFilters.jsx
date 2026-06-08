@@ -275,6 +275,7 @@ const UncoveredOutletFilters = ({
                 className="appearance-none pl-9 pr-9 py-2 bg-zinc-50 border border-[var(--color-border)] rounded-xl text-xs sm:text-sm font-semibold text-[var(--color-text-main)] shadow-2xs outline-none focus:border-[var(--color-primary)] transition-all cursor-pointer hover:border-zinc-400"
               >
                 <option value="default">Default Sort</option>
+                <option value="recent-visit">Most Recent Visit</option>
                 <option value="avg-desc">Value (High-Low)</option>
                 <option value="avg-asc">Value (Low-High)</option>
                 <option value="site-asc">Site (A-Z)</option>

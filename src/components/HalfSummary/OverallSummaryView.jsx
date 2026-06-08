@@ -3,9 +3,7 @@
 import React from 'react';
 import { Calendar, CheckCircle2, BarChart3 } from 'lucide-react';
 import HalfMetricsCard from './HalfMetricsCard';
-import SessionDonutWidget from '../ui/SessionDonutWidget';
-import SessionBarWidget from '../ui/SessionBarWidget';
-import SessionHorizontalBarWidget from '../ui/SessionHorizontalBarWidget';
+import FancyInfographic from './FancyInfographic';
 import Card from '../ui/Card';
 
 export default function OverallSummaryView({
@@ -17,10 +15,10 @@ export default function OverallSummaryView({
 }) {
   const amAmount = parseFloat(overallSummary.firstHalf.orderAmount) || 0;
   const pmAmount = parseFloat(overallSummary.secondHalf.totalVolume) || 0;
-  
+
   const amCount = parseFloat(overallSummary.firstHalf.orderCount) || 0;
   const pmCount = parseFloat(overallSummary.secondHalf.orderCount) || 0;
-  
+
   const amVisits = parseFloat(overallSummary.firstHalf.visitCount) || 0;
   const pmVisits = parseFloat(overallSummary.secondHalf.visitCount) || 0;
 
@@ -42,23 +40,6 @@ export default function OverallSummaryView({
   return (
     <div className="space-y-6">
       {/* ─── Compact Charts Grid ─── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card className="p-4 flex flex-col items-center">
-          <h3 className="text-sm font-extrabold text-[var(--color-text-main)] self-start mb-2">Order Amount</h3>
-          <SessionDonutWidget data={amountData} formatCurrency={formatCurrency} />
-        </Card>
-        
-        <Card className="p-4 flex flex-col items-center">
-          <h3 className="text-sm font-extrabold text-[var(--color-text-main)] self-start mb-2">Order Count</h3>
-          <SessionBarWidget data={countData} formatNum={formatNum} />
-        </Card>
-        
-        <Card className="p-4 flex flex-col items-center">
-          <h3 className="text-sm font-extrabold text-[var(--color-text-main)] self-start mb-2">Visit Count</h3>
-          <SessionHorizontalBarWidget data={visitData} formatNum={formatNum} />
-        </Card>
-      </div>
-
 
       {/* ─── H1 and H2 Grid (Side by side on desktop, stacked on mobile) ─── */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr] gap-6 xl:gap-8 items-stretch">
@@ -106,6 +87,15 @@ export default function OverallSummaryView({
           />
         </div>
       </div>
+
+      {/* ─── Fancy Session Infographic ─── */}
+      <FancyInfographic 
+        amAmount={amAmount} pmAmount={pmAmount}
+        amCount={amCount} pmCount={pmCount}
+        amVisits={amVisits} pmVisits={pmVisits}
+        formatCurrency={formatCurrency}
+        formatNum={formatNum}
+      />
     </div>
   );
 }

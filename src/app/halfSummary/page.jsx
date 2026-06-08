@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { Info, User, Loader2, Search, RotateCcw } from 'lucide-react';
+import Card from '@/components/ui/Card';
 import OverallSummaryView from '@/components/HalfSummary/OverallSummaryView';
 import TeamWiseView from '@/components/HalfSummary/TeamWiseView';
-import AmolnamaFilters from '@/components/Reports/AmolnamaFilters';
-import { Info, User, Loader2 } from 'lucide-react';
-import Card from '@/components/ui/Card';
+import CompactDateFilter from '@/components/HalfSummary/CompactDateFilter';
 
 function HalfSummaryContent() {
   const searchParams = useSearchParams();
@@ -283,56 +283,90 @@ function HalfSummaryContent() {
 
   return (
     <div className="space-y-6 pb-10">
-      {/* ─── Page Title and Tab Switcher Header ─── */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[var(--color-border)] pb-5">
-        <div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[var(--color-text-main)] tracking-tight">
+      {/* ─── Unified Header Row ─── */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+        
+        {/* Left Side: Title */}
+        <div className="shrink-0">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-[var(--color-text-main)] tracking-tight leading-tight">
             Half Summary Report
           </h1>
-          <p className="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium mt-1">
+          <p className="text-[10px] sm:text-xs text-[var(--color-text-muted)] font-medium mt-0.5">
             Performance metrics analysis by session
           </p>
         </div>
 
-        {/* Tab switch pills */}
-        <div className="flex bg-zinc-100/80 p-1 rounded-xl self-start md:self-auto shadow-2xs border border-zinc-200/50">
-          <button
-            onClick={() => handleTabChange('overall')}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'overall'
-              ? 'bg-emerald-800 text-white shadow-sm'
-              : 'text-zinc-600 hover:text-zinc-900'
-              }`}
-          >
-            Overall Summary
-          </button>
-          {data && data.teamWise.reps.length >= 2 && (
+        {/* Right Side: Filters, Actions, and Tabs */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          
+          {/* Minimal Date Range Selector */}
+          <CompactDateFilter 
+            startDate={startDate}
+            onStartDateChange={setStartDate}
+            endDate={endDate}
+            onEndDateChange={setEndDate}
+          />
+
+          {/* Action Buttons (Icons Only) */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {(startDate || endDate) && (
+              <button
+                onClick={handleClearFilters}
+                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors shadow-2xs"
+                title="Reset Filters"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
             <button
-              onClick={() => handleTabChange('team')}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${activeTab === 'team'
+              onClick={handleSearch}
+              disabled={loading}
+              className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all ${
+                loading 
+                  ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20' 
+                  : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-md cursor-pointer border border-emerald-900/50'
+              }`}
+              title="Search"
+            >
+              {loading ? (
+                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Search size={14} className="stroke-[2.5px]" />
+              )}
+            </button>
+          </div>
+
+          <div className="hidden sm:block w-px h-6 bg-zinc-200 mx-1"></div>
+
+          {/* Tab switch pills */}
+          <div className="flex bg-zinc-100/80 p-1 rounded-xl shadow-2xs border border-zinc-200/50 shrink-0">
+            <button
+              onClick={() => handleTabChange('overall')}
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'overall'
                 ? 'bg-emerald-800 text-white shadow-sm'
-                : 'text-zinc-600 hover:text-zinc-900'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                 }`}
             >
-              Team Wise
+              Overall
             </button>
-          )}
+            {data && data.teamWise.reps.length >= 2 && (
+              <button
+                onClick={() => handleTabChange('team')}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'team'
+                  ? 'bg-emerald-800 text-white shadow-sm'
+                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
+                  }`}
+              >
+                Team Wise
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* ─── Search and Date Range Filters ─── */}
-      <AmolnamaFilters
-        startDate={startDate}
-        onStartDateChange={setStartDate}
-        endDate={endDate}
-        onEndDateChange={setEndDate}
-        onClearFilters={handleClearFilters}
-        onSearch={handleSearch}
-        isLoading={loading}
-      />
-
       {/* ─── Error Message ─── */}
       {error && (
-        <Card className="p-4 border border-rose-100 bg-rose-50 rounded-2xl flex items-center gap-3 text-xs sm:text-sm font-semibold text-rose-700 hover:border-rose-100">
+        <Card className="shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-4 border border-rose-100 bg-rose-50 rounded-2xl flex items-center gap-3 text-xs sm:text-sm font-semibold text-rose-700 hover:border-rose-100">
           <Info size={16} className="shrink-0 text-rose-600" />
           <span>{error}</span>
         </Card>
@@ -340,7 +374,7 @@ function HalfSummaryContent() {
 
       {/* ─── Fancy Spinner Loading ─── */}
       {loading && (
-        <Card className="p-12 flex flex-col items-center justify-center space-y-4 border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" hoverable={false}>
+        <Card className="shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-12 flex flex-col items-center justify-center space-y-4 border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" >
           <div className="relative">
             <div className="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-75" />
             <Loader2 className="w-12 h-12 text-emerald-800 animate-spin relative z-10" />
@@ -351,7 +385,7 @@ function HalfSummaryContent() {
 
       {/* ─── Empty State Placeholder ─── */}
       {!data && !loading && !error && (
-        <Card className="p-8 sm:p-12 text-center flex flex-col items-center justify-center border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" hoverable={false}>
+        <Card className="shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-8 sm:p-12 text-center flex flex-col items-center justify-center border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" >
           <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mb-4 border border-emerald-100">
             <User size={32} className="stroke-[1.5px]" />
           </div>

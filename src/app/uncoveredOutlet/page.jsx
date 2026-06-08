@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 import AreaChartWidget from '@/components/ui/AreaChartWidget';
+import UncoveredOutletCard from '@/components/Reports/UncoveredOutletCard';
 
 function UncoveredOutletContent() {
   const searchParams = useSearchParams();
@@ -156,6 +157,11 @@ function UncoveredOutletContent() {
     });
 
     list.sort((a, b) => {
+      if (sortOrder === 'recent-visit') {
+        const dateA = a.last_visit_date === 'NOT FOUND' ? 0 : new Date(a.last_visit_date).getTime() || 0;
+        const dateB = b.last_visit_date === 'NOT FOUND' ? 0 : new Date(b.last_visit_date).getTime() || 0;
+        return dateB - dateA;
+      }
       if (sortOrder === 'avg-asc') return (a.avg_3_month_order || 0) - (b.avg_3_month_order || 0);
       if (sortOrder === 'avg-desc') return (b.avg_3_month_order || 0) - (a.avg_3_month_order || 0);
       if (sortOrder === 'site-asc') return (a.site_name || '').localeCompare(b.site_name || '');
@@ -301,7 +307,7 @@ function UncoveredOutletContent() {
               {/* Left Side: Number Metrics & Progress (Horizontal on all screens) */}
               <div className="w-full md:w-[40%] xl:w-[35%] flex shrink-0">
                 <Card className="flex-1 p-3 xl:p-4 flex flex-col justify-between bg-gradient-to-br from-white to-zinc-50/80 border border-zinc-200/60 shadow-sm hover:shadow-md transition-all rounded-2xl relative overflow-hidden">
-                  
+
                   {/* Decorative Gradient Blob */}
                   <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
 
@@ -354,13 +360,13 @@ function UncoveredOutletContent() {
 
                   {/* Bottom Section: Progress Bar */}
                   <div className="w-full bg-zinc-100 rounded-full h-2.5 overflow-hidden flex shadow-inner relative border border-zinc-200/50">
-                    <div 
+                    <div
                       className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all duration-1000 relative"
                       style={{ width: `${(summaryData.visited_count / (summaryData.total_planned || 1)) * 100}%` }}
                     >
                       <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem]"></div>
                     </div>
-                    <div 
+                    <div
                       className="h-full bg-gradient-to-r from-rose-400 to-rose-500 transition-all duration-1000"
                       style={{ width: `${(summaryData.unvisited_count / (summaryData.total_planned || 1)) * 100}%` }}
                     />
@@ -373,11 +379,11 @@ function UncoveredOutletContent() {
                 <Card className="flex-1 p-3 xl:p-4 hover:shadow-lg transition-shadow bg-gradient-to-bl from-white to-sky-50/30 border border-sky-100/50 rounded-2xl" hoverable={true}>
                   <AreaChartWidget
                     title="Order Volume"
-                    subtitle="Monthly Avg Orders across list"
+                    subtitle={`Monthly Avg Orders (Showing ${paginatedList.length} outlets on this page)`}
                     dataKey="Order Value"
                     xAxisKey="name"
                     color="#0ea5e9"
-                    data={filteredList.slice(0, 30).map(o => ({
+                    data={paginatedList.map(o => ({
                       name: o.site_name,
                       'Order Value': parseFloat(o.avg_3_month_order) || 0
                     }))}
@@ -395,97 +401,13 @@ function UncoveredOutletContent() {
 
           {/* ─── Cards Grid (Desktop: 3 Column, Mobile: Stacked) ─── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-            {paginatedList.map((outlet, index) => {
-              const orderValue = parseFloat(outlet.avg_3_month_order) || 0;
-              const barWidth = `${Math.min(100, (orderValue / maxOrder) * 100)}%`;
-
-              return (
-                <Card key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} className="p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow border-[var(--color-border)]" hoverable={true}>
-                  <div>
-                    {/* Header section inside card */}
-                    <div className="flex items-start justify-between border-b border-[var(--color-border)] pb-3 mb-3">
-                      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                        {/* Rounded Green icon box */}
-                        <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center shrink-0">
-                          <Store size={14} className="sm:size-16" />
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className="font-extrabold text-[11px] lg:text-sm text-[var(--color-text-main)] truncate leading-tight mb-0.5 sm:mb-1" title={outlet.site_name}>
-                            {outlet.site_name}
-                          </h4>
-                          <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-emerald-800 bg-emerald-50 px-1.5 sm:px-2 py-0.5 rounded-full font-bold">
-                            <User size={10} />
-                            {outlet.role}: {outlet.aemp_name}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Top-Right Badge */}
-                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 font-extrabold text-xs lg:text-sm shrink-0">
-                        !
-                      </div>
-                    </div>
-
-                    {/* Card Inner Grid Details */}
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      {/* Last Visit details */}
-                      <div className="space-y-0.5 sm:space-y-1">
-                        <span className="block text-[8px] sm:text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
-                          Last Visit
-                        </span>
-                        <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] lg:text-xs font-black text-rose-900">
-                          <Calendar size={12} className="text-rose-700" />
-                          <span>{outlet.last_visit_date === 'NOT FOUND' ? 'Never' : outlet.last_visit_date}</span>
-                        </div>
-                        {outlet.last_visit_date === 'NOT FOUND' && (
-                          <span className="block text-[9px] sm:text-[10px] text-rose-600 font-semibold">
-                            Critical Alert
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Monthly Average details */}
-                      <div className="space-y-0.5 sm:space-y-1">
-                        <span className="block text-[8px] sm:text-[9px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase">
-                          Monthly Order Avg.
-                        </span>
-                        <div className="flex items-center gap-1 text-[11px] lg:text-xs font-black text-slate-800">
-                          <span className="text-[var(--color-text-muted)]">৳</span>
-                          <span>{outlet.avg_3_month_order}</span>
-                        </div>
-                        {/* Infographic progress bar */}
-                        <div className="w-full bg-zinc-100 rounded-full h-1 sm:h-1.5 mt-0.5 sm:mt-1 overflow-hidden" title="Relative Order Volume">
-                          <div
-                            className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
-                            style={{ width: barWidth }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Buttons */}
-                  <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[var(--color-border)]">
-                    <a
-                      href={`https://maps.google.com/?q=${outlet.geo_lat},${outlet.geo_lon}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-center gap-1.5 py-1.5 px-3 border border-emerald-600/30 text-emerald-700 bg-emerald-50/50 hover:bg-emerald-100/50 hover:border-emerald-600/50 rounded-lg text-[11px] lg:text-xs font-bold transition-all select-none cursor-pointer"
-                    >
-                      <MapPin size={14} />
-                      Locate
-                    </a>
-                    <a
-                      href={`tel:${outlet.aemp_mob1 || outlet.aemp_dtsm}`}
-                      className="flex items-center justify-center gap-1.5 py-1.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white shadow-sm hover:shadow rounded-lg text-[11px] lg:text-xs font-bold transition-all select-none cursor-pointer"
-                    >
-                      <Phone size={14} />
-                      Contact
-                    </a>
-                  </div>
-                </Card>
-              );
-            })}
+            {paginatedList.map((outlet, index) => (
+              <UncoveredOutletCard 
+                key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} 
+                outlet={outlet} 
+                maxOrder={maxOrder} 
+              />
+            ))}
           </div>
 
           {data.length > 0 ? (
