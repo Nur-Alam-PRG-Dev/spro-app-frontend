@@ -94,31 +94,11 @@ const UncoveredOutletFilters = ({
   };
 
   return (
-    <Card className="p-4 sm:p-5 border border-[var(--color-border)] shadow-sm bg-white overflow-visible mb-6">
+    <Card className="p-2 sm:p-2 border border-[var(--color-border)] shadow-sm bg-white overflow-visible mb-6 w-fit">
       <div className="flex flex-col gap-4">
-        {/* Top Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[var(--color-border)]">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center shrink-0 border border-emerald-100">
-              <Search size={16} className="stroke-[2.5px]" />
-            </div>
-            <div>
-              <h3 className="font-black text-sm sm:text-base text-[var(--color-text-main)] tracking-tight">
-                Search Filters
-              </h3>
-              <p className="text-[10px] sm:text-xs text-[var(--color-text-muted)] font-semibold uppercase tracking-wider mt-0.5">
-                Find Unvisited Outlets
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Filters Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex justify-start items-center gap-2 w-fit">
           <div className="space-y-1.5 relative">
-            <label className="text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider ml-1">
-              Date Selector
-            </label>
             <div
               onClick={() => setIsOpen(!isOpen)}
               className={`flex items-center gap-1.5 sm:gap-2 bg-zinc-50 border rounded-xl px-4 py-2.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${isOpen ? 'border-[var(--color-primary)] bg-white ring-1 ring-[var(--color-primary)]' : 'border-zinc-200'
@@ -129,7 +109,6 @@ const UncoveredOutletFilters = ({
                 {date ? formatDateLabel(date) : 'Select Date'}
               </span>
             </div>
-
             {/* Dropdown Calendar Panel */}
             {isOpen && (
               <>
@@ -219,40 +198,39 @@ const UncoveredOutletFilters = ({
               </>
             )}
           </div>
-        </div>
-      </div>
 
-      <div className="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-[var(--color-border)]">
-        {hasActiveFilters && (
-          <button
-            onClick={onClearFilters}
-            className="flex items-center gap-1.5 hover:text-rose-600 transition-colors cursor-pointer text-rose-500 font-extrabold text-xs shrink-0"
-          >
-            <RotateCcw size={14} />
-            <span>Reset</span>
-          </button>
-        )}
-        <button
-          onClick={onSearch}
-          disabled={isLoading}
-          className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${
-            isLoading 
-              ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20' 
-              : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50'
-          }`}
-        >
-          {isLoading ? (
-            <span className="flex items-center gap-2">
-              <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Searching...
-            </span>
-          ) : (
-            <span className="flex items-center gap-1.5">
-              <span>Search</span>
-              <ArrowRight size={14} className="stroke-[3px]" />
-            </span>
-          )}
-        </button>
+          <div className="flex items-center justify-end gap-3">
+            {hasActiveFilters && (
+              <button
+                onClick={onClearFilters}
+                className="flex items-center gap-1.5 hover:text-rose-600 transition-colors cursor-pointer text-rose-500 font-extrabold text-xs shrink-0"
+              >
+                <RotateCcw size={14} />
+                <span>Reset</span>
+              </button>
+            )}
+            <button
+              onClick={onSearch}
+              disabled={isLoading}
+              className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${isLoading
+                ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20'
+                : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50'
+                }`}
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  {/* Searching... */}
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5">
+                  {/* <span>Search</span> */}
+                  <Search size={14} className="stroke-[3px]" />
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </Card>
   );

@@ -9,6 +9,8 @@ import {
   ChevronRight, ChevronLeft, Store, MapPin, Phone, FileSpreadsheet, AlertTriangle, ArrowUpDown, User,
   ChevronDown, Calendar, Info
 } from 'lucide-react';
+import DonutChartWidget from '@/components/ui/DonutChartWidget';
+import AreaChartWidget from '@/components/ui/AreaChartWidget';
 
 function UncoveredOutletContent() {
   const searchParams = useSearchParams();
@@ -274,64 +276,82 @@ function UncoveredOutletContent() {
         <>
           {/* ─── Summary Metrics & Infographic ─── */}
           {summaryData && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="p-4 flex flex-col justify-between" hoverable={false}>
-                <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
-                  Total Planned Outlets
-                </span>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-3xl sm:text-4xl font-black text-[var(--color-text-main)] tracking-tight leading-none">
-                    {summaryData.total_planned.toLocaleString()}
-                  </h2>
-                </div>
-              </Card>
-
-              <Card className="p-4 flex flex-col justify-between" hoverable={false}>
-                <div className="flex justify-between items-start">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              {/* Left Column: Number Metrics */}
+              <div className="md:col-span-1 space-y-4">
+                <Card className="p-4 flex flex-col justify-between" hoverable={false}>
                   <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
-                    Visited Outlets
+                    Total Planned
                   </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full">
-                    {((summaryData.visited_count / summaryData.total_planned) * 100).toFixed(1)}%
-                  </span>
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-emerald-700 tracking-tight leading-none">
-                  {summaryData.visited_count.toLocaleString()}
-                </h2>
-                <div className="w-full bg-zinc-100 rounded-full h-1.5 mt-3 overflow-hidden">
-                  <div
-                    className="bg-emerald-500 h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{ width: `${(summaryData.visited_count / summaryData.total_planned) * 100}%` }}
-                  />
-                </div>
-              </Card>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-3xl font-black text-[var(--color-text-main)] tracking-tight leading-none">
+                      {summaryData.total_planned.toLocaleString()}
+                    </h2>
+                  </div>
+                </Card>
 
-              <Card className="p-4 flex flex-col justify-between border-rose-100 bg-rose-50/30" hoverable={false}>
-                <div className="flex justify-between items-start">
-                  <span className="block text-[10px] font-black text-rose-800 tracking-wider uppercase mb-1">
-                    Uncovered Outlets
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-800 bg-rose-100 px-2 py-0.5 rounded-full">
-                    {((summaryData.unvisited_count / summaryData.total_planned) * 100).toFixed(1)}%
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-3xl sm:text-4xl font-black text-rose-700 tracking-tight leading-none">
-                    {summaryData.unvisited_count.toLocaleString()}
+                <Card className="p-4 flex flex-col justify-between" hoverable={false}>
+                  <div className="flex justify-between items-start">
+                    <span className="block text-[10px] font-black text-[var(--color-text-muted)] tracking-wider uppercase mb-1">
+                      Visited
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full">
+                      {((summaryData.visited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
+                    </span>
+                  </div>
+                  <h2 className="text-3xl font-black text-emerald-700 tracking-tight leading-none">
+                    {summaryData.visited_count.toLocaleString()}
                   </h2>
-                  <AlertTriangle size={24} className="text-rose-400 opacity-50" />
-                </div>
-                <div className="w-full bg-rose-100 rounded-full h-1.5 mt-3 overflow-hidden">
-                  <div
-                    className="bg-rose-500 h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{ width: `${(summaryData.unvisited_count / summaryData.total_planned) * 100}%` }}
+                </Card>
+
+                <Card className="p-4 flex flex-col justify-between border-rose-100 bg-rose-50/30" hoverable={false}>
+                  <div className="flex justify-between items-start">
+                    <span className="block text-[10px] font-black text-rose-800 tracking-wider uppercase mb-1">
+                      Uncovered
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-rose-800 bg-rose-100 px-2 py-0.5 rounded-full">
+                      {((summaryData.unvisited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-3xl font-black text-rose-700 tracking-tight leading-none">
+                      {summaryData.unvisited_count.toLocaleString()}
+                    </h2>
+                  </div>
+                </Card>
+              </div>
+
+              {/* Right Column: Chart Widgets */}
+              <div className="md:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <Card className="p-4" hoverable={false}>
+                  <DonutChartWidget 
+                    title="Outlet Coverage"
+                    subtitle="Visited vs Uncovered Ratio"
+                    data={[
+                      { name: 'Visited', value: summaryData.visited_count },
+                      { name: 'Uncovered', value: summaryData.unvisited_count }
+                    ]}
+                    colors={['#10b981', '#f43f5e']}
                   />
-                </div>
-              </Card>
+                </Card>
+                <Card className="p-4" hoverable={false}>
+                  <AreaChartWidget 
+                    title="Order Volume Distribution"
+                    subtitle="Monthly Avg Orders across list"
+                    dataKey="Order Value"
+                    xAxisKey="name"
+                    color="#0ea5e9"
+                    data={filteredList.slice(0, 30).map(o => ({ 
+                      name: o.site_name, 
+                      'Order Value': parseFloat(o.avg_3_month_order) || 0 
+                    }))}
+                  />
+                </Card>
+              </div>
             </div>
           )}
 
-          {/* ─── Filter Pills Section ─── */}
+
           <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none select-none">
             {/* Region/Area selector pill */}
             <div className="relative shrink-0">

@@ -1,12 +1,17 @@
 import React from 'react';
 import { BarChart3, TrendingUp, ChevronUp, ChevronDown, Calendar } from 'lucide-react';
+import BidirectionalBarChartWidget from '../ui/BidirectionalBarChartWidget';
+import RadialProgressWidget from '../ui/RadialProgressWidget';
 
 export default function TeamWiseView({
   teamWise,
   expandedRep,
   toggleRepExpand,
   formatCurrency,
-  formatNum
+  formatNum,
+  dateRange,
+  svName,
+  teamSize
 }) {
   return (
     <div className="space-y-6">
@@ -16,77 +21,22 @@ export default function TeamWiseView({
         </h3>
       </div>
 
-      {/* Stats Grid */}
-      {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-2xl p-5 shadow-xs border border-emerald-800">
-          <span className="block text-[9px] font-black text-emerald-200/80 uppercase tracking-widest">
-            Total Team Revenue
-          </span>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-black mt-2 tracking-tight">
-            {formatCurrency(teamWise.stats.totalTeamRevenue)}
-          </h2>
-          <div className="mt-3">
-            <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold bg-white/10 text-emerald-300 px-2 py-0.5 rounded-full border border-white/5">
-              <TrendingUp size={10} />
-              {teamWise.stats.revenueGrowth}% vs Last Half
-            </span>
-          </div>
-          <div className="absolute right-3 bottom-1 opacity-10">
-            <BarChart3 size={70} />
-          </div>
-        </div>
-
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 flex flex-col justify-between min-h-[110px] shadow-2xs">
-          <div>
-            <span className="block text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
-              Total Orders
-            </span>
-            <h2 className="text-xl sm:text-2xl font-black mt-1 text-[var(--color-text-main)] tracking-tight">
-              {formatNum(teamWise.stats.totalOrders)}
-            </h2>
-          </div>
-          <div className="mt-2 text-right">
-            <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full">
-              +{teamWise.stats.ordersGrowth}%
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 flex flex-col justify-between min-h-[110px] shadow-2xs">
-          <div>
-            <span className="block text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
-              Active Reps
-            </span>
-            <h2 className="text-xl sm:text-2xl font-black mt-1 text-[var(--color-text-main)] tracking-tight">
-              {teamWise.stats.activeReps}
-            </h2>
-          </div>
-          <div className="mt-2 text-right text-[10px] font-extrabold text-[var(--color-text-muted)] uppercase">
-            Deployments
-          </div>
-        </div>
-
-        <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 flex flex-col justify-between min-h-[110px] shadow-2xs">
-          <div>
-            <span className="block text-[9px] font-black text-[var(--color-text-muted)] uppercase tracking-widest">
-              Avg. Strike Rate
-            </span>
-            <h2 className="text-xl sm:text-2xl font-black mt-1 text-[var(--color-text-main)] tracking-tight">
-              {teamWise.stats.avgStrikeRate}%
-            </h2>
-          </div>
-          <div className="mt-2">
-            <div className="w-full h-1.5 bg-zinc-100 rounded-full overflow-hidden">
-              <div
-                style={{ width: `${teamWise.stats.avgStrikeRate}%` }}
-                className="h-full bg-emerald-800"
-              />
-            </div>
-          </div>
-        </div>
-
-      </div> */}
+      {/* Team Revenue Distribution Chart */}
+      <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 sm:p-6 shadow-2xs mb-6">
+        <BidirectionalBarChartWidget 
+          title="Total Revenue"
+          subtitle="AM vs PM Contribution"
+          xAxisKey="serial"
+          data={teamWise.reps.map(rep => ({ 
+            serial: rep.serial, 
+            AM: rep.performanceH1.orderAmount, 
+            PM: -rep.performanceH2.orderAmount 
+          }))}
+          dateRange={dateRange}
+          svName={svName}
+          teamSize={teamSize}
+        />
+      </div>
 
       {/* Collapsible Sales Representatives Section */}
       <div className="space-y-4">
@@ -120,14 +70,24 @@ export default function TeamWiseView({
                   <div className={`w-9 h-9 rounded-xl ${getAvatarBg(rep.avatarColor)} flex items-center justify-center font-extrabold text-xs shrink-0`}>
                     {rep.initials}
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <h4 className="font-extrabold text-sm text-[var(--color-text-main)] truncate leading-tight">
-                      {rep.name}
+                      {rep.serial}. {rep.name}
                     </h4>
                     <span className="text-[9px] text-[var(--color-text-muted)] font-semibold block">
                       {rep.role}
                     </span>
                   </div>
+                </div>
+
+                {/* Left/Middle Section: Radial Progress */}
+                <div className="hidden sm:flex items-center justify-center mr-4">
+                  <RadialProgressWidget 
+                    percentage={(rep.revenue / (teamWise.stats.totalTeamRevenue || 1)) * 100} 
+                    size={42} 
+                    strokeWidth={4} 
+                    color={rep.revenue > 0 ? '#10b981' : '#a1a1aa'} 
+                  />
                 </div>
 
                 {/* Middle Section: Collapsed Summaries (Hidden on mobile) */}

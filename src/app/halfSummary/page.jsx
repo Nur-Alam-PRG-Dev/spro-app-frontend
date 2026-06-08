@@ -119,11 +119,12 @@ function HalfSummaryContent() {
       }
 
       // 1. Transform Team Wise Array
-      const mappedReps = teamWiseData.map((rep) => ({
+      const mappedReps = teamWiseData.map((rep, index) => ({
         id: rep.sr_id,
         name: rep.sr_name,
         role: "SALES REPRESENTATIVE (SR)",
-        initials: rep.sr_name.charAt(0).toUpperCase(),
+        initials: (index + 1).toString(),
+        serial: index + 1,
         avatarColor: "primary",
         status: "Active",
         statusVariant: "success",
@@ -210,6 +211,9 @@ function HalfSummaryContent() {
         fiscalYear: "2026",
         verifiedData: true,
         overallSummary,
+        dateRange: `${startDate} to ${endDate}`,
+        svName: user.aemp_name || user.aemp_usnm,
+        teamSize: repCount,
         teamWise: {
           stats: {
             totalTeamRevenue,
@@ -378,6 +382,9 @@ function HalfSummaryContent() {
               toggleRepExpand={toggleRepExpand}
               formatCurrency={formatCurrency}
               formatNum={formatNum}
+              dateRange={data.dateRange}
+              svName={data.svName}
+              teamSize={data.teamSize}
             />
           )}
         </>
