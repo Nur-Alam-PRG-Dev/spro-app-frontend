@@ -54,7 +54,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-white font-sans">
+    <div className="h-[100dvh] flex bg-white font-sans overflow-hidden">
 
       {/* Left Panel - Illustration */}
       <div className="hidden lg:flex flex-1 items-center justify-center bg-[#f3f2f7] relative overflow-hidden">
@@ -79,8 +79,8 @@ export default function LoginPage() {
       </div>
 
       {/* Right Panel - Login Form */}
-      <div className="w-full lg:w-[450px] xl:w-[500px] flex items-center justify-center px-8 sm:px-12 py-10 bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.03)] z-20">
-        <div className="w-full max-w-sm">
+      <div className="w-full lg:w-[450px] xl:w-[500px] flex px-8 sm:px-12 py-10 bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.03)] z-20 overflow-y-auto">
+        <div className="w-full max-w-sm m-auto">
           
           {/* Mobile Logo (Visible only on small screens) */}
           <div className="flex lg:hidden items-center gap-2 mb-8">
