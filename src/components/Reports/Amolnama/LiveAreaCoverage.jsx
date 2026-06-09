@@ -17,8 +17,8 @@ export default function LiveAreaCoverage() {
         <h3 className="font-extrabold text-sm sm:text-base text-[var(--color-text-main)]">
           Live Area Coverage
         </h3>
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[9px] font-black bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-wider animate-pulse">
-          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[9px] font-black bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-wider animate-pulse">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
           Live
         </span>
       </div>
@@ -71,7 +71,7 @@ export default function LiveAreaCoverage() {
               key={idx}
               className="flex items-center gap-2 sm:gap-3.5 p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-zinc-50/50 border border-[var(--color-border)] hover:bg-zinc-50 transition-colors"
             >
-              <div className="w-2 h-2 rounded-full bg-indigo-500 shrink-0 shadow-xs shadow-indigo-500/30" />
+              <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 shadow-xs shadow-emerald-500/30" />
               <div className="min-w-0 flex-1">
                 <h4 className="font-extrabold text-[10px] sm:text-xs text-zinc-950 uppercase tracking-wide truncate">
                   {loc.name}

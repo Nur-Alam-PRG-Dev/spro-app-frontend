@@ -73,7 +73,7 @@ export default function BidirectionalBarChartWidget({
         <div className="text-left sm:text-right">
           {dateRange && <p className="text-xs font-bold text-zinc-500">{dateRange}</p>}
           {svName && <p className="text-sm font-black text-[var(--color-text-main)]">{svName}</p>}
-          {teamSize && <p className="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 inline-block px-2 py-0.5 rounded mt-1">Team Size: {teamSize}</p>}
+          {teamSize && <p className="text-[10px] font-extrabold text-emerald-600 bg-emerald-50 inline-block px-2 py-0.5 rounded mt-1">Team Size: {teamSize}</p>}
         </div>
       </div>
       

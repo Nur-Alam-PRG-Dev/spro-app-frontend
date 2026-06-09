@@ -325,8 +325,8 @@ function HalfSummaryContent() {
               disabled={loading}
               className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all ${
                 loading 
-                  ? 'bg-indigo-900/50 text-indigo-100 cursor-not-allowed border border-indigo-900/20' 
-                  : 'bg-indigo-800 hover:bg-indigo-900 text-white hover:shadow-md cursor-pointer border border-indigo-900/50'
+                  ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20' 
+                  : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-md cursor-pointer border border-emerald-900/50'
               }`}
               title="Search"
             >
@@ -345,7 +345,7 @@ function HalfSummaryContent() {
             <button
               onClick={() => handleTabChange('overall')}
               className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'overall'
-                ? 'bg-indigo-800 text-white shadow-sm'
+                ? 'bg-emerald-800 text-white shadow-sm'
                 : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                 }`}
             >
@@ -355,7 +355,7 @@ function HalfSummaryContent() {
               <button
                 onClick={() => handleTabChange('team')}
                 className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'team'
-                  ? 'bg-indigo-800 text-white shadow-sm'
+                  ? 'bg-emerald-800 text-white shadow-sm'
                   : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                   }`}
               >
@@ -385,7 +385,7 @@ function HalfSummaryContent() {
       {/* ─── Empty State Placeholder ─── */}
       {!data && !loading && !error && (
         <Card className="shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-8 sm:p-12 text-center flex flex-col items-center justify-center border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" >
-          <div className="w-16 h-16 rounded-full bg-indigo-50 text-indigo-800 flex items-center justify-center mb-4 border border-indigo-100">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mb-4 border border-emerald-100">
             <User size={32} className="stroke-[1.5px]" />
           </div>
           <h3 className="text-base sm:text-lg font-extrabold text-[var(--color-text-main)] mb-1">

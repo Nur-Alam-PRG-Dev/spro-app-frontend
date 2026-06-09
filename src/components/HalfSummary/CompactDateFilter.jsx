@@ -82,10 +82,10 @@ const CompactDateFilter = ({
       <div
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-1.5 bg-zinc-50 border rounded-lg px-2.5 py-1.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${
-          isOpen ? 'border-indigo-600 bg-white ring-1 ring-indigo-600' : 'border-[var(--color-border)]'
+          isOpen ? 'border-emerald-600 bg-white ring-1 ring-emerald-600' : 'border-[var(--color-border)]'
         }`}
       >
-        <Calendar size={14} className="text-indigo-800/70 shrink-0" />
+        <Calendar size={14} className="text-emerald-800/70 shrink-0" />
         <span className={`text-[11px] sm:text-xs font-semibold select-none ${startDate ? 'text-zinc-800' : 'text-zinc-400'}`}>
           {startDate ? formatDateLabel(startDate) : 'Start'}
         </span>
@@ -129,11 +129,11 @@ const CompactDateFilter = ({
                 let cellClass = "py-1.5 cursor-pointer transition-colors relative flex items-center justify-center h-8";
                 let innerClass = "w-7 h-7 flex items-center justify-center rounded-full ";
 
-                if (isStart && isEnd) innerClass += "bg-indigo-800 text-white font-extrabold shadow-sm";
-                else if (isStart) { cellClass += "bg-indigo-50 text-indigo-800 rounded-l-full"; innerClass += "bg-indigo-800 text-white font-extrabold shadow-sm"; }
-                else if (isEnd) { cellClass += "bg-indigo-50 text-indigo-800 rounded-r-full"; innerClass += "bg-indigo-800 text-white font-extrabold shadow-sm"; }
-                else if (isInRange) { cellClass += "bg-indigo-50 text-indigo-800 font-bold border-y border-indigo-100"; innerClass += "rounded-none"; }
-                else if (isHoverPreview) { cellClass += "bg-indigo-50/50 text-indigo-700/80 border-y border-dashed border-indigo-200"; innerClass += "rounded-none"; }
+                if (isStart && isEnd) innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm";
+                else if (isStart) { cellClass += "bg-emerald-50 text-emerald-800 rounded-l-full"; innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm"; }
+                else if (isEnd) { cellClass += "bg-emerald-50 text-emerald-800 rounded-r-full"; innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm"; }
+                else if (isInRange) { cellClass += "bg-emerald-50 text-emerald-800 font-bold border-y border-emerald-100"; innerClass += "rounded-none"; }
+                else if (isHoverPreview) { cellClass += "bg-emerald-50/50 text-emerald-700/80 border-y border-dashed border-emerald-200"; innerClass += "rounded-none"; }
                 else { innerClass += "text-[var(--color-text-main)] hover:bg-zinc-100"; }
 
                 return (
@@ -148,7 +148,7 @@ const CompactDateFilter = ({
               <button onClick={() => { onStartDateChange(''); onEndDateChange(''); }} className="text-[10px] font-bold text-zinc-500 hover:text-rose-600">
                 Clear Range
               </button>
-              <button onClick={() => setIsOpen(false)} className="px-3 py-1 bg-indigo-800 hover:bg-indigo-900 text-white rounded-lg text-[10px] font-extrabold shadow-2xs">
+              <button onClick={() => setIsOpen(false)} className="px-3 py-1 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-[10px] font-extrabold shadow-2xs">
                 Done
               </button>
             </div>

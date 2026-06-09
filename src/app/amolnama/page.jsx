@@ -58,56 +58,56 @@ function AmolnamaContent() {
       value: '26',
       subText: 'Total Working Days',
       icon: Calendar,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'First Activity',
       value: '08:45 AM',
       subText: 'LAST: 06:12 PM',
       icon: Clock,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'Total Retail ACT',
       value: '124',
       subText: 'Orders processed today',
       icon: ShoppingCart,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'AVG Retail ACT',
       value: '124',
       subText: 'Orders processed today',
       icon: ShoppingCart,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'Other Activities',
       value: '124',
       subText: 'Orders processed today',
       icon: CalendarCheck,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'AVG TTS',
       value: '124',
       subText: 'Orders processed today',
       icon: Clock9,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
     {
       title: 'Daily TTS',
       value: '124',
       subText: 'Orders processed today',
       icon: Clock9,
-      iconBg: 'bg-indigo-50',
-      iconColor: 'text-indigo-700'
+      iconBg: 'bg-emerald-50',
+      iconColor: 'text-emerald-700'
     },
   ];
 
@@ -244,7 +244,7 @@ function AmolnamaContent() {
             )}
             <button
               onClick={() => { }}
-              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all bg-indigo-800 hover:bg-indigo-900 text-white hover:shadow-md cursor-pointer border border-indigo-900/50"
+              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-md cursor-pointer border border-emerald-900/50"
               title="Search"
             >
               <Search size={14} className="stroke-[2.5px]" />

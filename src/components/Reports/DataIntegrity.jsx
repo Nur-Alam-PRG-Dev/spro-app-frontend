@@ -10,7 +10,7 @@ const DataIntegrity = () => {
 
       <div className="flex items-center gap-4">
         {/* Large Visual Grade badge */}
-        <div className="w-14 h-14 rounded-full border-4 border-[var(--color-badge-on-text)] flex items-center justify-center shrink-0 shadow-sm bg-indigo-50/50 dark:bg-indigo-950/10">
+        <div className="w-14 h-14 rounded-full border-4 border-[var(--color-badge-on-text)] flex items-center justify-center shrink-0 shadow-sm bg-emerald-50/50 dark:bg-emerald-950/10">
           <span className="text-lg font-black text-[var(--color-badge-on-text)]">A+</span>
         </div>
 

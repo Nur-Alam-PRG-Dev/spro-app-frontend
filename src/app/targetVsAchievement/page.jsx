@@ -324,7 +324,7 @@ function TargetVsAchievementContent() {
                       <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Order:</span>
-                          <div className="text-xs font-extrabold text-indigo-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-emerald-700 mt-0.5">
                             {formatNum(rep.todayPulse.order)}
                           </div>
                         </div>
@@ -343,7 +343,7 @@ function TargetVsAchievementContent() {
                       <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Ach:</span>
-                          <div className="text-xs font-extrabold text-indigo-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-emerald-700 mt-0.5">
                             {formatNum(rep.mtdProgress.achieved)}
                           </div>
                         </div>

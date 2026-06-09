@@ -51,14 +51,14 @@ export default function HalfMetricsCard({
           </div>
 
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl sm:text-3xl font-black text-indigo-800 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-emerald-800 tracking-tight">
               {formatCurrency(heroAmount)}
             </h2>
 
             {/* Circular Progress for Trend */}
             <div className="flex items-center gap-2">
               <div className="flex flex-col items-end">
-                <span className={`text-[11px] sm:text-xs font-black ${heroTrend > 0 ? 'text-indigo-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                <span className={`text-[11px] sm:text-xs font-black ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                   {heroTrend > 0 ? '+' : heroTrend < 0 ? '-' : ''}{Math.abs(heroTrend)}%
                 </span>
                 <span className="text-[8px] font-extrabold text-zinc-400 uppercase tracking-widest">
@@ -83,7 +83,7 @@ export default function HalfMetricsCard({
                     cy="18"
                     r="14"
                     fill="none"
-                    className={heroTrend > 0 ? "stroke-indigo-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"}
+                    className={heroTrend > 0 ? "stroke-emerald-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"}
                     strokeWidth="3.5"
                     strokeDasharray={2 * Math.PI * 14}
                     strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)}
@@ -92,7 +92,7 @@ export default function HalfMetricsCard({
                   />
                 </svg>
                 {/* Center Icon */}
-                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-indigo-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                   <TrendingUp size={12} className={`stroke-[3px] ${heroTrend < 0 ? 'rotate-180' : ''}`} />
                 </div>
               </div>
@@ -128,7 +128,7 @@ export default function HalfMetricsCard({
               <span className="text-[9px] font-bold text-zinc-400">/ {formatNum(visitCount)}</span>
             </div>
             <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden">
-              <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${(productive / (visitCount || 1)) * 100}%` }} />
+              <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${(productive / (visitCount || 1)) * 100}%` }} />
             </div>
           </div>
         </div>
@@ -162,9 +162,9 @@ export default function HalfMetricsCard({
             <span className="text-lg sm:text-xl font-black text-[#136336] leading-none block">
               {strikeRate}%
             </span>
-            <div className="w-full h-1 bg-indigo-100 rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-emerald-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-indigo-600 rounded-full"
+                className="h-full bg-emerald-600 rounded-full"
                 style={{ width: `${Math.min(100, Math.max(0, strikeRate))}%` }}
               />
             </div>

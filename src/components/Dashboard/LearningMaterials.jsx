@@ -9,20 +9,20 @@ const LearningMaterials = () => {
       <div className="flex items-center gap-4">
         {/* Banner Left Icon Container */}
         <div className="w-12 h-12 shrink-0 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
-          <BookOpen size={24} className="text-indigo-300" />
+          <BookOpen size={24} className="text-emerald-300" />
         </div>
         
         {/* Banner Text Content */}
         <div>
           <h3 className="font-bold text-sm sm:text-base leading-tight">Learning Materials</h3>
-          <p className="text-xs text-indigo-100/90 mt-1 max-w-xl font-medium">
+          <p className="text-xs text-emerald-100/90 mt-1 max-w-xl font-medium">
             Access our full library of logistics optimization guides and fleet management manuals.
           </p>
         </div>
       </div>
 
       {/* Right side Arrow navigation */}
-      <div className="text-indigo-100 hover:text-white transition-colors pl-4">
+      <div className="text-emerald-100 hover:text-white transition-colors pl-4">
         <ChevronRight size={24} />
       </div>
     </div>

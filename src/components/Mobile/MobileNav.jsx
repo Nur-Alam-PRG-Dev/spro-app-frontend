@@ -205,7 +205,7 @@ const MobileHeaderContent = () => {
             <h2 className="font-extrabold text-lg tracking-tight text-white text-center leading-tight">
               {user ? user.aemp_name : 'Admin Console'}
             </h2>
-            <p className="text-xs text-indigo-400 font-bold mt-1">
+            <p className="text-xs text-emerald-400 font-bold mt-1">
               {user ? user.aemp_usnm : 'SPRO'} <span className="text-[var(--color-sidebar-text-muted)] px-1">•</span> {designation}
             </p>
             {user && (user.aemp_mob1 || user.aemp_dtsm) && (
@@ -230,7 +230,7 @@ const MobileHeaderContent = () => {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3.5 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                   isActive
-                    ? 'bg-[var(--color-sidebar-active)] text-white border-l-4 border-indigo-400'
+                    ? 'bg-[var(--color-sidebar-active)] text-white border-l-4 border-emerald-400'
                     : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
                 }`}
               >
@@ -291,7 +291,7 @@ export const MobileTabBar = () => {
             href={tab.href}
             className={`flex flex-col items-center justify-center flex-1 py-2 text-[10px] font-semibold transition-colors ${
               isActive
-                ? 'text-[#696cff] dark:text-indigo-400'
+                ? 'text-[#696cff] dark:text-emerald-400'
                 : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
             }`}
           >

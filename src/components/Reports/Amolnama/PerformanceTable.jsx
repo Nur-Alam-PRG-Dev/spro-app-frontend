@@ -135,7 +135,7 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '' }) {
 
           {/* Visited Card */}
           <div className="flex items-center gap-1.5 sm:gap-4 bg-zinc-50/50 border border-[var(--color-border)] rounded-xl sm:rounded-2xl p-2 sm:p-4.5">
-            <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 shrink-0">
+            <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shrink-0">
               <CheckCircle2 size={12} className="sm:hidden stroke-[2.5px]" />
               <CheckCircle2 size={20} className="hidden sm:block stroke-[2.5px]" />
             </div>
@@ -143,7 +143,7 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '' }) {
               <span className="block text-[8px] sm:text-[10px] font-black text-zinc-400 tracking-wider uppercase leading-none truncate">
                 {currentSummary.visitedLabel}
               </span>
-              <h2 className="text-sm sm:text-2xl font-black text-indigo-600 mt-1 sm:mt-1.5 leading-none underline decoration-indigo-500/40 decoration-2 underline-offset-4">
+              <h2 className="text-sm sm:text-2xl font-black text-emerald-600 mt-1 sm:mt-1.5 leading-none underline decoration-emerald-500/40 decoration-2 underline-offset-4">
                 {currentSummary.visitedCount}
               </h2>
             </div>
@@ -187,7 +187,7 @@ export default function PerformanceTable({ activeSubTab, searchQuery = '' }) {
                     return (
                       <tr
                         key={row.sl}
-                        className={`transition-colors font-medium text-[var(--color-text-main)] hover:bg-zinc-50/60 ${isHighVisited ? 'bg-indigo-50/30' : ''
+                        className={`transition-colors font-medium text-[var(--color-text-main)] hover:bg-zinc-50/60 ${isHighVisited ? 'bg-emerald-50/30' : ''
                           }`}
                       >
                         <td className="px-1.5 py-2 sm:px-4 sm:py-3 text-center font-bold text-zinc-900 w-8 sm:w-12">

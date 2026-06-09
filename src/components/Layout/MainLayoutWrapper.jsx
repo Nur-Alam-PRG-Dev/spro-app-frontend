@@ -30,43 +30,32 @@ export default function MainLayoutWrapper({ children }) {
     // If we're already on the login page, no need for timeout
     if (isLoginPage) return;
 
-    // Check if 24 hours have already passed since login
-    const loginTime = localStorage.getItem('spro_login_time');
     const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
     
-    if (loginTime && Date.now() - parseInt(loginTime) > TWENTY_FOUR_HOURS) {
-      router.push('/login');
-      return;
-    }
+    const checkSession = () => {
+      const userStr = localStorage.getItem('spro_user');
+      const loginTime = localStorage.getItem('spro_login_time');
 
-    let timeoutId;
-
-    const resetTimer = () => {
-      clearTimeout(timeoutId);
-      // Set timeout for 24 hours of inactivity
-      timeoutId = setTimeout(() => {
+      if (!userStr || !loginTime || Date.now() - parseInt(loginTime) > TWENTY_FOUR_HOURS) {
+        // Clear session data if it's expired or missing parts
+        localStorage.removeItem('spro_user');
+        localStorage.removeItem('spro_login_time');
+        localStorage.removeItem('baseImageUrl');
         router.push('/login');
-      }, TWENTY_FOUR_HOURS);
+        return false;
+      }
+      return true;
     };
 
-    // Events that denote user activity
-    const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    // Immediate check on mount/route change
+    if (!checkSession()) return;
 
-    const setupListeners = () => {
-      events.forEach(event => window.addEventListener(event, resetTimer));
-    };
+    // Check periodically if the 24 hours have passed while the app is open
+    const intervalId = setInterval(() => {
+      checkSession();
+    }, 60000); // Check every minute
 
-    const cleanupListeners = () => {
-      events.forEach(event => window.removeEventListener(event, resetTimer));
-      clearTimeout(timeoutId);
-    };
-
-    // Initialize timer and listeners
-    resetTimer();
-    setupListeners();
-
-    // Cleanup on unmount
-    return cleanupListeners;
+    return () => clearInterval(intervalId);
   }, [isLoginPage, router]);
 
   if (isLoginPage) {
