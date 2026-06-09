@@ -21,6 +21,14 @@ SPRO App Frontend is a modern web application built with Next.js (App Router), d
 - **Charts & Data Visualization:** [Recharts](https://recharts.org/)
 - **Linting:** ESLint
 
+## 🌟 Core Features & Architecture
+
+- **Performance Tracking & Reports:** Detailed pages (`/amolnama`, `/halfSummary`, `/reports`) to calculate and display complex sales data, targets, and achievements.
+- **API Integration:** Built-in Next.js App Router API Routes (`src/app/api`) handling backend communication seamlessly.
+- **Recharts Integration:** Advanced, interactive data visualization utilizing `<ResponsiveContainer>`, `<BarChart>`, `<PieChart>`, etc., giving dynamic insights into sales metrics.
+- **Rendering Strategies (SSG & CSR):** Employs hybrid rendering. Server-Side Rendering / Static Generation (SSG) for performance-critical pages, alongside Client-Side Rendering (CSR) for real-time dashboard interactions.
+- **Client-Side Calculations:** Implements robust client-side math and state derivations to instantly update summary metrics and charts without unnecessary server round-trips.
+
 ## 📁 Project Structure
 
 The project is structured under the `src` directory using Next.js App Router conventions:
