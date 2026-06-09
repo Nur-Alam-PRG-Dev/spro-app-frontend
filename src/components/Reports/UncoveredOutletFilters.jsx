@@ -189,6 +189,10 @@ const UncoveredOutletFilters = ({
                         day,
                       );
                       const isSelected = date === dateStr;
+                      
+                      const today = new Date();
+                      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+                      const isToday = dateStr === todayStr;
 
                       let cellClass =
                         "py-2 cursor-pointer transition-colors relative flex items-center justify-center h-8 sm:h-9 rounded-full ";
@@ -199,7 +203,7 @@ const UncoveredOutletFilters = ({
                         cellClass += "bg-emerald-50 text-emerald-800";
                         innerClass +=
                           "bg-[var(--color-primary)] text-white font-extrabold shadow-sm";
-                      } else if (isSameDay) {
+                      } else if (isToday) {
                         innerClass +=
                           "bg-[var(--color-primary-light)] text-[var(--color-primary)] font-extrabold";
                       } else {

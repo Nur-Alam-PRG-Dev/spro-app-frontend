@@ -20,39 +20,8 @@ export default function Home() {
             Real-time oversight for SPRO Global Logistics.
           </p>
         </div>
-
-        {/* Header Actions */}
-        <div className="flex items-center gap-2.5">
-          {/* Custom Date Range Indicator */}
-          <button className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm bg-white border border-[var(--color-border)] rounded-xl font-bold text-[var(--color-text-main)] shadow-sm hover:bg-zinc-50 hover:bg-zinc-200 transition-colors">
-            <Calendar size={16} className="text-[var(--color-text-muted)]" />
-            <span>Oct 24 - Oct 30, 2023</span>
-          </button>
-
-          {/* New Entry Button */}
-          <button className="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-sm transition-colors">
-            <Plus size={16} />
-            <span>New Entry</span>
-          </button>
-        </div>
       </div>
 
-      {/* Learning Materials Banner */}
-      <LearningMaterials />
-
-      {/* Core Grid Options */}
-      <CardGrid />
-
-      {/* Charts & Split Timeline Log */}
-      <div className="flex flex-col lg:flex-row gap-6 mt-8">
-        <EfficiencyChart />
-        <ActivityLog />
-      </div>
-
-      {/* Floating Add Action Button (Mobile/Tablet accessibility) */}
-      <button className="fixed bottom-20 right-6 lg:bottom-8 lg:right-8 w-14 h-14 bg-[#0a5c36] hover:bg-[#074629] text-white rounded-full flex items-center justify-center shadow-xl transition-transform hover:scale-105 z-30">
-        <Plus size={28} />
-      </button>
     </div>
   );
 }

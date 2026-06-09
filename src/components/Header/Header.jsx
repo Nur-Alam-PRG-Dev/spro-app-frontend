@@ -138,7 +138,7 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
           <div tabIndex={0} role="button" className="flex items-center gap-3 select-none">
             <div className="text-right flex flex-col">
               <h4 className="text-xs sm:text-sm font-bold text-[var(--color-text-main)] leading-tight">
-                {user ? user.aemp_name : 'Admin Console'}
+                {user ? (user.aemp_name?.split(' ')[0] || user.aemp_name) : 'Admin Console'}
               </h4>
               <span className="text-[10px] text-[var(--color-text-muted)] font-bold leading-normal">
                 {user ? user.aemp_usnm : 'SPRO'}
