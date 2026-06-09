@@ -8,7 +8,7 @@ const ActivityLog = () => {
     {
       title: 'Order #8842 Shipped',
       subtitle: 'Central Hub • 2 mins ago',
-      color: 'bg-emerald-500',
+      color: 'bg-indigo-500',
     },
     {
       title: 'Stock Alert: Warehouse B',
@@ -23,7 +23,7 @@ const ActivityLog = () => {
     {
       title: 'Monthly Report Generated',
       subtitle: 'System Automated • 3 hrs ago',
-      color: 'bg-emerald-500',
+      color: 'bg-indigo-500',
     },
   ];
 

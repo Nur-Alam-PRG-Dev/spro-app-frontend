@@ -51,7 +51,7 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
                   key={tab}
                   onClick={() => setActiveSubTab(tab)}
                   className={`pb-2.5 px-3 sm:px-4 text-xs sm:text-sm font-extrabold border-b-2 transition-all cursor-pointer relative -mb-[2px] ${isActive
-                    ? 'border-[#267043] text-[#267043]'
+                    ? 'border-[#696cff] text-[#696cff]'
                     : 'border-transparent text-zinc-400 hover:text-zinc-600'
                     }`}
                 >
@@ -84,7 +84,7 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
           <div className="mt-5 pt-1">
             <div className="w-full h-2.5 bg-zinc-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#267043] rounded-full transition-all duration-500"
+                className="h-full bg-[#696cff] rounded-full transition-all duration-500"
                 style={{ width: `${pct}%` }}
               />
             </div>

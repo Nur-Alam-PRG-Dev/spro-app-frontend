@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
@@ -9,6 +9,7 @@ import AmolnamaInfographic from '@/components/Reports/Amolnama/AmolnamaInfograph
 import SVPerformanceSummary from '@/components/Reports/Amolnama/SVPerformanceSummary';
 import {
   ChevronRight,
+  ChevronLeft,
   Calendar,
   SlidersHorizontal,
   ShoppingCart,
@@ -26,6 +27,19 @@ import {
 function AmolnamaContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q')?.toLowerCase() || '';
+  const dailySummaryScrollRef = useRef(null);
+
+  const scrollLeft = () => {
+    if (dailySummaryScrollRef.current) {
+      dailySummaryScrollRef.current.scrollBy({ left: -600, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (dailySummaryScrollRef.current) {
+      dailySummaryScrollRef.current.scrollBy({ left: 600, behavior: 'smooth' });
+    }
+  };
 
   // State management
   const [employeeSearch, setEmployeeSearch] = useState('');
@@ -44,56 +58,56 @@ function AmolnamaContent() {
       value: '26',
       subText: 'Total Working Days',
       icon: Calendar,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
     {
       title: 'First Activity',
       value: '08:45 AM',
       subText: 'LAST: 06:12 PM',
       icon: Clock,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
     {
       title: 'Total Retail ACT',
       value: '124',
       subText: 'Orders processed today',
       icon: ShoppingCart,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
     {
       title: 'AVG Retail ACT',
       value: '124',
       subText: 'Orders processed today',
       icon: ShoppingCart,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
     {
       title: 'Other Activities',
       value: '124',
       subText: 'Orders processed today',
       icon: CalendarCheck,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
     {
       title: 'AVG TTS',
       value: '124',
       subText: 'Orders processed today',
       icon: Clock9,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
     {
       title: 'Daily TTS',
       value: '124',
       subText: 'Orders processed today',
       icon: Clock9,
-      iconBg: 'bg-emerald-50',
-      iconColor: 'text-emerald-700'
+      iconBg: 'bg-indigo-50',
+      iconColor: 'text-indigo-700'
     },
   ];
 
@@ -191,33 +205,24 @@ function AmolnamaContent() {
   ];
 
   return (
-    <div className="space-y-6 pb-10">
-      {/* ─── Breadcrumbs ─── */}
-      <div className="hidden lg:block">
-        <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-2">
-          <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
-          <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
-          <Link href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</Link>
-          <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
-          <span className="text-[var(--color-text-main)] font-bold">Amolnama</span>
-        </div>
-      </div>
+    <div className="space-y-6">
 
       {/* ─── Unified Header Row ─── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 border-[var(--color-border)]">
 
-        {/* Left Side: Title */}
-        <div className="shrink-0">
-          <h1 className="text-xl sm:text-2xl font-extrabold text-[var(--color-text-main)] tracking-tight leading-tight">
-            Amolnama
-          </h1>
-          <p className="text-[10px] sm:text-xs text-[var(--color-text-muted)] font-medium mt-0.5">
-            Daily operational intelligence report
-          </p>
+        {/* ─── Breadcrumbs ─── */}
+        <div className="hidden lg:block">
+          <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-semibold mb-2">
+            <Link href="/" className="hover:text-[var(--color-text-main)] transition-colors">Dashboard</Link>
+            <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
+            <Link href="/reports" className="hover:text-[var(--color-text-main)] transition-colors">Reports</Link>
+            <ChevronRight size={12} className="text-[var(--color-text-muted)]" />
+            <span className="text-[var(--color-text-main)] font-bold text-2xl">Amolnama</span>
+          </div>
         </div>
 
         {/* Right Side: Filters & Actions */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-between lg:justify-end bg-transparent md:bg-white drop-shadow-xs md:drop-shadow-md p-2 rounded-xl w-full md:w-fit lg:w-auto z-40">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-between lg:justify-end bg-white drop-shadow-xs md:drop-shadow-md p-2 rounded-xl w-full md:w-fit lg:w-auto z-40">
           {/* Minimal Date Range Selector */}
           <CompactDateFilter
             startDate={startDate}
@@ -239,7 +244,7 @@ function AmolnamaContent() {
             )}
             <button
               onClick={() => { }}
-              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-md cursor-pointer border border-emerald-900/50"
+              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all bg-indigo-800 hover:bg-indigo-900 text-white hover:shadow-md cursor-pointer border border-indigo-900/50"
               title="Search"
             >
               <Search size={14} className="stroke-[2.5px]" />
@@ -249,32 +254,48 @@ function AmolnamaContent() {
       </div>
 
       {/* ─── Daily Summary ─── */}
-      <div className='-mt-3 lg:mt-0'>
+      <div className='-mt-5 lg:mt-0 bg-white drop-shadow-xs md:drop-shadow-md p-2 sm:p-4 rounded-xl w-full z-40 transition-all duration-300'>
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-extrabold text-sm text-[var(--color-text-main)]">Daily Summary</h3>
-          <button className="text-xs font-bold text-[var(--color-primary)] hover:underline">View Detailed</button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={scrollLeft}
+              className="w-7 h-7 flex items-center justify-center rounded-lg border border-[var(--color-border)] bg-zinc-50 hover:bg-zinc-100 text-zinc-600 transition-colors"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              onClick={scrollRight}
+              className="w-7 h-7 flex items-center justify-center rounded-lg border border-[var(--color-border)] bg-zinc-50 hover:bg-zinc-100 text-zinc-600 transition-colors"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
 
-        <div className="flex lg:grid lg:grid-cols-4 xl:grid-cols-7 gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none snap-x">
+        <div
+          ref={dailySummaryScrollRef}
+          className="flex gap-2 overflow-x-auto pb-3 scrollbar-none snap-x sm:gap-3 smooth-scroll"
+        >
           {dailySummary.map((item, idx) => {
             const Icon = item.icon;
             return (
               <Card
                 key={idx}
-                className="p-3 flex items-center gap-2 min-w-[240px] lg:min-w-0 flex-1 snap-start"
+                className="p-2.5 sm:p-3.5 flex items-center gap-2 min-w-[200px] sm:min-w-[240px] flex-1 snap-start shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                 hoverable={true}
               >
-                <div className={`w-11 h-11 rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 border border-black/5`}>
-                  <Icon size={20} />
+                <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl ${item.iconBg} ${item.iconColor} flex items-center justify-center shrink-0 border border-black/5`}>
+                  <Icon size={16} className="sm:w-5 sm:h-5" />
                 </div>
                 <div>
-                  <span className="block text-[10px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase leading-none mb-1">
+                  <span className="block text-[8px] sm:text-[10px] font-bold text-[var(--color-text-muted)] tracking-wider uppercase leading-none mb-0.5 sm:mb-1">
                     {item.title}
                   </span>
-                  <h2 className="text-xl font-black text-[var(--color-text-main)] tracking-tight leading-none mb-1.5">
+                  <h2 className="text-lg sm:text-xl font-black text-[var(--color-text-main)] tracking-tight leading-none mb-1 sm:mb-1.5">
                     {item.value}
                   </h2>
-                  <span className="block text-[10px] text-[var(--color-text-muted)] font-semibold leading-none">
+                  <span className="block text-[8px] sm:text-[10px] text-[var(--color-text-muted)] font-semibold leading-none">
                     {item.subText}
                   </span>
                 </div>
@@ -300,13 +321,13 @@ function AmolnamaContent() {
         </div>
 
         {/* Mobile metrics list: separate cards */}
-        <div className="lg:hidden grid grid-cols-3 gap-1.5">
+        <div className="lg:hidden grid grid-cols-3 gap-1.5 sm:gap-2">
           {visitedSummaryMetrics.map((m, idx) => (
-            <Card key={idx} className="p-2 flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" >
-              <span className="text-[8px] font-bold text-zinc-400 tracking-wider uppercase mb-1 block truncate">
+            <Card key={idx} className="p-1.5 sm:p-2.5 flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" >
+              <span className="text-[7px] sm:text-[9px] font-bold text-zinc-400 tracking-wider uppercase mb-0.5 sm:mb-1 block truncate">
                 {m.label}
               </span>
-              <span className="text-sm font-black tracking-tight text-[var(--color-text-main)]">
+              <span className="text-xs sm:text-sm font-black tracking-tight text-[var(--color-text-main)]">
                 {m.value}
               </span>
             </Card>
@@ -319,37 +340,37 @@ function AmolnamaContent() {
           </div>
 
           {/* Current Period */}
-          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <span className="block text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5 truncate">
+          <div className="p-1.5 sm:p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <span className="block text-[7px] sm:text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5 truncate">
               Current Period
             </span>
-            <span className="block text-[7px] font-semibold text-zinc-450 mb-1 leading-none">
+            <span className="block text-[6px] sm:text-[7px] font-semibold text-zinc-450 mb-1 leading-none">
               {currentStart}
             </span>
-            <h4 className="text-xs font-black text-[var(--color-text-main)] leading-none mt-1">
-              0 <span className="text-[9px] font-bold text-[var(--color-text-muted)]">Sites</span>
+            <h4 className="text-[10px] sm:text-xs font-black text-[var(--color-text-main)] leading-none mt-1">
+              0 <span className="text-[7px] sm:text-[9px] font-bold text-[var(--color-text-muted)]">Sites</span>
             </h4>
           </div>
 
           {/* Previous Period */}
-          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <span className="block text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5 truncate">
+          <div className="p-1.5 sm:p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <span className="block text-[7px] sm:text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5 truncate">
               Prev Period
             </span>
-            <span className="block text-[7px] font-semibold text-zinc-450 mb-1 leading-none">
+            <span className="block text-[6px] sm:text-[7px] font-semibold text-zinc-450 mb-1 leading-none">
               {prevPeriod.start}
             </span>
-            <h4 className="text-xs font-black text-[var(--color-text-main)] leading-none mt-1">
-              0 <span className="text-[9px] font-bold text-[var(--color-text-muted)]">Sites</span>
+            <h4 className="text-[10px] sm:text-xs font-black text-[var(--color-text-main)] leading-none mt-1">
+              0 <span className="text-[7px] sm:text-[9px] font-bold text-[var(--color-text-muted)]">Sites</span>
             </h4>
           </div>
 
           {/* ND */}
-          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between items-center text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <span className="text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-2 truncate">
+          <div className="p-1.5 sm:p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between items-center text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <span className="text-[7px] sm:text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-2 truncate">
               ND
             </span>
-            <span className="text-sm font-black text-[var(--color-text-main)] leading-none">
+            <span className="text-xs sm:text-sm font-black text-[var(--color-text-main)] leading-none">
               0
             </span>
           </div>

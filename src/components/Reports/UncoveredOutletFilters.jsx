@@ -134,7 +134,7 @@ const UncoveredOutletFilters = ({
                   : "border-zinc-200"
               }`}
             >
-              <Calendar size={16} className="text-emerald-800/70 shrink-0" />
+              <Calendar size={16} className="text-indigo-800/70 shrink-0" />
               <span
                 className={`text-xs sm:text-sm font-semibold select-none flex-1 truncate ${date ? "text-zinc-900" : "text-zinc-400"}`}
               >
@@ -196,9 +196,9 @@ const UncoveredOutletFilters = ({
                         "w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full ";
 
                       if (isSelected) {
-                        cellClass += "bg-emerald-50 text-emerald-800";
+                        cellClass += "bg-indigo-50 text-indigo-800";
                         innerClass +=
-                          "bg-emerald-800 text-white font-extrabold shadow-sm";
+                          "bg-indigo-800 text-white font-extrabold shadow-sm";
                       } else {
                         innerClass +=
                           "text-[var(--color-text-main)] hover:bg-zinc-100";
@@ -303,8 +303,8 @@ const UncoveredOutletFilters = ({
               disabled={isLoading}
               className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${
                 isLoading
-                  ? "bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20"
-                  : "bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50"
+                  ? "bg-indigo-900/50 text-indigo-100 cursor-not-allowed border border-indigo-900/20"
+                  : "bg-indigo-800 hover:bg-indigo-900 text-white hover:shadow-lg cursor-pointer border border-indigo-900/50"
               }`}
             >
               {isLoading ? (

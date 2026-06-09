@@ -86,7 +86,7 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
                     : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
                 }`}
               >
-                <Icon size={18} className={`shrink-0 ${isActive ? 'text-emerald-400' : ''}`} />
+                <Icon size={18} className={`shrink-0 ${isActive ? 'text-indigo-400' : ''}`} />
                 {isOpen && <span className="whitespace-nowrap overflow-hidden">{item.name}</span>}
               </Link>
               
@@ -101,12 +101,12 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
                   )}
                   {item.subItems && (
                     <div className="py-1 min-w-[180px]">
-                      <div className="px-4 py-2 font-black border-b border-white/10 text-emerald-400 tracking-wider text-xs uppercase">{item.name}</div>
+                      <div className="px-4 py-2 font-black border-b border-white/10 text-indigo-400 tracking-wider text-xs uppercase">{item.name}</div>
                       {item.subItems.map(subItem => (
                         <Link 
                           key={subItem.name} 
                           href={subItem.href}
-                          className="block px-4 py-2 hover:bg-emerald-900/50 hover:text-emerald-300 transition-colors"
+                          className="block px-4 py-2 hover:bg-indigo-900/50 hover:text-indigo-300 transition-colors"
                         >
                           {subItem.name}
                         </Link>
@@ -126,7 +126,7 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
                         key={subItem.name} 
                         href={subItem.href}
                         className={`block px-3 py-2 text-xs font-semibold rounded-lg transition-colors ${
-                          isSubActive ? 'bg-emerald-500/20 text-emerald-400' : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
+                          isSubActive ? 'bg-indigo-500/20 text-indigo-400' : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
                         }`}
                       >
                         {subItem.name}
@@ -168,14 +168,14 @@ const Sidebar = ({ isOpen = true, toggleSidebar }) => {
 
         {/* Download Reports Button */}
         {isOpen ? (
-          <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-[#004b23] dark:text-emerald-300 py-2 px-3 rounded-xl text-sm font-semibold transition-colors shadow-sm cursor-pointer">
+          <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] dark:bg-indigo-950/40 dark:hover:bg-indigo-900/40 text-[#696cff] dark:text-indigo-300 py-2 px-3 rounded-xl text-sm font-semibold transition-colors shadow-sm cursor-pointer">
             <Download size={16} />
             Download Reports
           </button>
         ) : (
           <button
             title="Download Reports"
-            className="w-full flex items-center justify-center bg-[#86efac] hover:bg-[#6ee7b7] dark:bg-emerald-950/40 dark:hover:bg-emerald-900/40 text-[#004b23] dark:text-emerald-300 p-2.5 rounded-xl transition-colors shadow-sm cursor-pointer"
+            className="w-full flex items-center justify-center bg-[#86efac] hover:bg-[#6ee7b7] dark:bg-indigo-950/40 dark:hover:bg-indigo-900/40 text-[#696cff] dark:text-indigo-300 p-2.5 rounded-xl transition-colors shadow-sm cursor-pointer"
           >
             <Download size={16} />
           </button>

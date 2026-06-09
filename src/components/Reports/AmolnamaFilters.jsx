@@ -164,8 +164,8 @@ const AmolnamaFilters = ({
                 className={`flex items-center gap-1.5 sm:gap-2 bg-zinc-50 border rounded-2xl px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 shadow-2xs hover:border-zinc-400 transition-all cursor-pointer ${isOpen ? 'border-[var(--color-primary)] bg-white ring-1 ring-[var(--color-primary)]' : 'border-[var(--color-border)]'
                   }`}
               >
-                <Calendar size={13} className="sm:hidden text-emerald-800/70 shrink-0" />
-                <Calendar size={16} className="hidden sm:block text-emerald-800/70 shrink-0" />
+                <Calendar size={13} className="sm:hidden text-indigo-800/70 shrink-0" />
+                <Calendar size={16} className="hidden sm:block text-indigo-800/70 shrink-0" />
                 <span className={`text-[11px] sm:text-sm font-semibold select-none ${startDate ? 'text-[var(--color-text-main)]' : 'text-zinc-400'}`}>
                   {startDate ? formatDateLabel(startDate) : 'Start Date'}
                 </span>
@@ -223,23 +223,23 @@ const AmolnamaFilters = ({
                         let innerClass = "w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full ";
 
                         if (isStart && isEnd) {
-                          innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm";
+                          innerClass += "bg-indigo-800 text-white font-extrabold shadow-sm";
                         } else if (isStart) {
-                          cellClass += "bg-emerald-50 text-emerald-800 rounded-l-full";
-                          innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm";
+                          cellClass += "bg-indigo-50 text-indigo-800 rounded-l-full";
+                          innerClass += "bg-indigo-800 text-white font-extrabold shadow-sm";
                         } else if (isEnd) {
-                          cellClass += "bg-emerald-50 text-emerald-800 rounded-r-full";
-                          innerClass += "bg-emerald-800 text-white font-extrabold shadow-sm";
+                          cellClass += "bg-indigo-50 text-indigo-800 rounded-r-full";
+                          innerClass += "bg-indigo-800 text-white font-extrabold shadow-sm";
                         } else if (isInRange) {
-                          cellClass += "bg-emerald-50 text-emerald-800 font-bold border-y border-emerald-100";
+                          cellClass += "bg-indigo-50 text-indigo-800 font-bold border-y border-indigo-100";
                           innerClass += "rounded-none";
                         } else if (isHoverPreview) {
-                          cellClass += "bg-emerald-50/50 text-emerald-700/80 border-y border-dashed border-emerald-200";
+                          cellClass += "bg-indigo-50/50 text-indigo-700/80 border-y border-dashed border-indigo-200";
                           innerClass += "rounded-none";
                         } else {
                           innerClass += "text-[var(--color-text-main)] hover:bg-zinc-100";
                           if (dateStr === '2026-05-02') {
-                            innerClass += " border border-emerald-500 font-black";
+                            innerClass += " border border-indigo-500 font-black";
                           }
                         }
 
@@ -270,7 +270,7 @@ const AmolnamaFilters = ({
                       </button>
                       <button
                         onClick={() => setIsOpen(false)}
-                        className="px-3 py-1 bg-emerald-800 hover:bg-emerald-900 text-white rounded-lg text-[10px] font-extrabold shadow-2xs cursor-pointer"
+                        className="px-3 py-1 bg-indigo-800 hover:bg-indigo-900 text-white rounded-lg text-[10px] font-extrabold shadow-2xs cursor-pointer"
                       >
                         Done
                       </button>
@@ -308,7 +308,7 @@ const AmolnamaFilters = ({
       {/* Dynamic Summary Footer */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-2 mt-4 pt-3.5 border-t border-[var(--color-border)] text-[10px] sm:text-xs font-bold text-[var(--color-text-muted)]">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse shrink-0" />
           <span className="truncate">{summaryText}</span>
         </div>
         <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
@@ -326,8 +326,8 @@ const AmolnamaFilters = ({
             disabled={isLoading}
             className={`flex items-center gap-1.5 px-6 py-2 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all uppercase tracking-wide shrink-0 ${
               isLoading 
-                ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20' 
-                : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-lg cursor-pointer border border-emerald-900/50'
+                ? 'bg-indigo-900/50 text-indigo-100 cursor-not-allowed border border-indigo-900/20' 
+                : 'bg-indigo-800 hover:bg-indigo-900 text-white hover:shadow-lg cursor-pointer border border-indigo-900/50'
             }`}
           >
             {isLoading ? (

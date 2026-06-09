@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import targetData from '@/dummyData/targetVsAchievement.json';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import PageSpinner from '@/components/ui/PageSpinner';
 import {
   ChevronRight,
   Calendar,
@@ -71,9 +72,11 @@ function TargetVsAchievementContent() {
 
   if (loading || !data) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <div className="w-12 h-12 rounded-full border-4 border-emerald-100 border-t-emerald-800 animate-spin" />
-        <span className="text-sm font-bold text-[var(--color-text-muted)]">Loading metrics...</span>
+      <div className="min-h-[400px] flex items-center justify-center">
+        <PageSpinner 
+          message="Loading metrics..." 
+          subMessage="Fetching target achievements"
+        />
       </div>
     );
   }
@@ -321,7 +324,7 @@ function TargetVsAchievementContent() {
                       <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Order:</span>
-                          <div className="text-xs font-extrabold text-emerald-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-indigo-700 mt-0.5">
                             {formatNum(rep.todayPulse.order)}
                           </div>
                         </div>
@@ -340,7 +343,7 @@ function TargetVsAchievementContent() {
                       <div className="flex justify-between items-start text-[10px] font-semibold text-zinc-500">
                         <div>
                           <span>Ach:</span>
-                          <div className="text-xs font-extrabold text-emerald-700 mt-0.5">
+                          <div className="text-xs font-extrabold text-indigo-700 mt-0.5">
                             {formatNum(rep.mtdProgress.achieved)}
                           </div>
                         </div>

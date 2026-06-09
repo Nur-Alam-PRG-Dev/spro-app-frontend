@@ -47,7 +47,7 @@ export default function TeamWiseView({
             switch (color) {
               case 'primary':
               case 'success':
-                return 'bg-emerald-800 text-white';
+                return 'bg-indigo-800 text-white';
               case 'info':
                 return 'bg-sky-700 text-white';
               default:
@@ -101,12 +101,12 @@ export default function TeamWiseView({
                           1st Half Performance (AM)
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-[13px] font-black text-emerald-800 tracking-tight">
+                          <span className="text-[13px] font-black text-indigo-800 tracking-tight">
                             {formatCurrency(rep.performanceH1.orderAmount)}
                           </span>
                           <div className="flex items-center gap-1">
                             <div className="flex flex-col items-end leading-[1]">
-                              <span className={`text-[8px] font-black ${heroTrend1 > 0 ? 'text-emerald-600' : heroTrend1 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                              <span className={`text-[8px] font-black ${heroTrend1 > 0 ? 'text-indigo-600' : heroTrend1 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                 {heroTrend1 > 0 ? '+' : heroTrend1 < 0 ? '-' : ''}{Math.abs(heroTrend1)}%
                               </span>
                               <span className="text-[6px] font-extrabold text-zinc-400 uppercase tracking-widest mt-0.5">Change</span>
@@ -114,9 +114,9 @@ export default function TeamWiseView({
                             <div className="relative flex items-center justify-center w-5 h-5">
                               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                                 <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
-                                <circle cx="18" cy="18" r="14" fill="none" className={heroTrend1 > 0 ? "stroke-emerald-500" : heroTrend1 < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend1))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" />
+                                <circle cx="18" cy="18" r="14" fill="none" className={heroTrend1 > 0 ? "stroke-indigo-500" : heroTrend1 < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend1))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" />
                               </svg>
-                              <div className={`absolute inset-0 flex items-center justify-center ${heroTrend1 > 0 ? 'text-emerald-600' : heroTrend1 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                              <div className={`absolute inset-0 flex items-center justify-center ${heroTrend1 > 0 ? 'text-indigo-600' : heroTrend1 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                  <TrendingUp size={7} className={`stroke-[3px] ${heroTrend1 < 0 ? 'rotate-180' : ''}`} />
                               </div>
                             </div>
@@ -126,7 +126,7 @@ export default function TeamWiseView({
                     )
                   })()}
 
-                  <div className="w-px h-8 bg-emerald-800/30"></div>
+                  <div className="w-px h-8 bg-indigo-800/30"></div>
 
                   {(() => {
                     const heroTrend2 = rep.performanceH2.orderAmountChange || 0;
@@ -137,12 +137,12 @@ export default function TeamWiseView({
                           2nd Half Performance (PM)
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-[13px] font-black text-emerald-800 tracking-tight">
+                          <span className="text-[13px] font-black text-indigo-800 tracking-tight">
                             {formatCurrency(rep.performanceH2.orderAmount)}
                           </span>
                           <div className="flex items-center gap-1">
                             <div className="flex flex-col items-end leading-[1]">
-                              <span className={`text-[8px] font-black ${heroTrend2 > 0 ? 'text-emerald-600' : heroTrend2 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                              <span className={`text-[8px] font-black ${heroTrend2 > 0 ? 'text-indigo-600' : heroTrend2 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                 {heroTrend2 > 0 ? '+' : heroTrend2 < 0 ? '-' : ''}{Math.abs(heroTrend2)}%
                               </span>
                               <span className="text-[6px] font-extrabold text-zinc-400 uppercase tracking-widest mt-0.5">Change</span>
@@ -150,9 +150,9 @@ export default function TeamWiseView({
                             <div className="relative flex items-center justify-center w-5 h-5">
                               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                                 <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
-                                <circle cx="18" cy="18" r="14" fill="none" className={heroTrend2 > 0 ? "stroke-emerald-500" : heroTrend2 < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend2))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" />
+                                <circle cx="18" cy="18" r="14" fill="none" className={heroTrend2 > 0 ? "stroke-indigo-500" : heroTrend2 < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend2))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" />
                               </svg>
-                              <div className={`absolute inset-0 flex items-center justify-center ${heroTrend2 > 0 ? 'text-emerald-600' : heroTrend2 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                              <div className={`absolute inset-0 flex items-center justify-center ${heroTrend2 > 0 ? 'text-indigo-600' : heroTrend2 < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                  <TrendingUp size={7} className={`stroke-[3px] ${heroTrend2 < 0 ? 'rotate-180' : ''}`} />
                               </div>
                             </div>
@@ -199,14 +199,14 @@ export default function TeamWiseView({
                           <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100 flex items-center justify-between">
                             <div className="space-y-1">
                               <span className="block text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Amount</span>
-                              <span className="block text-xl font-black text-emerald-800">
+                              <span className="block text-xl font-black text-indigo-800">
                                 {formatCurrency(data.orderAmount)}
                               </span>
                             </div>
 
                             <div className="flex items-center gap-2">
                               <div className="flex flex-col items-end">
-                                <span className={`text-[10px] font-black ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                <span className={`text-[10px] font-black ${heroTrend > 0 ? 'text-indigo-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                   {heroTrend > 0 ? '+' : heroTrend < 0 ? '-' : ''}{Math.abs(heroTrend)}%
                                 </span>
                                 <span className="text-[7px] font-extrabold text-zinc-400 uppercase tracking-widest">Change</span>
@@ -214,9 +214,9 @@ export default function TeamWiseView({
                               <div className="relative flex items-center justify-center w-8 h-8">
                                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                                   <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
-                                  <circle cx="18" cy="18" r="14" fill="none" className={heroTrend > 0 ? "stroke-emerald-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
+                                  <circle cx="18" cy="18" r="14" fill="none" className={heroTrend > 0 ? "stroke-indigo-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
                                 </svg>
-                                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-indigo-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                    <TrendingUp size={10} className={`stroke-[3px] ${heroTrend < 0 ? 'rotate-180' : ''}`} />
                                 </div>
                               </div>
@@ -239,7 +239,7 @@ export default function TeamWiseView({
                                   <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] leading-none">{formatNum(data.productiveOutlets)}</span>
                                   <span className="text-[8px] font-bold text-zinc-400">/ {formatNum(data.visits)}</span>
                                 </div>
-                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full rounded-full" style={{ width: `${(data.productiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
+                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-indigo-500 h-full rounded-full" style={{ width: `${(data.productiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
                               </div>
                             </div>
                             <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
@@ -260,7 +260,7 @@ export default function TeamWiseView({
                               <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Strike Rate</span>
                               <div className="mt-1 space-y-1">
                                 <span className="text-sm sm:text-base font-black text-[#136336] leading-none block">{data.strike}%</span>
-                                <div className="w-full h-1 bg-emerald-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-600 rounded-full" style={{ width: `${Math.min(100, Math.max(0, data.strike))}%` }} /></div>
+                                <div className="w-full h-1 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full bg-indigo-600 rounded-full" style={{ width: `${Math.min(100, Math.max(0, data.strike))}%` }} /></div>
                               </div>
                             </div>
                           </div>
@@ -284,14 +284,14 @@ export default function TeamWiseView({
                           <div className="bg-zinc-50/50 rounded-xl p-3 border border-zinc-100 flex items-center justify-between">
                             <div className="space-y-1">
                               <span className="block text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Order Amount</span>
-                              <span className="block text-xl font-black text-emerald-800">
+                              <span className="block text-xl font-black text-indigo-800">
                                 {formatCurrency(data.orderAmount)}
                               </span>
                             </div>
 
                             <div className="flex items-center gap-2">
                               <div className="flex flex-col items-end">
-                                <span className={`text-[10px] font-black ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                <span className={`text-[10px] font-black ${heroTrend > 0 ? 'text-indigo-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                   {heroTrend > 0 ? '+' : heroTrend < 0 ? '-' : ''}{Math.abs(heroTrend)}%
                                 </span>
                                 <span className="text-[7px] font-extrabold text-zinc-400 uppercase tracking-widest">Change</span>
@@ -299,9 +299,9 @@ export default function TeamWiseView({
                               <div className="relative flex items-center justify-center w-8 h-8">
                                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                                   <circle cx="18" cy="18" r="14" fill="none" className="stroke-zinc-200" strokeWidth="4" />
-                                  <circle cx="18" cy="18" r="14" fill="none" className={heroTrend > 0 ? "stroke-emerald-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
+                                  <circle cx="18" cy="18" r="14" fill="none" className={heroTrend > 0 ? "stroke-indigo-500" : heroTrend < 0 ? "stroke-rose-500" : "stroke-zinc-400"} strokeWidth="4" strokeDasharray={2 * Math.PI * 14} strokeDashoffset={(2 * Math.PI * 14) - ((Math.min(100, Math.abs(heroTrend))) / 100) * (2 * Math.PI * 14)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
                                 </svg>
-                                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-emerald-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
+                                <div className={`absolute inset-0 flex items-center justify-center ${heroTrend > 0 ? 'text-indigo-600' : heroTrend < 0 ? 'text-rose-600' : 'text-zinc-500'}`}>
                                    <TrendingUp size={10} className={`stroke-[3px] ${heroTrend < 0 ? 'rotate-180' : ''}`} />
                                 </div>
                               </div>
@@ -324,7 +324,7 @@ export default function TeamWiseView({
                                   <span className="text-sm sm:text-base font-black text-[var(--color-text-main)] leading-none">{formatNum(data.productiveOutlets)}</span>
                                   <span className="text-[8px] font-bold text-zinc-400">/ {formatNum(data.visits)}</span>
                                 </div>
-                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full rounded-full" style={{ width: `${(data.productiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
+                                <div className="w-full h-1 bg-zinc-100 rounded-full overflow-hidden"><div className="bg-indigo-500 h-full rounded-full" style={{ width: `${(data.productiveOutlets / (data.visits || 1)) * 100}%` }} /></div>
                               </div>
                             </div>
                             <div className="bg-white border border-[var(--color-border)] rounded-xl p-2.5 flex flex-col justify-between min-h-[64px]">
@@ -345,7 +345,7 @@ export default function TeamWiseView({
                               <span className="block text-[8px] sm:text-[9px] font-extrabold text-[var(--color-text-muted)] uppercase tracking-wider">Strike Rate</span>
                               <div className="mt-1 space-y-1">
                                 <span className="text-sm sm:text-base font-black text-[#136336] leading-none block">{data.strike}%</span>
-                                <div className="w-full h-1 bg-emerald-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-600 rounded-full" style={{ width: `${Math.min(100, Math.max(0, data.strike))}%` }} /></div>
+                                <div className="w-full h-1 bg-indigo-100 rounded-full overflow-hidden"><div className="h-full bg-indigo-600 rounded-full" style={{ width: `${Math.min(100, Math.max(0, data.strike))}%` }} /></div>
                               </div>
                             </div>
                           </div>

@@ -18,7 +18,7 @@ const QuickExport = () => {
       size: '1.1 MB',
       date: 'Yesterday',
       icon: TableProperties,
-      bg: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400',
+      bg: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/20 dark:text-indigo-400',
     },
   ];
 

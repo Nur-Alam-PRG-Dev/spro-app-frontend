@@ -9,7 +9,7 @@ export default function SessionDonutWidget({ data, formatCurrency }) {
       return (
         <div className="bg-white p-2 border border-[var(--color-border)] rounded-xl shadow-lg">
           <p className="text-xs font-bold text-[var(--color-text-main)]">{payload[0].name}</p>
-          <p className="text-sm font-black text-emerald-800">
+          <p className="text-sm font-black text-indigo-800">
             {formatCurrency(payload[0].value)}
           </p>
         </div>

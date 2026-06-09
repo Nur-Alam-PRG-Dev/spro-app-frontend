@@ -73,25 +73,25 @@ const MobileHeaderContent = () => {
 
   return (
     <>
-      <header className="lg:hidden flex items-center justify-between gap-3 px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full">
+      <header className="lg:hidden flex items-center justify-between gap-3 px-4 h-14 bg-[#696cff] text-white sticky top-0 z-30 shadow-sm w-full">
         {isUncovered ? (
           <>
-            <Link href="/reports" className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0 text-white">
+            <Link href="/reports" className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0 text-white">
               <ArrowLeft size={22} />
             </Link>
             <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Uncovered Outlets</span>
             <div className="flex items-center gap-1">
-              <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+              <button className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0">
                 <Search size={22} />
               </button>
-              <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+              <button className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0">
                 <MoreVertical size={22} />
               </button>
             </div>
           </>
         ) : isTargetVs ? (
           <>
-            <Link href="/reports" className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0 text-white">
+            <Link href="/reports" className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0 text-white">
               <ArrowLeft size={22} />
             </Link>
             <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Target vs. Achievement</span>
@@ -106,7 +106,7 @@ const MobileHeaderContent = () => {
           </>
         ) : isHalfSummary ? (
           <>
-            <Link href="/reports" className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0 text-white">
+            <Link href="/reports" className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0 text-white">
               <ArrowLeft size={22} />
             </Link>
             <span className="font-extrabold text-base tracking-normal mr-auto ml-1.5">Half Summary Report</span>
@@ -124,7 +124,7 @@ const MobileHeaderContent = () => {
             {/* Left Side Hamburger */}
             <button
               onClick={() => setIsOpen(true)}
-              className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0"
+              className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0"
             >
               <Menu size={22} />
             </button>
@@ -132,7 +132,7 @@ const MobileHeaderContent = () => {
             {isAmolnama ? (
               <>
                 <span className="font-extrabold tracking-wider text-base uppercase mr-auto ml-2">AMOLNAMA</span>
-                <button className="p-1.5 hover:bg-[#1f5734] rounded-lg transition-colors shrink-0">
+                <button className="p-1.5 hover:bg-[#5f61e6] rounded-lg transition-colors shrink-0">
                   <Grid size={22} />
                 </button>
               </>
@@ -205,7 +205,7 @@ const MobileHeaderContent = () => {
             <h2 className="font-extrabold text-lg tracking-tight text-white text-center leading-tight">
               {user ? user.aemp_name : 'Admin Console'}
             </h2>
-            <p className="text-xs text-emerald-400 font-bold mt-1">
+            <p className="text-xs text-indigo-400 font-bold mt-1">
               {user ? user.aemp_usnm : 'SPRO'} <span className="text-[var(--color-sidebar-text-muted)] px-1">•</span> {designation}
             </p>
             {user && (user.aemp_mob1 || user.aemp_dtsm) && (
@@ -230,7 +230,7 @@ const MobileHeaderContent = () => {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3.5 px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                   isActive
-                    ? 'bg-[var(--color-sidebar-active)] text-white border-l-4 border-emerald-400'
+                    ? 'bg-[var(--color-sidebar-active)] text-white border-l-4 border-indigo-400'
                     : 'text-[var(--color-sidebar-text-muted)] hover:bg-[var(--color-sidebar-hover)] hover:text-white'
                 }`}
               >
@@ -243,7 +243,7 @@ const MobileHeaderContent = () => {
 
         {/* Drawer Footer actions */}
         <div className="p-4 border-t border-[var(--color-sidebar-hover)] space-y-3 shrink-0">
-          <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] text-[#004b23] py-2.5 px-4 rounded-xl text-sm font-bold shadow-md transition-colors cursor-pointer">
+          <button className="w-full flex items-center justify-center gap-2 bg-[#86efac] hover:bg-[#6ee7b7] text-[#696cff] py-2.5 px-4 rounded-xl text-sm font-bold shadow-md transition-colors cursor-pointer">
             <Download size={16} />
             Download Reports
           </button>
@@ -262,7 +262,7 @@ const MobileHeaderContent = () => {
 
 export const MobileHeader = () => {
   return (
-    <React.Suspense fallback={<header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#267043] text-white sticky top-0 z-30 shadow-sm w-full animate-pulse" />}>
+    <React.Suspense fallback={<header className="lg:hidden flex items-center justify-between px-4 h-14 bg-[#696cff] text-white sticky top-0 z-30 shadow-sm w-full animate-pulse" />}>
       <MobileHeaderContent />
     </React.Suspense>
   );
@@ -291,7 +291,7 @@ export const MobileTabBar = () => {
             href={tab.href}
             className={`flex flex-col items-center justify-center flex-1 py-2 text-[10px] font-semibold transition-colors ${
               isActive
-                ? 'text-[#267043] dark:text-emerald-400'
+                ? 'text-[#696cff] dark:text-indigo-400'
                 : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-main)]'
             }`}
           >

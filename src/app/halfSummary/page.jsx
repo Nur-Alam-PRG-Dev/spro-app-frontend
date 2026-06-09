@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card';
 import OverallSummaryView from '@/components/HalfSummary/OverallSummaryView';
 import TeamWiseView from '@/components/HalfSummary/TeamWiseView';
 import CompactDateFilter from '@/components/HalfSummary/CompactDateFilter';
+import PageSpinner from '@/components/ui/PageSpinner';
 
 function HalfSummaryContent() {
   const searchParams = useSearchParams();
@@ -72,6 +73,7 @@ function HalfSummaryContent() {
 
     setLoading(true);
     setError(null);
+    setData(null);
     try {
       const userStr = localStorage.getItem('spro_user');
       if (!userStr) {
@@ -323,8 +325,8 @@ function HalfSummaryContent() {
               disabled={loading}
               className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all ${
                 loading 
-                  ? 'bg-emerald-900/50 text-emerald-100 cursor-not-allowed border border-emerald-900/20' 
-                  : 'bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-md cursor-pointer border border-emerald-900/50'
+                  ? 'bg-indigo-900/50 text-indigo-100 cursor-not-allowed border border-indigo-900/20' 
+                  : 'bg-indigo-800 hover:bg-indigo-900 text-white hover:shadow-md cursor-pointer border border-indigo-900/50'
               }`}
               title="Search"
             >
@@ -343,7 +345,7 @@ function HalfSummaryContent() {
             <button
               onClick={() => handleTabChange('overall')}
               className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'overall'
-                ? 'bg-emerald-800 text-white shadow-sm'
+                ? 'bg-indigo-800 text-white shadow-sm'
                 : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                 }`}
             >
@@ -353,7 +355,7 @@ function HalfSummaryContent() {
               <button
                 onClick={() => handleTabChange('team')}
                 className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all cursor-pointer ${activeTab === 'team'
-                  ? 'bg-emerald-800 text-white shadow-sm'
+                  ? 'bg-indigo-800 text-white shadow-sm'
                   : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                   }`}
               >
@@ -374,19 +376,16 @@ function HalfSummaryContent() {
 
       {/* ─── Fancy Spinner Loading ─── */}
       {loading && (
-        <Card className="shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-12 flex flex-col items-center justify-center space-y-4 border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" >
-          <div className="relative">
-            <div className="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-75" />
-            <Loader2 className="w-12 h-12 text-emerald-800 animate-spin relative z-10" />
-          </div>
-          <span className="text-sm font-extrabold text-[var(--color-text-muted)] animate-pulse tracking-wide">Fetching report metrics...</span>
-        </Card>
+        <PageSpinner 
+          message="Fetching report metrics..." 
+          subMessage="Crunching half-summary data"
+        />
       )}
 
       {/* ─── Empty State Placeholder ─── */}
       {!data && !loading && !error && (
         <Card className="shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-8 sm:p-12 text-center flex flex-col items-center justify-center border-dashed border-2 border-[var(--color-border)] rounded-2xl bg-zinc-50/20" >
-          <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mb-4 border border-emerald-100">
+          <div className="w-16 h-16 rounded-full bg-indigo-50 text-indigo-800 flex items-center justify-center mb-4 border border-indigo-100">
             <User size={32} className="stroke-[1.5px]" />
           </div>
           <h3 className="text-base sm:text-lg font-extrabold text-[var(--color-text-main)] mb-1">

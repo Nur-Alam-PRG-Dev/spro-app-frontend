@@ -24,7 +24,7 @@ export default function OutletActivityCard() {
         </div>
         <div className="bg-zinc-50/50 border border-[var(--color-border)] rounded-xl p-2 sm:p-3 flex flex-col justify-center min-h-[64px] sm:min-h-[72px]">
           <span className="text-[8px] sm:text-[9px] font-bold text-zinc-400 tracking-wider uppercase truncate">UPDATED</span>
-          <span className="text-base sm:text-xl font-black text-emerald-600 mt-1.5 leading-none">0</span>
+          <span className="text-base sm:text-xl font-black text-indigo-600 mt-1.5 leading-none">0</span>
         </div>
         <div className="bg-zinc-50/50 border border-[var(--color-border)] rounded-xl p-2 sm:p-3 flex flex-col justify-center min-h-[64px] sm:min-h-[72px]">
           <span className="text-[8px] sm:text-[9px] font-bold text-zinc-400 tracking-wider uppercase truncate">DELETED</span>

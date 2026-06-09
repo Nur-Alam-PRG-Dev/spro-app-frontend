@@ -12,6 +12,7 @@ import {
 
 import AreaChartWidget from '@/components/ui/AreaChartWidget';
 import UncoveredOutletCard from '@/components/Reports/UncoveredOutletCard';
+import PageSpinner from '@/components/ui/PageSpinner';
 
 function UncoveredOutletContent() {
   const searchParams = useSearchParams();
@@ -73,6 +74,8 @@ function UncoveredOutletContent() {
 
     setLoading(true);
     setError(null);
+    setData(null);
+    setSummaryData(null);
     try {
       const userStr = localStorage.getItem('spro_user');
       if (!userStr) {
@@ -191,9 +194,9 @@ function UncoveredOutletContent() {
   const paginationControls = (
     <div className="flex flex-row items-center justify-between gap-4 mt-2 mb-4 w-full">
       {/* Active List Count Area */}
-      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50/80 rounded-full border border-emerald-100/50 backdrop-blur-sm shadow-sm shrink-0">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span className="text-[11px] md:text-xs font-extrabold text-emerald-800 tracking-wide">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50/80 rounded-full border border-indigo-100/50 backdrop-blur-sm shadow-sm shrink-0">
+        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+        <span className="text-[11px] md:text-xs font-extrabold text-indigo-800 tracking-wide">
           {filteredList.length} Outlets
         </span>
       </div>
@@ -208,7 +211,7 @@ function UncoveredOutletContent() {
               setPageSize(Number(e.target.value));
               setCurrentPage(1);
             }}
-            className="bg-transparent font-bold text-zinc-800 outline-none cursor-pointer hover:text-emerald-600 transition-colors"
+            className="bg-transparent font-bold text-zinc-800 outline-none cursor-pointer hover:text-indigo-600 transition-colors"
           >
             <option value={20}>20</option>
             <option value={50}>50</option>
@@ -222,7 +225,7 @@ function UncoveredOutletContent() {
           <button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+            className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-600 hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
           >
             <ChevronLeft size={16} />
           </button>
@@ -232,7 +235,7 @@ function UncoveredOutletContent() {
           <button
             onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredList.length / pageSize), p + 1))}
             disabled={currentPage === Math.ceil(filteredList.length / pageSize) || Math.ceil(filteredList.length / pageSize) === 0}
-            className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-600 hover:bg-emerald-50 hover:text-emerald-600 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
+            className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-600 hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all"
           >
             <ChevronRight size={16} />
           </button>
@@ -254,7 +257,7 @@ function UncoveredOutletContent() {
           <h1 className="text-2xl font-black text-[var(--color-text-main)] tracking-tight">Uncovered Outlets</h1>
         </div>
 
-        <div className="flex-1 flex xl:justify-end w-full">
+        <div className="flex-1 flex xl:justify-end w-full z-40">
           <UncoveredOutletFilters
             date={date}
             onDateChange={setDate}
@@ -277,26 +280,11 @@ function UncoveredOutletContent() {
         </Card>
       )}
 
-      {loading && !data && (
-        <div className="space-y-4">
-          {/* Skeleton for Top Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-28 bg-zinc-100 rounded-2xl animate-pulse" />
-            ))}
-          </div>
-          {/* Skeleton for Filters */}
-          <div className="flex gap-2">
-            <div className="h-10 w-32 bg-zinc-100 rounded-full animate-pulse" />
-            <div className="h-10 w-32 bg-zinc-100 rounded-full animate-pulse" />
-          </div>
-          {/* Skeleton for Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-48 bg-zinc-100 rounded-2xl animate-pulse" />
-            ))}
-          </div>
-        </div>
+      {loading && (
+        <PageSpinner 
+          message="Loading Outlets..." 
+          subMessage="Gathering logistics intelligence" 
+        />
       )}
 
       {!loading && !error && data && (
@@ -309,7 +297,7 @@ function UncoveredOutletContent() {
                 <Card className="flex-1 p-3 xl:p-4 flex flex-col justify-between bg-gradient-to-br from-white to-zinc-50/80 border border-zinc-200/60 shadow-sm hover:shadow-md transition-all rounded-2xl relative overflow-hidden">
 
                   {/* Decorative Gradient Blob */}
-                  <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
+                  <div className="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none"></div>
 
                   {/* Top Section: Title & Planned */}
                   <div className="flex justify-between items-start mb-3">
@@ -328,15 +316,15 @@ function UncoveredOutletContent() {
                   {/* Middle Section: Metrics */}
                   <div className="flex justify-between items-end mb-3 sm:mb-4 px-1">
                     <div className="flex flex-col">
-                      <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-700 tracking-wider uppercase mb-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"></div>
+                      <span className="flex items-center gap-1.5 text-[9px] font-black text-indigo-700 tracking-wider uppercase mb-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]"></div>
                         Visited
                       </span>
                       <div className="flex items-baseline gap-1.5">
-                        <h2 className="text-xl sm:text-2xl font-black text-emerald-600 leading-none tracking-tighter">
+                        <h2 className="text-xl sm:text-2xl font-black text-indigo-600 leading-none tracking-tighter">
                           {summaryData.visited_count.toLocaleString()}
                         </h2>
-                        <span className="text-[10px] font-bold text-emerald-600/70">
+                        <span className="text-[10px] font-bold text-indigo-600/70">
                           {((summaryData.visited_count / (summaryData.total_planned || 1)) * 100).toFixed(1)}%
                         </span>
                       </div>
@@ -361,7 +349,7 @@ function UncoveredOutletContent() {
                   {/* Bottom Section: Progress Bar */}
                   <div className="w-full bg-zinc-100 rounded-full h-2.5 overflow-hidden flex shadow-inner relative border border-zinc-200/50">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all duration-1000 relative"
+                      className="h-full bg-gradient-to-r from-indigo-400 to-indigo-500 transition-all duration-1000 relative"
                       style={{ width: `${(summaryData.visited_count / (summaryData.total_planned || 1)) * 100}%` }}
                     >
                       <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem]"></div>
@@ -402,10 +390,10 @@ function UncoveredOutletContent() {
           {/* ─── Cards Grid (Desktop: 3 Column, Mobile: Stacked) ─── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {paginatedList.map((outlet, index) => (
-              <UncoveredOutletCard 
-                key={`${outlet.site_id}-${outlet.aemp_id}-${index}`} 
-                outlet={outlet} 
-                maxOrder={maxOrder} 
+              <UncoveredOutletCard
+                key={`${outlet.site_id}-${outlet.aemp_id}-${index}`}
+                outlet={outlet}
+                maxOrder={maxOrder}
               />
             ))}
           </div>

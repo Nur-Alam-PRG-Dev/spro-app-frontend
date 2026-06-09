@@ -13,14 +13,14 @@ const UncoveredOutletCard = ({ outlet, maxOrder }) => {
         <div className="flex items-start justify-between border-b border-[var(--color-border)] pb-3 mb-3">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
             {/* Rounded Green icon box */}
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-50 text-indigo-800 border border-indigo-100 flex items-center justify-center shrink-0">
               <Store size={16} className="sm:size-18" />
             </div>
             <div className="min-w-0">
               <h4 className="font-extrabold text-[12px] md:text-[13px] text-[var(--color-text-main)] truncate leading-tight mb-1" title={outlet.site_name}>
                 {outlet.site_name}
               </h4>
-              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">
+              <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded-full font-bold">
                 <User size={10} />
                 {outlet.role}: {outlet.aemp_name}
               </span>
@@ -40,7 +40,7 @@ const UncoveredOutletCard = ({ outlet, maxOrder }) => {
             </a>
             <a
               href={`tel:${outlet.aemp_mob1 || outlet.aemp_dtsm}`}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-emerald-300 hover:bg-emerald-500 hover:scale-110 border border-emerald-100 hover:border-emerald-500 transition-all shadow-[0_2px_8px_-4px_rgba(16,185,129,0.4)] hover:shadow-md"
+              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-indigo-300 hover:bg-indigo-500 hover:scale-110 border border-indigo-100 hover:border-indigo-500 transition-all shadow-[0_2px_8px_-4px_rgba(16,185,129,0.4)] hover:shadow-md"
               title="Call Contact"
             >
               <Phone size={14} />
@@ -88,7 +88,7 @@ const UncoveredOutletCard = ({ outlet, maxOrder }) => {
             {/* Infographic progress bar */}
             <div className="w-full bg-zinc-100 rounded-full h-1.5 mt-1 overflow-hidden" title="Relative Order Volume">
               <div
-                className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
+                className="bg-indigo-500 h-full rounded-full transition-all duration-500 ease-out"
                 style={{ width: barWidth }}
               />
             </div>
