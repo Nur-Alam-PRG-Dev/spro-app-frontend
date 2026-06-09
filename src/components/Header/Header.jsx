@@ -50,9 +50,11 @@ const HeaderContent = ({ toggleSidebar, isSidebarOpen }) => {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  const HARDCODED_BASE_IMAGE_URL = 'https://prgspro.sgp1.cdn.digitaloceanspaces.com/';
   const designation = user ? (user.role_id === 1 ? 'SR' : 'SV') : 'Logistics';
   const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.aemp_name || 'User')}&background=047857&color=fff&size=128`;
-  const avatarUrl = user && user.aemp_pimg ? `${baseImageUrl}${user.aemp_pimg}` : fallbackAvatar;
+  const resolvedBase = baseImageUrl || HARDCODED_BASE_IMAGE_URL;
+  const avatarUrl = user && user.aemp_pimg ? `${resolvedBase}${user.aemp_pimg}` : fallbackAvatar;
 
   const handleLogout = () => {
     localStorage.removeItem('spro_user');
