@@ -201,7 +201,6 @@ export default function Home() {
     );
   }
 
-  // ── Error state ──────────────────────────────────────────────────────────
   if (status === 'error') {
     return (
       <div className="flex h-[80vh] items-center justify-center flex-col gap-3">
@@ -216,11 +215,10 @@ export default function Home() {
     );
   }
 
-  // ── Dashboard ─────────────────────────────────────────────────────────────
   return (
     <div className="space-y-2 pb-4">
 
-      {/* ── ROW 1: Welcome Card + KPI Metrics ──────────────────────────── */}
+      {/* ── ROW 1: Profile + KPI Metrics + Coverage ──────────────────────────── */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-2">
         <div className="xl:col-span-3">
           <WelcomeCard
@@ -230,7 +228,7 @@ export default function Home() {
             teamSize={teamSize}
           />
         </div>
-        <div className="xl:col-span-9">
+        <div className="xl:col-span-6">
           <MetricsGrid
             totalRevenue={analysis.totalRevenue}
             totalVisits={analysis.totalVisits}
@@ -240,14 +238,7 @@ export default function Home() {
             growthRate={analysis.growthRate}
           />
         </div>
-      </div>
-
-      {/* ── ROW 2: 7-Day Area/Bar Chart + Coverage Donut ───────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
-        <div className="lg:col-span-8">
-          <ActivityAreaChart chartData={chartData} />
-        </div>
-        <div className="lg:col-span-4">
+        <div className="xl:col-span-3">
           <CoverageDonutChart
             productiveVisits={analysis.productiveVisits}
             totalVisits={analysis.totalVisits}
@@ -256,14 +247,18 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── ROW 3: Unvisited Outlets Table + Team Radar ─────────────────── */}
+      {/* ── ROW 2: 7-Day Area/Bar Chart + Team Radar ───────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
-        <div className="lg:col-span-7">
-          <UnvisitedOutletsTable outlets={unvisitedOutlets} />
+        <div className="lg:col-span-8">
+          <ActivityAreaChart chartData={chartData} />
         </div>
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-4">
           <TeamRadarChart rawData={halfSummaryRaw} />
         </div>
+      </div>
+      {/* ── ROW 3: Unvisited Outlets Table ─────────────────── */}
+      <div className="grid grid-cols-1 gap-2">
+        <UnvisitedOutletsTable outlets={unvisitedOutlets} />
       </div>
 
     </div>

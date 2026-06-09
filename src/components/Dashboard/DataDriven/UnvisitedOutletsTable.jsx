@@ -1,37 +1,42 @@
 'use client';
 import React, { useState } from 'react';
-import { MapPin, ChevronRight, Search } from 'lucide-react';
+import { MapPin, Search, Phone, Navigation } from 'lucide-react';
 
 export default function UnvisitedOutletsTable({ outlets = [] }) {
   const [search, setSearch] = useState('');
 
-  const filtered = outlets
+  // 1. Sort by highest Avg Order first (Top Priority)
+  const sortedOutlets = [...outlets].sort((a, b) => {
+    return parseFloat(b.avg_3_month_order || 0) - parseFloat(a.avg_3_month_order || 0);
+  });
+
+  // 2. Filter by search term and take top 10
+  const filtered = sortedOutlets
     .filter(o => {
       const q = search.toLowerCase();
       return (
-        (o.outlet_name || o.name || '').toLowerCase().includes(q) ||
-        (o.route_name || o.area || '').toLowerCase().includes(q) ||
+        (o.site_name || o.name || '').toLowerCase().includes(q) ||
+        (o.zone_name || o.area || '').toLowerCase().includes(q) ||
         (o.aemp_name || '').toLowerCase().includes(q)
       );
     })
     .slice(0, 10);
 
   return (
-    <div className="bg-white rounded-[20px] border border-[var(--color-border)] shadow-sm flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[var(--color-border)]">
+    <div className="bg-white rounded-[12px] border border-[var(--color-border)] shadow-sm flex flex-col h-full overflow-hidden">
+      <div className="p-3 border-b border-[var(--color-border)] flex items-center justify-between bg-zinc-50/50">
         <div>
-          <h3 className="text-[15px] font-bold text-zinc-800 tracking-tight">Unvisited Outlets</h3>
-          <p className="text-[12px] text-zinc-400 font-medium mt-0.5">Today — {outlets.length} total</p>
+          <h3 className="text-[13px] font-black text-zinc-800 tracking-tight leading-none">Top 10 Priority Outlets</h3>
+          <p className="text-[9px] text-zinc-400 font-medium mt-0.5">Unvisited today — Sorted by highest avg order</p>
         </div>
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+          <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input
             type="text"
+            placeholder="Search..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="pl-8 pr-3 py-1.5 text-[12px] bg-zinc-50 border border-[var(--color-border)] rounded-full outline-none focus:border-[var(--color-primary)] focus:bg-white transition-all w-36"
+            className="pl-6 pr-3 py-1 bg-white border border-zinc-200 rounded-md text-[9px] w-32 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
           />
         </div>
       </div>
@@ -47,42 +52,81 @@ export default function UnvisitedOutletsTable({ outlets = [] }) {
           </div>
         ) : (
           <table className="w-full text-[12px]">
-            <thead>
-              <tr className="text-zinc-400 font-bold uppercase text-[10px] tracking-wider border-b border-zinc-100">
-                <th className="text-left px-6 py-3">#</th>
-                <th className="text-left px-3 py-3">Outlet</th>
-                <th className="text-left px-3 py-3 hidden md:table-cell">Area / Route</th>
-                <th className="text-left px-3 py-3 hidden lg:table-cell">SR</th>
-                <th className="px-4 py-3"></th>
+            <thead className="bg-zinc-100/80 sticky top-0 z-10 backdrop-blur-sm">
+              <tr>
+                <th className="px-3 py-1.5 text-center text-[9px] font-bold text-zinc-500 uppercase tracking-wider w-8">SL</th>
+                <th className="px-3 py-1.5 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Outlet Name</th>
+                <th className="px-3 py-1.5 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Zone</th>
+                <th className="px-3 py-1.5 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-wider">SR Name</th>
+                <th className="px-3 py-1.5 text-right text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Avg Order</th>
+                <th className="px-3 py-1.5 text-center text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Last Visit</th>
+                <th className="px-3 py-1.5 text-center text-[9px] font-bold text-zinc-500 uppercase tracking-wider w-10">Loc</th>
+                <th className="px-3 py-1.5 text-center text-[9px] font-bold text-zinc-500 uppercase tracking-wider w-10">Call</th>
               </tr>
             </thead>
-            <tbody>
-              {filtered.map((outlet, i) => {
-                const name = outlet.outlet_name || outlet.name || `Outlet #${i + 1}`;
-                const area = outlet.route_name || outlet.area || '—';
-                const sr = outlet.aemp_name || '—';
-                return (
-                  <tr
-                    key={i}
-                    className="border-b border-zinc-50 hover:bg-[var(--color-primary)]/[0.03] transition-colors group cursor-default"
-                  >
-                    <td className="px-6 py-3 text-zinc-400 font-bold">{i + 1}</td>
-                    <td className="px-3 py-3">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
-                          <MapPin size={12} className="text-amber-500" />
-                        </div>
-                        <span className="font-semibold text-zinc-700 leading-tight line-clamp-1">{name}</span>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3 text-zinc-500 hidden md:table-cell">{area}</td>
-                    <td className="px-3 py-3 text-zinc-500 hidden lg:table-cell">{sr}</td>
-                    <td className="px-4 py-3">
-                      <ChevronRight size={14} className="text-zinc-300 group-hover:text-[var(--color-primary)] group-hover:translate-x-0.5 transition-all" />
-                    </td>
-                  </tr>
-                );
-              })}
+            <tbody className="divide-y divide-zinc-100">
+              {filtered.map((outlet, i) => (
+                <tr key={i} className="hover:bg-zinc-50/80 transition-colors group">
+                  {/* SL */}
+                  <td className="px-3 py-1.5 whitespace-nowrap text-center">
+                    <span className="text-[10px] font-bold text-zinc-400">{i + 1}</span>
+                  </td>
+                  
+                  {/* Outlet Name */}
+                  <td className="px-3 py-1.5 whitespace-nowrap">
+                    <div className="flex flex-col">
+                      <p className="text-[11px] font-bold text-zinc-800 truncate max-w-[150px]">{outlet.site_name}</p>
+                      <p className="text-[9px] text-zinc-400 font-medium">{outlet.site_code}</p>
+                    </div>
+                  </td>
+                  
+                  {/* Zone */}
+                  <td className="px-3 py-1.5 whitespace-nowrap text-[10px] text-zinc-600 font-medium">
+                    {outlet.zone_name}
+                  </td>
+
+                  {/* SR Name */}
+                  <td className="px-3 py-1.5 whitespace-nowrap">
+                    <p className="text-[10px] font-semibold text-zinc-700 truncate max-w-[120px]">{outlet.aemp_name}</p>
+                  </td>
+                  
+                  {/* Avg Order */}
+                  <td className="px-3 py-1.5 whitespace-nowrap text-[10px] text-emerald-700 font-black text-right">
+                    ৳{parseFloat(outlet.avg_3_month_order || 0).toFixed(0)}
+                  </td>
+                  
+                  {/* Last Visit */}
+                  <td className="px-3 py-1.5 whitespace-nowrap text-[9px] text-zinc-500 font-medium text-center">
+                    <span className="bg-zinc-100 px-1.5 py-0.5 rounded text-zinc-600 border border-zinc-200">
+                      {outlet.last_visit_date === 'NOT FOUND' ? 'Never' : outlet.last_visit_date}
+                    </span>
+                  </td>
+
+                  {/* Location Icon */}
+                  <td className="px-3 py-1.5 whitespace-nowrap text-center">
+                    <a 
+                      href={`https://maps.google.com/?q=${outlet.geo_lat},${outlet.geo_lon}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-orange-50 text-orange-600 hover:bg-orange-100 hover:scale-110 transition-all border border-orange-100 shadow-sm"
+                      title="Open in Maps"
+                    >
+                      <Navigation size={11} strokeWidth={2.5} />
+                    </a>
+                  </td>
+
+                  {/* Call Icon */}
+                  <td className="px-3 py-1.5 whitespace-nowrap text-center">
+                    <a 
+                      href={`tel:${outlet.aemp_mob1}`}
+                      className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 hover:scale-110 transition-all border border-blue-100 shadow-sm"
+                      title={`Call ${outlet.aemp_name}`}
+                    >
+                      <Phone size={11} strokeWidth={2.5} />
+                    </a>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}

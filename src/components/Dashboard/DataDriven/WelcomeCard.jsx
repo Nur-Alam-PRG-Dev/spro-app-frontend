@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Mail, Hash, Users, Briefcase, ShieldCheck } from 'lucide-react';
+import { Mail, Hash, Users, Briefcase, Phone, Globe } from 'lucide-react';
 
 const BASE_IMAGE_URL = 'https://prgspro.sgp1.cdn.digitaloceanspaces.com/';
 
@@ -45,96 +45,84 @@ export default function WelcomeCard({ user, totalRevenue, productiveRate, teamSi
       value: user.aemp_id || user.aemp_usnm || '—',
     },
     {
-      icon: <Mail size={13} className="text-[var(--color-primary)]" />,
-      label: 'Email / Username',
-      value: user.aemp_usnm || user.email || '—',
+      icon: <Phone size={13} className="text-[var(--color-primary)]" />,
+      label: 'Mobile',
+      value: user.aemp_mob1 || user.aemp_dtsm || '—',
     },
     {
-      icon: <Briefcase size={13} className="text-[var(--color-primary)]" />,
-      label: 'Designation',
-      value: designation,
+      icon: <Mail size={13} className="text-[var(--color-primary)]" />,
+      label: 'Email',
+      value: user.aemp_emal || user.email || '—',
     },
     {
       icon: <Users size={13} className="text-[var(--color-primary)]" />,
-      label: 'Team Members',
+      label: 'Team Size',
       value: teamSize != null ? `${teamSize} members` : '—',
+    },
+    {
+      icon: <Globe size={13} className="text-[var(--color-primary)]" />,
+      label: 'Country',
+      value: user.country_name || 'Bangladesh',
     },
   ];
 
   return (
-    <div className="bg-white rounded-[20px] border border-[var(--color-border)] shadow-sm overflow-hidden h-full flex flex-col">
-      {/* ── Gradient Header Banner ─────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-[var(--color-primary)] to-[#006838] px-6 pt-6 pb-10 relative overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute top-[-20px] right-[-20px] w-32 h-32 rounded-full bg-white/5" />
-        <div className="absolute bottom-[-30px] left-[-10px] w-28 h-28 rounded-full bg-white/5" />
+    <div className="grid grid-cols-2 gap-2 h-full">
+      {/* ── BLOCK 1: Full Profile Image & Designation ────────────────────────── */}
+      <div className="bg-gradient-to-br from-[#047857] to-[#004b23] rounded-[12px] border border-emerald-800/50 shadow-[0_8px_20px_rgba(4,120,87,0.3)] overflow-hidden flex flex-col justify-center text-center">
+        {/* Full-width Profile Image */}
+        <div className="w-full flex-1 relative bg-zinc-900 min-h-[100px]">
+          <img
+            src={avatarUrl}
+            alt={user.aemp_name || 'User'}
+            className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
+            onError={(e) => { e.target.src = fallbackAvatar; }}
+          />
+          {/* Online status indicator */}
+          <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-emerald-900 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+        </div>
 
-        <div className="flex items-start justify-between relative z-10">
-          <div>
-            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-1">Logged In As</p>
-            <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass} opacity-90`}>
-              <ShieldCheck size={10} />
-              {designation}
-            </span>
-          </div>
-          <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-            <ShieldCheck size={14} className="text-white/70" />
+        {/* Name & Designation Details */}
+        <div className="p-2 flex flex-col items-center justify-center bg-transparent z-10 w-full">
+          <h2 className="text-[14px] font-black text-white tracking-tight leading-tight w-full text-center break-words shadow-sm">
+            {user.aemp_name || 'Unknown User'}
+          </h2>
+          <div className={`mt-1 inline-flex items-center justify-center text-center gap-1 font-bold px-1.5 py-0.5 rounded-sm text-[10px] leading-tight bg-white/10 text-emerald-100 border border-white/20 backdrop-blur-md`}>
+            <Briefcase size={10} className="flex-shrink-0" />
+            <span className="break-words">{designation}</span>
           </div>
         </div>
       </div>
 
-      {/* ── Avatar (overlapping banner) ────────────────────────────── */}
-      <div className="-mt-10 px-6 flex items-end gap-4">
-        <div className="relative flex-shrink-0">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden border-4 border-white shadow-lg bg-zinc-100">
-            <img
-              src={avatarUrl}
-              alt={user.aemp_name || 'User'}
-              className="w-full h-full object-cover"
-              onError={(e) => { e.target.src = fallbackAvatar; }}
-            />
-          </div>
-          {/* Online dot */}
-          <span className="absolute bottom-0.5 right-0.5 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white" />
-        </div>
-
-        {/* Revenue quick-stat next to avatar */}
-        <div className="mb-1 pb-0.5">
-          <p className="text-[10px] text-zinc-400 font-semibold uppercase tracking-wide">This Month</p>
-          <p className="text-lg font-black text-zinc-800 leading-tight">{formattedRevenue}</p>
-          {productiveRate > 0 && (
-            <p className="text-[11px] font-semibold text-emerald-600">{productiveRate}% Productive</p>
-          )}
-        </div>
-      </div>
-
-      {/* ── Full Name ─────────────────────────────────────────────── */}
-      <div className="px-6 pt-3 pb-0">
-        <h2 className="text-[16px] font-black text-zinc-800 tracking-tight leading-snug">
-          {user.aemp_name || 'Unknown User'}
-        </h2>
-      </div>
-
-      {/* ── Info Grid ─────────────────────────────────────────────── */}
-      <div className="px-6 pt-4 pb-6 flex-1 space-y-3">
-        {infoRows.map((row, i) => (
-          <div
-            key={i}
-            className="flex items-start gap-3 group hover:bg-zinc-50 rounded-xl px-3 py-2.5 -mx-3 transition-colors cursor-default"
-          >
-            <div className="w-7 h-7 rounded-lg bg-[var(--color-primary)]/8 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[var(--color-primary)]/12 transition-colors">
-              {row.icon}
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider leading-none mb-1">
-                {row.label}
-              </p>
-              <p className="text-[13px] font-bold text-zinc-700 truncate leading-tight">
+      {/* ── BLOCK 2: Profile Info ─────────────────────────────────── */}
+      <div className="bg-gradient-to-br from-[#065f46] to-[#022c22] rounded-[12px] border border-emerald-800/50 shadow-[0_8px_20px_rgba(6,95,70,0.3)] flex-1 p-2 flex flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '12px 12px' }} />
+        <div className="space-y-1 relative z-10">
+          {infoRows.map((row, i) => (
+            <div
+              key={i}
+              className="flex flex-col gap-0.5 group hover:bg-white/10 rounded-lg p-1.5 transition-colors cursor-default"
+            >
+              <div className="flex items-center gap-1.5">
+                <div className="w-5 h-5 rounded-md bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white/20 transition-colors shadow-inner text-emerald-300">
+                  {row.icon}
+                </div>
+                <p className="text-[8px] font-bold text-emerald-200/70 uppercase tracking-wider">
+                  {row.label}
+                </p>
+              </div>
+              <p className="text-[10px] font-bold text-white truncate ml-6">
                 {row.value}
               </p>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Small separator and revenue stat */}
+        <div className="mt-auto pt-2 border-t border-emerald-800/50 flex flex-col items-center justify-center text-center bg-white/5 rounded-lg p-1.5 backdrop-blur-md relative z-10">
+          <p className="text-[8px] font-bold text-emerald-300 uppercase tracking-wider">MTD Revenue</p>
+          <p className="text-[12px] font-black text-white leading-none mt-0.5">{formattedRevenue}</p>
+        </div>
       </div>
     </div>
   );
