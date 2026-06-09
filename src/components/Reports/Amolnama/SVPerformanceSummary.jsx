@@ -41,7 +41,7 @@ export default function SVPerformanceSummary({ searchQuery = '' }) {
         </div>
 
         {/* Collapsed progress card strictly matching screenshot & project theme */}
-        <Card className="max-w-md p-3.5 sm:p-5 bg-white border border-[var(--color-border)] rounded-2xl" hoverable={false}>
+        <Card className="max-w-md p-3.5 sm:p-5 bg-white border border-[var(--color-border)] rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" >
           {/* Tab Switcher */}
           <div className="flex border-b border-[var(--color-border)] -mx-3.5 sm:-mx-5 px-3.5 sm:px-5 pb-0">
             {['Thana Wise', 'Zone Wise', 'District Wise'].map((tab) => {

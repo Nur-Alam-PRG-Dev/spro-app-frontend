@@ -4,7 +4,8 @@ import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Card from '@/components/ui/Card';
-import AmolnamaFilters from '@/components/Reports/AmolnamaFilters';
+import CompactDateFilter from '@/components/HalfSummary/CompactDateFilter';
+import AmolnamaInfographic from '@/components/Reports/Amolnama/AmolnamaInfographic';
 import SVPerformanceSummary from '@/components/Reports/Amolnama/SVPerformanceSummary';
 import {
   ChevronRight,
@@ -17,7 +18,9 @@ import {
   ChevronDown,
   CalendarCheck,
   Clock9,
-  Info
+  Info,
+  Search,
+  RotateCcw
 } from 'lucide-react';
 
 function AmolnamaContent() {
@@ -148,42 +151,42 @@ function AmolnamaContent() {
     {
       label: 'TOTAL OUTLETS',
       description: 'Total outlets for the supervisor and their team',
-      value: '0'
+      value: '1420'
     },
     {
       label: 'TOTAL VISITS',
       description: 'Total outlet visits by selected staff including repeats',
-      value: '0'
+      value: '520'
     },
     {
       label: 'UNIQUE VISITS',
       description: 'Unique outlets visited by the selected staff',
-      value: '0'
+      value: '320'
     },
     {
       label: 'VISIT COVERAGE',
       description: 'Unique visit ÷ Total olt',
-      value: '0.00%'
+      value: '20.00%'
     },
     {
       label: 'NO. OF ORDERS',
       description: 'Total orders from visited outlets',
-      value: '0'
+      value: '450'
     },
     {
       label: 'ORDER VALUE',
       description: 'Total order amount',
-      value: '0'
+      value: '540000'
     },
     {
       label: 'DEL. AMOUNT',
       description: 'Total delivered amount',
-      value: '0'
+      value: '340000'
     },
     {
       label: 'LPC',
       description: 'Lines per call',
-      value: '0'
+      value: '12'
     }
   ];
 
@@ -200,28 +203,50 @@ function AmolnamaContent() {
         </div>
       </div>
 
-      {/* ─── Header Section ─── */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div className="hidden lg:block">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[var(--color-text-main)] tracking-tight">
+      {/* ─── Unified Header Row ─── */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+
+        {/* Left Side: Title */}
+        <div className="shrink-0">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-[var(--color-text-main)] tracking-tight leading-tight">
             Amolnama
           </h1>
-          <p className="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium mt-1">
+          <p className="text-[10px] sm:text-xs text-[var(--color-text-muted)] font-medium mt-0.5">
             Daily operational intelligence report
           </p>
         </div>
-      </div>
 
-      {/* ─── Search and Date Range Filters ─── */}
-      <AmolnamaFilters
-        employeeSearch={employeeSearch}
-        onEmployeeSearchChange={setEmployeeSearch}
-        startDate={startDate}
-        onStartDateChange={setStartDate}
-        endDate={endDate}
-        onEndDateChange={setEndDate}
-        onClearFilters={handleClearFilters}
-      />
+        {/* Right Side: Filters & Actions */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-between lg:justify-end bg-transparent md:bg-white drop-shadow-xs md:drop-shadow-md p-2 rounded-xl w-full md:w-fit lg:w-auto z-40">
+          {/* Minimal Date Range Selector */}
+          <CompactDateFilter
+            startDate={startDate}
+            onStartDateChange={setStartDate}
+            endDate={endDate}
+            onEndDateChange={setEndDate}
+          />
+
+          {/* Action Buttons (Icons Only) */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {(startDate || endDate) && (
+              <button
+                onClick={handleClearFilters}
+                className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg border border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-colors shadow-2xs"
+                title="Reset Filters"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
+            <button
+              onClick={() => { }}
+              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg shadow-2xs transition-all bg-emerald-800 hover:bg-emerald-900 text-white hover:shadow-md cursor-pointer border border-emerald-900/50"
+              title="Search"
+            >
+              <Search size={14} className="stroke-[2.5px]" />
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* ─── Daily Summary ─── */}
       <div className='-mt-3 lg:mt-0'>
@@ -277,7 +302,7 @@ function AmolnamaContent() {
         {/* Mobile metrics list: separate cards */}
         <div className="lg:hidden grid grid-cols-3 gap-1.5">
           {visitedSummaryMetrics.map((m, idx) => (
-            <Card key={idx} className="p-2 flex flex-col justify-between" hoverable={false}>
+            <Card key={idx} className="p-2 flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" >
               <span className="text-[8px] font-bold text-zinc-400 tracking-wider uppercase mb-1 block truncate">
                 {m.label}
               </span>
@@ -286,7 +311,6 @@ function AmolnamaContent() {
               </span>
             </Card>
           ))}
-
           {/* Numeric Distribution (ND) Sub-Header (Mobile only) */}
           <div className="col-span-3 pt-2 pb-1">
             <span className="block text-[10px] font-black tracking-wider text-[var(--color-text-muted)] uppercase border-b border-[var(--color-border)] pb-2">
@@ -295,7 +319,7 @@ function AmolnamaContent() {
           </div>
 
           {/* Current Period */}
-          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between">
+          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <span className="block text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5 truncate">
               Current Period
             </span>
@@ -308,7 +332,7 @@ function AmolnamaContent() {
           </div>
 
           {/* Previous Period */}
-          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between">
+          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <span className="block text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-0.5 truncate">
               Prev Period
             </span>
@@ -321,7 +345,7 @@ function AmolnamaContent() {
           </div>
 
           {/* ND */}
-          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between items-center text-center">
+          <div className="p-2 bg-white border border-[var(--color-border)] rounded-xl flex flex-col justify-between items-center text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <span className="text-[8px] font-black text-zinc-500 uppercase tracking-wider leading-none mb-2 truncate">
               ND
             </span>
@@ -331,97 +355,16 @@ function AmolnamaContent() {
           </div>
         </div>
 
-        {/* Desktop Single Card View */}
-        <Card className="hidden lg:block p-0 overflow-hidden" hoverable={false}>
-          {/* Card Header */}
-          <div className="px-6 py-4.5 border-b border-[var(--color-border)] flex items-center justify-between">
-            <h3 className="font-extrabold text-base text-[var(--color-text-main)]">Visited Summary</h3>
-            <a href="#" className="text-xs font-bold text-[var(--color-primary)] hover:underline">
-              View Detailed Log
-            </a>
-          </div>
-
-          {/* Outlet Performance Sub-Header */}
-          <div className="px-6 py-3 bg-zinc-50/50 border-b border-[var(--color-border)]">
-            <span className="text-xs font-black tracking-wider text-[var(--color-text-muted)] uppercase">
-              Outlet Performance
-            </span>
-          </div>
-
-          {/* 2x4 Metric Grid */}
-          <div className="grid grid-cols-4 border-b border-[var(--color-border)]">
-            {visitedSummaryMetrics.map((m, idx) => (
-              <div
-                key={idx}
-                tabIndex={0}
-                className={`p-5 border-r border-b border-[var(--color-border)] relative group focus:outline-none transition-colors hover:bg-zinc-50/50 ${(idx + 1) % 4 === 0 ? 'border-r-0' : ''
-                  } ${idx >= 4 ? 'border-b-0' : ''}`}
-              >
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="block text-xs font-bold text-zinc-500 tracking-wider uppercase">
-                    {m.label}
-                  </span>
-                  <Info size={12} className="text-zinc-400 group-hover:text-zinc-600 group-focus-within:text-zinc-600 shrink-0" />
-                </div>
-                <h3 className="text-2xl font-black tracking-tight text-[var(--color-text-main)]">
-                  {m.value}
-                </h3>
-
-                {/* Tooltip bubble */}
-                <div className={`absolute bottom-full mb-2 w-52 p-2.5 bg-zinc-900 text-[11px] text-white font-medium rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible pointer-events-none text-center normal-case leading-snug transition-all duration-200 z-50 ${getTooltipAlignment(idx, 4)}`}>
-                  {m.description}
-                  <div className={`absolute top-full border-4 border-transparent border-t-zinc-900 ${getTooltipArrowAlignment(idx, 4)}`} />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Numeric Distribution (ND) Sub-Header */}
-          <div className="px-6 py-3 bg-zinc-50/50 border-b border-[var(--color-border)]">
-            <span className="text-xs font-black tracking-wider text-[var(--color-text-muted)] uppercase">
-              Numeric Distribution (ND)
-            </span>
-          </div>
-
-          {/* ND Column Grid */}
-          <div className="grid grid-cols-3 divide-x divide-[var(--color-border)]">
-            {/* Current Period */}
-            <div className="p-6">
-              <span className="block text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
-                Current Period
-              </span>
-              <span className="block text-xs font-semibold text-[var(--color-text-muted)] mb-2">
-                {currentStart} &rarr; {currentEnd}
-              </span>
-              <h3 className="text-xl font-black text-[var(--color-text-main)]">
-                0 <span className="text-xs font-bold text-[var(--color-text-muted)]">Unique Sites</span>
-              </h3>
-            </div>
-
-            {/* Previous Period */}
-            <div className="p-6">
-              <span className="block text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
-                Previous Period
-              </span>
-              <span className="block text-xs font-semibold text-[var(--color-text-muted)] mb-2">
-                {prevPeriod.start} &rarr; {prevPeriod.end}
-              </span>
-              <h3 className="text-xl font-black text-[var(--color-text-main)]">
-                0 <span className="text-xs font-bold text-[var(--color-text-muted)]">Unique Sites</span>
-              </h3>
-            </div>
-
-            {/* ND */}
-            <div className="p-6 flex flex-col justify-center">
-              <span className="block text-[10px] font-bold text-zinc-500 tracking-wider uppercase mb-1">
-                ND
-              </span>
-              <h3 className="text-3xl font-black text-[var(--color-text-main)]">
-                0
-              </h3>
-            </div>
-          </div>
-        </Card>
+        {/* Desktop Single Fancy Infographic View */}
+        <div className="hidden lg:block mt-6">
+          <AmolnamaInfographic
+            metrics={visitedSummaryMetrics}
+            currentStart={currentStart}
+            currentEnd={currentEnd}
+            prevStart={prevPeriod.start}
+            prevEnd={prevPeriod.end}
+          />
+        </div>
       </div>
 
       {/* ─── SV Field Performance Summary ─── */}

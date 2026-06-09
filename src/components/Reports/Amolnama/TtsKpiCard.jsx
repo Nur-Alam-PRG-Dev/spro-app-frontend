@@ -12,7 +12,7 @@ const ttsKpiData = [
 
 export default function TtsKpiCard() {
   return (
-    <Card className="p-3.5 sm:p-6" hoverable={false}>
+    <Card className="p-3.5 sm:p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4 mb-4">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-5 bg-[var(--color-primary)] rounded-full" />
