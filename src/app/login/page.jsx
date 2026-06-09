@@ -34,8 +34,16 @@ export default function LoginPage() {
       }
 
       if (resData.status === 'success' && resData.data) {
-        // Store user and baseImageUrl in localStorage
         const u = resData.data;
+
+        // Verify that we actually received valid user data from the upstream API
+        if (!u.aemp_usnm && !u.aemp_id) {
+          setError(u.message || u.error || 'User not found or invalid credentials.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Store user and baseImageUrl in localStorage
         localStorage.setItem('spro_user', JSON.stringify(u));
         localStorage.setItem('baseImageUrl', resData.baseImageUrl || '');
 

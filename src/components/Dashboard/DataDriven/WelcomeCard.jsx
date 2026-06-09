@@ -75,7 +75,7 @@ export default function WelcomeCard({ user, totalRevenue, productiveRate, teamSi
           <img
             src={avatarUrl}
             alt={user.aemp_name || 'User'}
-            className="w-full h-full object-cover opacity-90 mix-blend-luminosity"
+            className="w-full h-full object-cover"
             onError={(e) => { e.target.src = fallbackAvatar; }}
           />
           {/* Online status indicator */}
