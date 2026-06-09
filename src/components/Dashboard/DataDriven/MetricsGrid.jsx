@@ -15,8 +15,8 @@ export default function MetricsGrid({ totalRevenue, totalVisits, productiveVisit
       sub: `Avg ৳${avgDailyRevenue?.toFixed(0)}`,
       icon: <DollarSign size={16} className="text-white" />,
       trend: growthRate != null ? (
-        <span className="flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-sm bg-white/20 text-white backdrop-blur-sm">
-          {isPositiveGrowth ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+        <span className="flex items-center gap-1 text-xs font-black px-2 py-1 rounded bg-white/20 text-white backdrop-blur-md shadow-sm border border-white/10">
+          {isPositiveGrowth ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
           {isPositiveGrowth ? '+' : ''}{growthRate?.toFixed(1)}%
         </span>
       ) : null,
@@ -76,9 +76,9 @@ export default function MetricsGrid({ totalRevenue, totalVisits, productiveVisit
             {m.trend}
           </div>
 
-          <div className="relative z-10 flex flex-col justify-end mt-auto">
-            <h4 className="text-2xl font-black text-white leading-none tracking-tight mb-0.5">{m.value}</h4>
-            <span className="text-[10px] text-white/70 font-medium leading-none">{m.sub}</span>
+          <div className="relative z-10 flex flex-col items-center justify-center flex-1 mt-1 text-center">
+            <h4 className="text-[32px] font-black text-white leading-none tracking-tight mb-1 drop-shadow-md">{m.value}</h4>
+            <span className="text-xs text-white/90 font-bold leading-none tracking-wide">{m.sub}</span>
           </div>
         </div>
       ))}
