@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SPRO App Frontend
 
-## Getting Started
+SPRO App Frontend is a modern web application built with Next.js (App Router), designed for tracking and managing sales performance, reports, and outlet coverage metrics. It features a responsive layout with dynamic charts and structured data presentation.
 
-First, run the development server:
+## 🔗 Links & Demo Access
+
+- **GitHub Repository:** [Nur-Alam-PRG-Dev/spro-app-frontend](https://github.com/Nur-Alam-PRG-Dev/spro-app-frontend)
+- **Live Demo:** [https://spro-app-frontend.vercel.app/](https://spro-app-frontend.vercel.app/)
+
+**Demo Credentials:**
+- **Staff ID:** `224446`
+- **Password:** `87654321`
+
+## 🚀 Tech Stack
+
+- **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
+- **Library:** [React 19](https://react.dev/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **UI Components:** [DaisyUI v5](https://daisyui.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Charts & Data Visualization:** [Recharts](https://recharts.org/)
+- **Linting:** ESLint
+
+## 📁 Project Structure
+
+The project is structured under the `src` directory using Next.js App Router conventions:
+
+- **`src/app/`**: Contains all the application routes and layouts.
+  - `/` - Main Dashboard
+  - `/login` - Authentication page
+  - `/amolnama` - Detailed metrics page
+  - `/halfSummary` - Half-summary overview
+  - `/reports` - Comprehensive data reports
+  - `/targetVsAchievement` - Performance comparison metrics
+  - `/uncoveredOutlet` - Uncovered outlet tracking
+  - `/api` - API route handlers
+- **`src/components/`**: Reusable React components organized by features (e.g., Dashboard, Sidebar, Navbar, Reports, Mobile UI).
+- **`src/dummyData/`**: Local JSON files (`halfSummary.json`, `targetVsAchievement.json`, `uncoveredOutlets.json`, `webReport.json`) used for testing and mock data rendering.
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+Make sure you have Node.js (version 18+ recommended) and `npm` installed.
+
+### Installation
+
+1. Clone the repository and navigate to the project folder:
+   ```bash
+   cd spro-app-frontend
+   ```
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running the Development Server
+
+Start the application in development mode:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. The page will automatically reload if you make edits.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To create an optimized production build, run:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+And to start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 UI/UX Features
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Fully responsive design targeting both desktop and mobile platforms.
+- Interactive and dynamic charts using Recharts for target comparisons and performance tracking.
+- Pre-styled, customizable UI components utilizing DaisyUI and Tailwind CSS.
+- Sleek and lightweight icons provided by Lucide React.
