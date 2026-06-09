@@ -8,7 +8,7 @@ import MetricsGrid from '@/components/Dashboard/DataDriven/MetricsGrid';
 import ActivityAreaChart from '@/components/Dashboard/DataDriven/ActivityAreaChart';
 import CoverageDonutChart from '@/components/Dashboard/DataDriven/CoverageDonutChart';
 import UnvisitedOutletsTable from '@/components/Dashboard/DataDriven/UnvisitedOutletsTable';
-import TeamRadarChart from '@/components/Dashboard/DataDriven/TeamRadarChart';
+import TopPerformersLeaderboard from '@/components/Dashboard/DataDriven/TopPerformersLeaderboard';
 
 // ─── Client-side Analysis Engine ─────────────────────────────────────────────
 function analyzeHalfSummary(rawData) {
@@ -106,12 +106,12 @@ export default function Home() {
           const growth = calcGrowthRate(halfRaw);
           setAnalysis({ ...stats, growthRate: growth });
           setChartData(buildChartData(halfRaw));
-          
+
           const uniqueMembers = new Set(halfRaw.map(i => i.emp_id || i.sr_id)).size;
           setTeamSize(uniqueMembers > 0 ? uniqueMembers : halfRaw.length);
           setStatus('ready');
         };
-        
+
         let needsFetch = true;
 
         try {
@@ -119,7 +119,7 @@ export default function Home() {
           if (cachedStr) {
             const cached = JSON.parse(cachedStr);
             const now = Date.now();
-            
+
             // If cache is less than 20 minutes old, use it and DO NOT refetch
             if (cached.timestamp && (now - cached.timestamp < CACHE_EXPIRY_MS)) {
               updateStateWithData(cached.halfSummaryRaw || [], cached.unvisitedOutlets || []);
@@ -218,9 +218,9 @@ export default function Home() {
   return (
     <div className="space-y-2 pb-4">
 
-      {/* ── ROW 1: Profile + KPI Metrics + Coverage ──────────────────────────── */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-2">
-        <div className="xl:col-span-3">
+      {/* ── ROW 1: Profile + KPI Metrics ──────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+        <div className="lg:col-span-4">
           <WelcomeCard
             user={user}
             totalRevenue={analysis.totalRevenue}
@@ -228,7 +228,7 @@ export default function Home() {
             teamSize={teamSize}
           />
         </div>
-        <div className="xl:col-span-6">
+        <div className="lg:col-span-8">
           <MetricsGrid
             totalRevenue={analysis.totalRevenue}
             totalVisits={analysis.totalVisits}
@@ -238,27 +238,29 @@ export default function Home() {
             growthRate={analysis.growthRate}
           />
         </div>
-        <div className="xl:col-span-3">
+      </div>
+
+      {/* ── ROW 2: 7-Day Area/Bar Chart + Leaderboard ───────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+        <div className="lg:col-span-8">
+          <ActivityAreaChart chartData={chartData} />
+        </div>
+        <div className="lg:col-span-4">
+          <TopPerformersLeaderboard rawData={halfSummaryRaw} />
+        </div>
+      </div>
+      {/* ── ROW 3: Coverage Donut + Unvisited Table ─────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+        <div className="lg:col-span-4">
           <CoverageDonutChart
             productiveVisits={analysis.productiveVisits}
             totalVisits={analysis.totalVisits}
             unvisitedCount={unvisitedCount}
           />
         </div>
-      </div>
-
-      {/* ── ROW 2: 7-Day Area/Bar Chart + Team Radar ───────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
         <div className="lg:col-span-8">
-          <ActivityAreaChart chartData={chartData} />
+          <UnvisitedOutletsTable outlets={unvisitedOutlets} />
         </div>
-        <div className="lg:col-span-4">
-          <TeamRadarChart rawData={halfSummaryRaw} />
-        </div>
-      </div>
-      {/* ── ROW 3: Unvisited Outlets Table ─────────────────── */}
-      <div className="grid grid-cols-1 gap-2">
-        <UnvisitedOutletsTable outlets={unvisitedOutlets} />
       </div>
 
     </div>

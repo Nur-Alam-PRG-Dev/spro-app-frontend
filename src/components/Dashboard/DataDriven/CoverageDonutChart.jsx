@@ -50,7 +50,7 @@ export default function CoverageDonutChart({ productiveVisits = 0, totalVisits =
       <div className="flex-1 flex items-center justify-center min-h-[160px] relative -mt-4 z-10">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Pie data={data} cx="50%" cy="50%" innerRadius={55} outerRadius={80}
+            <Pie data={data} cx="50%" cy="50%" innerRadius={70} outerRadius={100}
               paddingAngle={4} dataKey="value" stroke="none" cornerRadius={5}>
               {data.map((entry, i) => (
                 <Cell key={i} fill={entry.color} />
