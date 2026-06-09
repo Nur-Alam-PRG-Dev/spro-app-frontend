@@ -32,7 +32,7 @@ export default function ActivityAreaChart({ chartData = [] }) {
   const [mode, setMode] = useState('area'); // 'area' | 'bar'
 
   return (
-    <div className="bg-gradient-to-br from-[#083344] to-[#164e63] rounded-[12px] border border-cyan-800/50 shadow-[0_8px_20px_rgba(8,51,68,0.3)] p-3 flex flex-col h-full overflow-hidden relative">
+    <div className="bg-gradient-to-br from-[#083344] to-[#164e63] rounded-[12px] border border-cyan-800/50 shadow-[0_8px_20px_rgba(8,51,68,0.3)] p-3 flex flex-col h-full overflow-hidden relative transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(8,51,68,0.6)]">
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '12px 12px' }} />
       <div className="flex items-center justify-between mb-2 relative z-10">
         <div>

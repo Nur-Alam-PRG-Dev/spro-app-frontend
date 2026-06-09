@@ -85,16 +85,19 @@ export default function LoginPage() {
           }
 
           let freshUnvOutlets = [];
+          let freshUnvSummary = null;
           if (unvRes.status === 'fulfilled' && unvRes.value.ok) {
             const unvJson = await unvRes.value.json();
             const outletsArr = unvJson?.data || unvJson?.receive_data?.data; // Safely handle both based on user's sample
             freshUnvOutlets = Array.isArray(outletsArr) ? outletsArr : [];
+            freshUnvSummary = unvJson?.summary || unvJson?.receive_data?.summary || null;
           }
 
-          sessionStorage.setItem('dashboard_cache_v2', JSON.stringify({
+          sessionStorage.setItem('dashboard_cache_v3', JSON.stringify({
             timestamp: Date.now(), // 20 min cache
             halfSummaryRaw: freshHalfRaw,
             unvisitedOutlets: freshUnvOutlets,
+            unvisitedSummary: freshUnvSummary,
           }));
         } catch (cacheErr) {
           console.warn('Initial dashboard fetch failed:', cacheErr);

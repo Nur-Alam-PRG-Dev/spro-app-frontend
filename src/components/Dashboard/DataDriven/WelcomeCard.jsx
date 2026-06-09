@@ -69,7 +69,7 @@ export default function WelcomeCard({ user, totalRevenue, productiveRate, teamSi
   return (
     <div className="grid grid-cols-2 gap-2 h-full">
       {/* ── BLOCK 1: Full Profile Image & Designation ────────────────────────── */}
-      <div className="bg-gradient-to-br from-[#047857] to-[#004b23] rounded-[12px] border border-emerald-800/50 shadow-[0_8px_20px_rgba(4,120,87,0.3)] overflow-hidden flex flex-col justify-center text-center">
+      <div className="bg-gradient-to-br from-[#047857] to-[#004b23] rounded-[12px] border border-emerald-800/50 shadow-[0_8px_20px_rgba(4,120,87,0.3)] overflow-hidden flex flex-col justify-center text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(4,120,87,0.6)]">
         {/* Full-width Profile Image */}
         <div className="w-full flex-1 relative bg-zinc-900 min-h-[100px]">
           <img
@@ -95,7 +95,7 @@ export default function WelcomeCard({ user, totalRevenue, productiveRate, teamSi
       </div>
 
       {/* ── BLOCK 2: Profile Info ─────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-[#065f46] to-[#022c22] rounded-[12px] border border-emerald-800/50 shadow-[0_8px_20px_rgba(6,95,70,0.3)] flex-1 p-2 flex flex-col justify-center relative overflow-hidden">
+      <div className="bg-gradient-to-br from-[#065f46] to-[#022c22] rounded-[12px] border border-emerald-800/50 shadow-[0_8px_20px_rgba(6,95,70,0.3)] flex-1 p-2 flex flex-col justify-center relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(6,95,70,0.6)]">
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '12px 12px' }} />
         <div className="space-y-1 relative z-10">
           {infoRows.map((row, i) => (

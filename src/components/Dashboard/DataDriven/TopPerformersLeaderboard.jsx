@@ -38,7 +38,7 @@ export default function TopPerformersLeaderboard({ rawData = [] }) {
     .slice(0, 5);
 
   return (
-    <div className="bg-gradient-to-br from-[#78350f] to-[#451a03] rounded-[12px] border border-amber-800/50 shadow-[0_8px_20px_rgba(120,53,15,0.3)] p-3 flex flex-col h-full overflow-hidden relative">
+    <div className="bg-gradient-to-br from-[#78350f] to-[#451a03] rounded-[12px] border border-amber-800/50 shadow-[0_8px_20px_rgba(120,53,15,0.3)] p-3 flex flex-col h-full overflow-hidden relative transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(120,53,15,0.6)]">
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '12px 12px' }} />
       
       {/* Header */}

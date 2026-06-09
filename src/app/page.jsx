@@ -62,6 +62,7 @@ export default function Home() {
   const [chartData, setChartData] = useState([]);
   const [halfSummaryRaw, setHalfSummaryRaw] = useState([]);
   const [unvisitedOutlets, setUnvisitedOutlets] = useState([]);
+  const [unvisitedSummary, setUnvisitedSummary] = useState({ total_planned: 0, visited_count: 0, unvisited_count: 0 });
   const [unvisitedCount, setUnvisitedCount] = useState(0);
   const [teamSize, setTeamSize] = useState(null);
 
@@ -94,13 +95,14 @@ export default function Home() {
         const start_date = sevenDaysAgo.toISOString().split('T')[0];
         const end_date = today.toISOString().split('T')[0];
 
-        const CACHE_KEY = 'dashboard_cache_v2'; // Must match login page
+        const CACHE_KEY = 'dashboard_cache_v3'; // Must match login page
         const CACHE_EXPIRY_MS = 20 * 60 * 1000; // 20 minutes
 
-        const updateStateWithData = (halfRaw, unvOutlets) => {
+        const updateStateWithData = (halfRaw, unvOutlets, unvSummary) => {
           setHalfSummaryRaw(halfRaw);
           setUnvisitedOutlets(unvOutlets);
           setUnvisitedCount(unvOutlets.length);
+          if (unvSummary) setUnvisitedSummary(unvSummary);
 
           const stats = analyzeHalfSummary(halfRaw);
           const growth = calcGrowthRate(halfRaw);
@@ -120,9 +122,8 @@ export default function Home() {
             const cached = JSON.parse(cachedStr);
             const now = Date.now();
 
-            // If cache is less than 20 minutes old, use it and DO NOT refetch
             if (cached.timestamp && (now - cached.timestamp < CACHE_EXPIRY_MS)) {
-              updateStateWithData(cached.halfSummaryRaw || [], cached.unvisitedOutlets || []);
+              updateStateWithData(cached.halfSummaryRaw || [], cached.unvisitedOutlets || [], cached.unvisitedSummary);
               needsFetch = false;
             }
           }
@@ -155,6 +156,7 @@ export default function Home() {
 
         let freshHalfRaw = [];
         let freshUnvOutlets = [];
+        let freshUnvSummary = null;
 
         if (halfRes.status === 'fulfilled' && halfRes.value.ok) {
           const halfJson = await halfRes.value.json();
@@ -166,6 +168,7 @@ export default function Home() {
           const unvJson = await unvRes.value.json();
           const outletsArr = unvJson?.data || unvJson?.receive_data?.data;
           freshUnvOutlets = Array.isArray(outletsArr) ? outletsArr : [];
+          freshUnvSummary = unvJson?.summary || unvJson?.receive_data?.summary || null;
         }
 
         // Save fresh data to cache for the next 20 mins
@@ -174,12 +177,13 @@ export default function Home() {
             timestamp: Date.now(),
             halfSummaryRaw: freshHalfRaw,
             unvisitedOutlets: freshUnvOutlets,
+            unvisitedSummary: freshUnvSummary,
           }));
         } catch (e) {
           // Ignore QuotaExceeded errors
         }
 
-        updateStateWithData(freshHalfRaw, freshUnvOutlets);
+        updateStateWithData(freshHalfRaw, freshUnvOutlets, freshUnvSummary);
       } catch (e) {
         console.error('Dashboard fetch error:', e);
         setStatus('error');
@@ -233,9 +237,11 @@ export default function Home() {
             totalRevenue={analysis.totalRevenue}
             totalVisits={analysis.totalVisits}
             productiveVisits={analysis.productiveVisits}
-            unvisitedCount={unvisitedCount}
             avgDailyRevenue={analysis.avgDailyRevenue}
             growthRate={analysis.growthRate}
+            todayPlanned={unvisitedSummary.total_planned}
+            todayVisited={unvisitedSummary.visited_count}
+            todayUnvisited={unvisitedSummary.unvisited_count}
           />
         </div>
       </div>
