@@ -35,11 +35,63 @@ export default function LoginPage() {
 
       if (resData.status === 'success' && resData.data) {
         // Store user and baseImageUrl in localStorage
-        localStorage.setItem('spro_user', JSON.stringify(resData.data));
+        const u = resData.data;
+        localStorage.setItem('spro_user', JSON.stringify(u));
         localStorage.setItem('baseImageUrl', resData.baseImageUrl || '');
 
         // Also set login timestamp for 24hr timeout
         localStorage.setItem('spro_login_time', Date.now().toString());
+
+        // ── Fetch Dashboard Data for 20-min Cache ─────────────────────────
+        try {
+          const today = new Date();
+          const sevenDaysAgo = new Date(today);
+          sevenDaysAgo.setDate(today.getDate() - 6);
+          const start_date = sevenDaysAgo.toISOString().split('T')[0];
+          const end_date = today.toISOString().split('T')[0];
+
+          const basePayload = {
+            country_id: u.cont_id || 2,
+            aemp_id: u.aemp_usnm,
+            role_id: u.role_id,
+          };
+
+          const [halfRes, unvRes] = await Promise.allSettled([
+            fetch('/api/halfSummary', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...basePayload, start_date, end_date, report_type: 'team_wise' }),
+            }),
+            fetch('/api/unvisitedOutlet', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...basePayload, date: end_date }),
+            }),
+          ]);
+
+          let freshHalfRaw = [];
+          if (halfRes.status === 'fulfilled' && halfRes.value.ok) {
+            const halfJson = await halfRes.value.json();
+            const teamWiseArr = halfJson?.receive_data?.team_wise;
+            freshHalfRaw = Array.isArray(teamWiseArr) ? teamWiseArr : [];
+          }
+
+          let freshUnvOutlets = [];
+          if (unvRes.status === 'fulfilled' && unvRes.value.ok) {
+            const unvJson = await unvRes.value.json();
+            const outletsArr = unvJson?.data || unvJson?.receive_data?.data; // Safely handle both based on user's sample
+            freshUnvOutlets = Array.isArray(outletsArr) ? outletsArr : [];
+          }
+
+          sessionStorage.setItem('dashboard_cache_v2', JSON.stringify({
+            timestamp: Date.now(), // 20 min cache
+            halfSummaryRaw: freshHalfRaw,
+            unvisitedOutlets: freshUnvOutlets,
+          }));
+        } catch (cacheErr) {
+          console.warn('Initial dashboard fetch failed:', cacheErr);
+        }
+        // ──────────────────────────────────────────────────────────────────
 
         router.push('/');
       } else {

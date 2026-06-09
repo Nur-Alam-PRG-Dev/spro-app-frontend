@@ -14,9 +14,9 @@ import TeamRadarChart from '@/components/Dashboard/DataDriven/TeamRadarChart';
 function analyzeHalfSummary(rawData) {
   let totalRevenue = 0, totalVisits = 0, productiveVisits = 0;
   rawData.forEach(item => {
-    totalRevenue += parseFloat(item.order_amount || 0);
-    totalVisits += parseInt(item.visit_count || 0);
-    productiveVisits += parseInt(item.productive_count || 0);
+    totalRevenue += parseFloat(item.first_half?.order_amount || 0) + parseFloat(item.second_half?.order_amount || 0);
+    totalVisits += parseInt(item.first_half?.visit_count || 0) + parseInt(item.second_half?.visit_count || 0);
+    productiveVisits += parseInt(item.first_half?.productive_outlets || 0) + parseInt(item.second_half?.productive_outlets || 0);
   });
   const avgDailyRevenue = rawData.length > 0 ? totalRevenue / rawData.length : 0;
   const productiveRate = totalVisits > 0
@@ -28,11 +28,11 @@ function analyzeHalfSummary(rawData) {
 function buildChartData(rawData) {
   const grouped = {};
   rawData.forEach(item => {
-    const key = item.aemp_name?.split(' ')[0] || item.aemp_id || 'Unknown';
-    if (!grouped[key]) grouped[key] = { date: key, revenue: 0, visits: 0, productive: 0 };
-    grouped[key].revenue += parseFloat(item.order_amount || 0);
-    grouped[key].visits += parseInt(item.visit_count || 0);
-    grouped[key].productive += parseInt(item.productive_count || 0);
+    const key = item.sr_name?.split('-').pop() || item.sr_id || 'Unknown';
+    if (!grouped[key]) grouped[key] = { date: key.substring(0, 10), revenue: 0, visits: 0, productive: 0 };
+    grouped[key].revenue += parseFloat(item.first_half?.order_amount || 0) + parseFloat(item.second_half?.order_amount || 0);
+    grouped[key].visits += parseInt(item.first_half?.visit_count || 0) + parseInt(item.second_half?.visit_count || 0);
+    grouped[key].productive += parseInt(item.first_half?.productive_outlets || 0) + parseInt(item.second_half?.productive_outlets || 0);
   });
   return Object.values(grouped).map(d => ({ ...d, revenue: parseFloat(d.revenue.toFixed(2)) }));
 }
@@ -40,10 +40,10 @@ function buildChartData(rawData) {
 function calcGrowthRate(rawData) {
   if (rawData.length < 2) return null;
   const mid = Math.floor(rawData.length / 2);
-  const firstHalf = rawData.slice(0, mid).reduce((s, i) => s + parseFloat(i.order_amount || 0), 0);
-  const secondHalf = rawData.slice(mid).reduce((s, i) => s + parseFloat(i.order_amount || 0), 0);
-  if (firstHalf === 0) return null;
-  return parseFloat((((secondHalf - firstHalf) / firstHalf) * 100).toFixed(1));
+  const firstHalfData = rawData.slice(0, mid).reduce((s, i) => s + parseFloat(i.first_half?.order_amount || 0) + parseFloat(i.second_half?.order_amount || 0), 0);
+  const secondHalfData = rawData.slice(mid).reduce((s, i) => s + parseFloat(i.first_half?.order_amount || 0) + parseFloat(i.second_half?.order_amount || 0), 0);
+  if (firstHalfData === 0) return null;
+  return parseFloat((((secondHalfData - firstHalfData) / firstHalfData) * 100).toFixed(1));
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -94,29 +94,46 @@ export default function Home() {
         const start_date = sevenDaysAgo.toISOString().split('T')[0];
         const end_date = today.toISOString().split('T')[0];
 
-        const CACHE_KEY = 'dashboard_cache_v1';
+        const CACHE_KEY = 'dashboard_cache_v2'; // Must match login page
+        const CACHE_EXPIRY_MS = 20 * 60 * 1000; // 20 minutes
+
+        const updateStateWithData = (halfRaw, unvOutlets) => {
+          setHalfSummaryRaw(halfRaw);
+          setUnvisitedOutlets(unvOutlets);
+          setUnvisitedCount(unvOutlets.length);
+
+          const stats = analyzeHalfSummary(halfRaw);
+          const growth = calcGrowthRate(halfRaw);
+          setAnalysis({ ...stats, growthRate: growth });
+          setChartData(buildChartData(halfRaw));
+          
+          const uniqueMembers = new Set(halfRaw.map(i => i.emp_id || i.sr_id)).size;
+          setTeamSize(uniqueMembers > 0 ? uniqueMembers : halfRaw.length);
+          setStatus('ready');
+        };
         
-        // Try to load from cache first for instant display
+        let needsFetch = true;
+
         try {
           const cachedStr = sessionStorage.getItem(CACHE_KEY);
           if (cachedStr) {
             const cached = JSON.parse(cachedStr);
-            // Only use cache if it was created today (to avoid very stale data)
-            if (cached.date === end_date) {
-              setHalfSummaryRaw(cached.halfSummaryRaw);
-              setUnvisitedOutlets(cached.unvisitedOutlets);
-              setUnvisitedCount(cached.unvisitedOutlets.length);
-              setAnalysis(cached.analysis);
-              setChartData(cached.chartData);
-              setTeamSize(cached.teamSize);
-              setStatus('ready');
+            const now = Date.now();
+            
+            // If cache is less than 20 minutes old, use it and DO NOT refetch
+            if (cached.timestamp && (now - cached.timestamp < CACHE_EXPIRY_MS)) {
+              updateStateWithData(cached.halfSummaryRaw || [], cached.unvisitedOutlets || []);
+              needsFetch = false;
             }
           }
         } catch (e) {
           console.warn('Failed to parse dashboard cache:', e);
         }
 
-        // ── Fire all APIs in parallel (Background Refresh) ────────────────
+        // If we have a valid 20-min cache, we stop here.
+        if (!needsFetch) return;
+
+        // ── Fetch fresh data (20 mins expired or not present) ─────────────
         const basePayload = {
           country_id: u.cont_id || 2,
           aemp_id: u.aemp_usnm,
@@ -127,74 +144,42 @@ export default function Home() {
           fetch('/api/halfSummary', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...basePayload,
-              start_date,
-              end_date,
-              report_type: 'team_wise',
-            }),
+            body: JSON.stringify({ ...basePayload, start_date, end_date, report_type: 'team_wise' }),
           }),
           fetch('/api/unvisitedOutlet', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...basePayload,
-              date: end_date,
-            }),
+            body: JSON.stringify({ ...basePayload, date: end_date }),
           }),
         ]);
 
-        let freshHalfRaw = halfSummaryRaw;
-        let freshUnvOutlets = unvisitedOutlets;
-        let freshAnalysis = analysis;
-        let freshChartData = chartData;
-        let freshTeamSize = teamSize;
+        let freshHalfRaw = [];
+        let freshUnvOutlets = [];
 
-        // ── Process halfSummary ──────────────────────────────────────────
         if (halfRes.status === 'fulfilled' && halfRes.value.ok) {
           const halfJson = await halfRes.value.json();
           const teamWiseArr = halfJson?.receive_data?.team_wise;
           freshHalfRaw = Array.isArray(teamWiseArr) ? teamWiseArr : [];
-          setHalfSummaryRaw(freshHalfRaw);
-          
-          const stats = analyzeHalfSummary(freshHalfRaw);
-          const growth = calcGrowthRate(freshHalfRaw);
-          freshAnalysis = { ...stats, growthRate: growth };
-          setAnalysis(freshAnalysis);
-          
-          freshChartData = buildChartData(freshHalfRaw);
-          setChartData(freshChartData);
-          
-          // Derive team size = unique members in the response
-          const uniqueMembers = new Set(freshHalfRaw.map(i => i.aemp_id || i.aemp_name)).size;
-          freshTeamSize = uniqueMembers > 0 ? uniqueMembers : freshHalfRaw.length;
-          setTeamSize(freshTeamSize);
         }
 
-        // ── Process unvisitedOutlet ──────────────────────────────────────
         if (unvRes.status === 'fulfilled' && unvRes.value.ok) {
           const unvJson = await unvRes.value.json();
-          const outletsArr = unvJson?.receive_data?.data;
+          const outletsArr = unvJson?.data || unvJson?.receive_data?.data;
           freshUnvOutlets = Array.isArray(outletsArr) ? outletsArr : [];
-          setUnvisitedOutlets(freshUnvOutlets);
-          setUnvisitedCount(freshUnvOutlets.length);
         }
 
-        // ── Save fresh data to cache ─────────────────────────────────────
+        // Save fresh data to cache for the next 20 mins
         try {
           sessionStorage.setItem(CACHE_KEY, JSON.stringify({
-            date: end_date,
+            timestamp: Date.now(),
             halfSummaryRaw: freshHalfRaw,
             unvisitedOutlets: freshUnvOutlets,
-            analysis: freshAnalysis,
-            chartData: freshChartData,
-            teamSize: freshTeamSize
           }));
         } catch (e) {
           // Ignore QuotaExceeded errors
         }
 
-        setStatus('ready');
+        updateStateWithData(freshHalfRaw, freshUnvOutlets);
       } catch (e) {
         console.error('Dashboard fetch error:', e);
         setStatus('error');
@@ -233,10 +218,10 @@ export default function Home() {
 
   // ── Dashboard ─────────────────────────────────────────────────────────────
   return (
-    <div className="space-y-5 pb-10">
+    <div className="space-y-2 pb-4">
 
       {/* ── ROW 1: Welcome Card + KPI Metrics ──────────────────────────── */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-2">
         <div className="xl:col-span-3">
           <WelcomeCard
             user={user}
@@ -258,7 +243,7 @@ export default function Home() {
       </div>
 
       {/* ── ROW 2: 7-Day Area/Bar Chart + Coverage Donut ───────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
         <div className="lg:col-span-8">
           <ActivityAreaChart chartData={chartData} />
         </div>
@@ -272,7 +257,7 @@ export default function Home() {
       </div>
 
       {/* ── ROW 3: Unvisited Outlets Table + Team Radar ─────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
         <div className="lg:col-span-7">
           <UnvisitedOutletsTable outlets={unvisitedOutlets} />
         </div>
