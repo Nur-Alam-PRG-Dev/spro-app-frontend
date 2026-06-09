@@ -45,7 +45,7 @@ export async function POST(request) {
     const data = await response.json();
     
     // Add BASE_IMAGE_URL to the response so frontend can use it
-    const baseImageUrl = process.env.BASE_IMAGE_URL || '';
+    const baseImageUrl = process.env.BASE_IMAGE_URL || 'https://prgspro.sgp1.cdn.digitaloceanspaces.com/';
     
     return NextResponse.json({
       status: 'success',

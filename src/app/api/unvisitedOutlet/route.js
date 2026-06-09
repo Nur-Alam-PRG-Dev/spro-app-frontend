@@ -13,7 +13,7 @@ export async function POST(request) {
     }
 
     const apiKey = process.env.UNVISITED_OUTLET_API_KEY || 'f06ff43be3310989';
-    const baseUrl = process.env.SPRO_API_BASE_URL || 'http://sprodevtest.prgfms.com/';
+    const baseUrl = process.env.SPRO_API_BASE_URL || 'http://dashboard.prgfms.com/';
 
     // Create x-www-form-urlencoded payload
     const params = new URLSearchParams();
